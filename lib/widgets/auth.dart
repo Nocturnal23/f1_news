@@ -1,115 +1,38 @@
+import 'package:f1_news/widgets/registerForm.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_form_builder/flutter_form_builder.dart';
-import 'package:form_builder_validators/form_builder_validators.dart';
 
-import 'homepage.dart';
+import 'loginForm.dart';
 
-class Auth extends StatefulWidget {
+class Auth extends StatelessWidget {
   const Auth({super.key});
 
   @override
-  State<Auth> createState() => _AuthState();
-}
-
-class _AuthState extends State<Auth> {
-  String? username;
-  String? email;
-  String? password;
-  final _formKey = GlobalKey<FormBuilderState>(); // Questa chiave serve per verificare la validità del form.
-  Map signUp = {"username":"", "email":"", "password":""};
-
-  @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      body: FormBuilder(
-        key: _formKey,
-        child: Column(
-          mainAxisAlignment: .center,
+    return DefaultTabController(
+      length: 2,
+      child: Scaffold(
+        appBar: AppBar(
+          backgroundColor: Colors.red.shade500,
+          title: const Text('Benvenuto in F1 News'),
+          bottom: TabBar(
+            dividerColor: Colors.black,
+            labelColor: Colors.white,
+            unselectedLabelColor: Colors.black,
+            indicatorColor: Colors.white,
+            tabs: [
+              Tab(text: 'ACCEDI'),
+              Tab(text: 'REGISTRATI'),
+            ],
+          ),
+        ),
+        body: const TabBarView(
           children: [
-            FormBuilderTextField(
-              name: 'username',
-              // validator: (value) {
-              //   if (value == null || value.isEmpty) {
-              //     return "Devi inserire lo userneame!";
-              //   }
-              //   return null;
-              // },
-              onSaved: (value){
-                signUp["username"] = value;
-              },
-              textInputAction: TextInputAction.next,
-              //Con invio passo al campo successivo.
-              decoration: const InputDecoration(
-                icon: Icon(Icons.person),
-                labelText: 'Username',
-              ),
-              validator: FormBuilderValidators.compose([
-                FormBuilderValidators.required(),
-              ]),
-            ),
+            LoginForm(),
 
-            FormBuilderTextField(
-              name: 'email',
-              // validator: (value) {
-              //   if (value == null || value.isEmpty) {
-              //     return "Devi inserire una mail valida!";
-              //   }
-              //   return null;
-              // },
-              onSaved: (value){
-                signUp["email"] = value;
-              },
-              textInputAction: TextInputAction.next, //Con invio passo al campo successivo.
-              decoration: const InputDecoration(
-                icon: Icon(Icons.mail),
-                labelText: 'Email',
-              ),
-              validator: FormBuilderValidators.compose([
-                FormBuilderValidators.required(),
-                FormBuilderValidators.email(),
-              ]),
-            ),
-
-            FormBuilderTextField(
-              name: 'password',
-              // validator: (value) {
-              //   if (value == null || value.isEmpty || value.length < 10) {
-              //     return "Devi inserire una password valida!";
-              //   }
-              //   return null;
-              // },
-              onSaved: (value){
-                signUp["password"] = value;
-              },
-              obscureText: true,
-              decoration: const InputDecoration(
-                icon: Icon(Icons.password),
-                labelText: 'Password',
-              ),
-              validator: FormBuilderValidators.compose([
-                FormBuilderValidators.required(),
-              ]),
-            ),
-
-            ElevatedButton(
-              onPressed: () {
-                if (_formKey.currentState!.validate()) {
-                  _formKey.currentState!.saveAndValidate(); // Se il form risulta valido salvo le credenziali.
-                  print(signUp);
-                }
-              },
-              child: Text("INVIA"),
-            ),
+            RegisterForm(),
           ],
         ),
       ),
     );
   }
-}
-
-void loadHomepage(BuildContext context, dynamic controller) {
-  final username = controller.name;
-  Navigator.of(context).push(
-    MaterialPageRoute<void>(builder: (context) => homepage(user: username)),
-  );
 }
