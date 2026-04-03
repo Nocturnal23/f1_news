@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "253313055688",
+    "project_id": "f1-news-22bfc",
+    "storage_bucket": "f1-news-22bfc.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:253313055688:android:b043b5597bdba239e5defd",
+        "android_client_info": {
+          "package_name": "com.nocturnal.f1_news"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCobn_222ciSY_utbrGKjh4NpzggfPN26c"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
