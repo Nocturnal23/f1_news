@@ -1,8 +1,7 @@
+import 'package:f1_news/controllers/authController.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_form_builder/flutter_form_builder.dart';
 import 'package:form_builder_validators/form_builder_validators.dart';
-
-import 'homepage.dart';
 
 class RegisterForm extends StatefulWidget {
   const RegisterForm({super.key});
@@ -12,28 +11,21 @@ class RegisterForm extends StatefulWidget {
 }
 
 class _RegisterFormState extends State<RegisterForm> {
-  String? username;
-  String? email;
-  String? password;
   final _formKey = GlobalKey<FormBuilderState>(); // Questa chiave serve per verificare la validità del form.
   Map signUp = {"username":"", "email":"", "password":""};
 
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: EdgeInsetsGeometry.all(16.0),
+      padding: EdgeInsets.all(16.0),
       child: FormBuilder(
         key: _formKey,
         child: Column(
-          mainAxisAlignment: .center,
+          mainAxisAlignment: MainAxisAlignment.center,
           children: [
             FormBuilderTextField(
               name: 'username',
-              onSaved: (value){
-                signUp["username"] = value;
-              },
-              textInputAction: TextInputAction.next,
-              //Con invio passo al campo successivo.
+              textInputAction: TextInputAction.next, //Con invio passo al campo successivo.
               decoration: const InputDecoration(
                 icon: Icon(Icons.person),
                 labelText: 'Username',
@@ -68,9 +60,21 @@ class _RegisterFormState extends State<RegisterForm> {
               decoration: const InputDecoration(
                 icon: Icon(Icons.password),
                 labelText: 'Password',
+                helperText: 'Inserisci almeno 6 caratteri di cui:\n'
+                    '• 1 minuscola;\n'
+                    '• 1 maiuscola;\n'
+                    '• 1 numero;\n'
+                    '• 1 carattere speciale.',
+                helperMaxLines: 6,
+                errorMaxLines: 6,
               ),
-              validator: FormBuilderValidators.compose([
+              validator: FormBuilderValidators.aggregate([
                 FormBuilderValidators.required(),
+                FormBuilderValidators.hasLowercaseChars(errorText: 'Almeno un carattere minuscolo'),
+                FormBuilderValidators.hasUppercaseChars(errorText: 'Almeno un carattere maiuscolo'),
+                FormBuilderValidators.hasNumericChars(errorText: 'Almeno un numero'),
+                FormBuilderValidators.hasSpecialChars(errorText: 'Almeno un carattere speciale'),
+                FormBuilderValidators.minLength(6, errorText: 'Minimo 6 caratteri'),
               ]),
             ),
 
