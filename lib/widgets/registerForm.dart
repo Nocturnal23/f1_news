@@ -14,6 +14,7 @@ class RegisterForm extends StatefulWidget {
 
 class _RegisterFormState extends State<RegisterForm> {
   final _formKey = GlobalKey<FormBuilderState>(); // Questa chiave serve per verificare la validità del form.
+  bool obscuredPassword = true;
 
   @override
   Widget build(BuildContext context) {
@@ -51,9 +52,19 @@ class _RegisterFormState extends State<RegisterForm> {
 
             FormBuilderTextField(
               name: 'password',
-              obscureText: true,
-              decoration: const InputDecoration(
-                icon: Icon(Icons.password),
+              obscureText: obscuredPassword,
+              decoration: InputDecoration(
+                icon: const Icon(Icons.password),
+                suffixIcon: IconButton(
+                  icon: Icon(
+                    obscuredPassword ? Icons.visibility : Icons.visibility_off,
+                  ),
+                  onPressed: () {
+                    setState(() {
+                      obscuredPassword = !obscuredPassword;
+                    });
+                  },
+                ),
                 labelText: 'Password',
                 helperText: 'Inserisci almeno 6 caratteri di cui:\n'
                     '• 1 minuscola;\n'
@@ -95,7 +106,7 @@ class _RegisterFormState extends State<RegisterForm> {
                   }
                 }
               },
-              child: Text("Registrati"),
+              child: const Text("Registrati"),
             ),
           ],
         ),

@@ -14,6 +14,7 @@ class LoginForm extends StatefulWidget {
 
 class _LoginFormState extends State<LoginForm> {
   final _formKey = GlobalKey<FormBuilderState>();
+  bool obscuredPassword = true;
 
   @override
   Widget build(BuildContext context) {
@@ -39,9 +40,19 @@ class _LoginFormState extends State<LoginForm> {
 
             FormBuilderTextField(
               name: 'password',
-              obscureText: true,
-              decoration: const InputDecoration(
-                icon: Icon(Icons.password),
+              obscureText: obscuredPassword,
+              decoration: InputDecoration(
+                icon: const Icon(Icons.password),
+                suffixIcon: IconButton(
+                  icon: Icon(
+                    obscuredPassword ? Icons.visibility : Icons.visibility_off,
+                  ),
+                  onPressed: () {
+                    setState(() {
+                      obscuredPassword = !obscuredPassword;
+                    });
+                  },
+                ),
                 labelText: 'Password',
               ),
               validator: FormBuilderValidators.compose([
@@ -55,7 +66,7 @@ class _LoginFormState extends State<LoginForm> {
                   final data = _formKey.currentState!.value;
                   try {
                     await signIn(data['email'], data['password']);
-                  } on FirebaseAuthException catch(e) {
+                  } on FirebaseAuthException catch (e) {
                     String error = "Errore generico. Riprova";
 
                     if (e.code == 'invalid-credential') {
@@ -71,7 +82,7 @@ class _LoginFormState extends State<LoginForm> {
                   }
                 }
               },
-              child: Text("Accedi"),
+              child: const Text("Accedi"),
             ),
           ],
         ),
