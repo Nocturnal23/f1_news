@@ -1,7 +1,9 @@
 import 'package:f1_news/controllers/authController.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_form_builder/flutter_form_builder.dart';
 import 'package:form_builder_validators/form_builder_validators.dart';
+import 'infoDialogAlert.dart';
 
 class RegisterForm extends StatefulWidget {
   const RegisterForm({super.key});
@@ -12,7 +14,6 @@ class RegisterForm extends StatefulWidget {
 
 class _RegisterFormState extends State<RegisterForm> {
   final _formKey = GlobalKey<FormBuilderState>(); // Questa chiave serve per verificare la validità del form.
-  Map signUp = {"username":"", "email":"", "password":""};
 
   @override
   Widget build(BuildContext context) {
@@ -37,9 +38,6 @@ class _RegisterFormState extends State<RegisterForm> {
 
             FormBuilderTextField(
               name: 'email',
-              onSaved: (value){
-                signUp["email"] = value;
-              },
               textInputAction: TextInputAction.next, //Con invio passo al campo successivo.
               decoration: const InputDecoration(
                 icon: Icon(Icons.mail),
@@ -53,9 +51,6 @@ class _RegisterFormState extends State<RegisterForm> {
 
             FormBuilderTextField(
               name: 'password',
-              onSaved: (value){
-                signUp["password"] = value;
-              },
               obscureText: true,
               decoration: const InputDecoration(
                 icon: Icon(Icons.password),
@@ -79,10 +74,25 @@ class _RegisterFormState extends State<RegisterForm> {
             ),
 
             ElevatedButton(
-              onPressed: () {
-                if (_formKey.currentState!.validate()) {
-                  _formKey.currentState!.saveAndValidate(); // Se il form risulta valido salvo le credenziali.
-                  print(signUp);
+              onPressed: () async {
+                if (_formKey.currentState!.saveAndValidate()) {
+                  final data = _formKey.currentState!.value;
+                  try {
+                    await signUp(data['username'], data['email'], data['password']);
+                  } on FirebaseAuthException catch(e) {
+                    String error = "Errore generico. Riprova";
+
+                    if (e.code == 'email-already-in-use') {
+                      error = "La mail inserita è già in uso da un altro utente.";
+                    }
+
+                    showDialog(
+                      context: context,
+                      builder: (BuildContext context) {
+                        return InfoDialogAlert(messaggio: error);
+                      },
+                    );
+                  }
                 }
               },
               child: Text("Registrati"),
@@ -92,4 +102,8 @@ class _RegisterFormState extends State<RegisterForm> {
       ),
     );
   }
+}
+
+Future<void> signUp(String username, String email, String password) async {
+  await AuthController().signUp(user: username, email: email, password: password);
 }
