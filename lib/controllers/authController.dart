@@ -20,10 +20,14 @@ class AuthController {
 
   //Funzione per la registrazione.
   Future<void> signUp({required String user, required String email, required String password}) async {
-    // A quanto pare su Firebase non si può salvare un utente con username, email e password.
-    // Probabilemte dovrò creare l'utente usando email e password e successivamente aggiornare
-    // la relativa riga dell'utente associato a quella email aggiungendo il campo password.
-    await _firebaseAuth.createUserWithEmailAndPassword(email: email, password: password);
+    try {
+      await _firebaseAuth.createUserWithEmailAndPassword(email: email, password: password);
+    } on FirebaseAuthException catch(e) {
+      print('Failed with error code: ${e.code}');
+      print(e.message);
+      rethrow;
+    }
+
   }
 
 
