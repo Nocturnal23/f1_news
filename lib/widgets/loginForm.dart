@@ -1,8 +1,9 @@
+import 'package:f1_news/widgets/infoDialogAlert.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_form_builder/flutter_form_builder.dart';
 import 'package:form_builder_validators/form_builder_validators.dart';
-
-import 'homepage.dart';
+import '../controllers/authController.dart';
 
 class LoginForm extends StatefulWidget {
   const LoginForm({super.key});
@@ -12,15 +13,12 @@ class LoginForm extends StatefulWidget {
 }
 
 class _LoginFormState extends State<LoginForm> {
-  String? email;
-  String? password;
   final _formKey = GlobalKey<FormBuilderState>();
-  Map signIn = {"email":"", "password":""};
 
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: EdgeInsetsGeometry.all(16.0),
+      padding: EdgeInsets.all(16.0),
       child: FormBuilder(
         key: _formKey,
         child: Column(
@@ -28,9 +26,6 @@ class _LoginFormState extends State<LoginForm> {
           children: [
             FormBuilderTextField(
               name: 'email',
-              onSaved: (value){
-                signIn["email"] = value;
-              },
               textInputAction: TextInputAction.next,
               decoration: const InputDecoration(
                 icon: Icon(Icons.mail),
@@ -44,9 +39,6 @@ class _LoginFormState extends State<LoginForm> {
 
             FormBuilderTextField(
               name: 'password',
-              onSaved: (value){
-                signIn["password"] = value;
-              },
               obscureText: true,
               decoration: const InputDecoration(
                 icon: Icon(Icons.password),
@@ -58,10 +50,25 @@ class _LoginFormState extends State<LoginForm> {
             ),
 
             ElevatedButton(
-              onPressed: () {
-                if (_formKey.currentState!.validate()) {
-                  _formKey.currentState!.saveAndValidate();
-                  print(signIn);
+              onPressed: () async {
+                if (_formKey.currentState!.saveAndValidate()) {
+                  final data = _formKey.currentState!.value;
+                  try {
+                    await signIn(data['email'], data['password']);
+                  } on FirebaseAuthException catch(e) {
+                    String error = "Errore generico. Riprova";
+
+                    if (e.code == 'invalid-credential') {
+                      error = "Email o password errate. Riprova.";
+                    }
+
+                    showDialog(
+                      context: context,
+                      builder: (BuildContext context) {
+                        return InfoDialogAlert(messaggio: error);
+                      },
+                    );
+                  }
                 }
               },
               child: Text("Accedi"),
@@ -71,4 +78,8 @@ class _LoginFormState extends State<LoginForm> {
       ),
     );
   }
+}
+
+Future<void> signIn(String email, String password) async {
+  await AuthController().signIn(email: email, password: password);
 }
