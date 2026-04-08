@@ -89,8 +89,10 @@ class _LoginFormState extends State<LoginForm> {
       ),
     );
   }
+
+  Future<void> signIn(String email, String password) async {
+    await AuthController().signIn(email: email, password: password);
+  }
 }
 
-Future<void> signIn(String email, String password) async {
-  await AuthController().signIn(email: email, password: password);
-}
+
