@@ -1,4 +1,6 @@
+import 'package:f1_news/controllers/authController.dart';
 import 'package:f1_news/widgets/auth.dart';
+import 'package:f1_news/widgets/homepage.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'firebase_options.dart';
@@ -23,7 +25,16 @@ class MyApp extends StatelessWidget {
       theme: ThemeData(
         colorScheme: .fromSeed(seedColor: Colors.deepPurple),
       ),
-      home: const Auth(),//MyHomePage(title: 'Flutter Demo Home Page'),
+      home: StreamBuilder(
+          stream: AuthController().authStateChanges,
+          builder: (context, snapshot) {
+            if(snapshot.hasData) {
+              return homepage(user: snapshot.data?.email);
+            } else {
+              return Auth();
+            }
+          }
+      ),
     );
   }
 }
