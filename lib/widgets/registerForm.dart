@@ -113,8 +113,9 @@ class _RegisterFormState extends State<RegisterForm> {
       ),
     );
   }
+
+  Future<void> signUp(String username, String email, String password) async {
+    await AuthController().signUp(user: username, email: email, password: password);
+  }
 }
 
-Future<void> signUp(String username, String email, String password) async {
-  await AuthController().signUp(user: username, email: email, password: password);
-}
