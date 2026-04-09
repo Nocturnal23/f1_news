@@ -1,7 +1,9 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 
 class AuthController {
   final FirebaseAuth _firebaseAuth = FirebaseAuth.instance;
+  final FirebaseFirestore _firestore = FirebaseFirestore.instance;
 
   User? get currentUser => _firebaseAuth.currentUser;
   Stream<User?> get authStateChanges => _firebaseAuth.authStateChanges();
@@ -19,9 +21,16 @@ class AuthController {
   }
 
   //Funzione per la registrazione.
-  Future<void> signUp({required String user, required String email, required String password}) async {
+  Future<void> signUp({required String displayName, required String email, required String password}) async {
     try {
-      await _firebaseAuth.createUserWithEmailAndPassword(email: email, password: password);
+      UserCredential user = await _firebaseAuth.createUserWithEmailAndPassword(email: email, password: password);
+
+      await _firestore.collection('users').doc(user.user!.uid).set({
+        'displayName': displayName,
+        'email': email,
+        'createdAt': FieldValue.serverTimestamp(),
+      });
+
       await sendVerificationEmail();
 
     } on FirebaseAuthException catch(e) {
@@ -91,6 +100,7 @@ class AuthController {
 // Conferma account via mail. OK.
 // Recupero password.
 // Accedi via google.
+// Accesso come ospite. Ok.
 
 /* Nota: Costruire una classe dizionario per contenere gli errori.
 Magari costruire un enum dove vengono associati gli errori cosi da usare questa
