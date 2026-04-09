@@ -40,7 +40,7 @@ class _RegisterFormState extends State<RegisterForm> {
 
             FormBuilderTextField(
               name: 'email',
-              textInputAction: TextInputAction.next, //Con invio passo al campo successivo.
+              textInputAction: TextInputAction.next,
               decoration: const InputDecoration(
                 icon: Icon(Icons.mail),
                 labelText: 'Email',
@@ -86,27 +86,7 @@ class _RegisterFormState extends State<RegisterForm> {
             ),
 
             ElevatedButton(
-              onPressed: () async {
-                if (_formKey.currentState!.saveAndValidate()) {
-                  final data = _formKey.currentState!.value;
-                  try {
-                    await signUp(data['username'], data['email'], data['password']);
-                  } on FirebaseAuthException catch(e) {
-                    String error = "Errore generico. Riprova";
-
-                    if (e.code == ErrorsEnums.EMAIL_ALREADY_IN_USE.label) {
-                      error = "La mail inserita è già in uso da un altro utente.";
-                    }
-
-                    showDialog(
-                      context: context,
-                      builder: (BuildContext context) {
-                        return InfoDialogAlert(messaggio: error);
-                      },
-                    );
-                  }
-                }
-              },
+              onPressed: _signUp,
               child: const Text("Registrati"),
             ),
           ],
@@ -115,8 +95,31 @@ class _RegisterFormState extends State<RegisterForm> {
     );
   }
 
-  Future<void> signUp(String username, String email, String password) async {
-    await AuthController().signUp(user: username, email: email, password: password);
+  Future<void> _signUp() async {
+    if (_formKey.currentState!.saveAndValidate()) {
+      final data = _formKey.currentState!.value;
+      try {
+        await AuthController().signUp(user: data['username'], email: data['email'], password: data['password']);
+      } on FirebaseAuthException catch(e) {
+        String error = "Errore generico. Riprova";
+
+        if (e.code == ErrorsEnums.EMAIL_ALREADY_IN_USE.label) {
+          error = "La mail inserita è già in uso da un altro utente.";
+        }
+
+        _showAlert(messaggio: error);
+      }
+    }
+  }
+
+  void _showAlert({required String messaggio, String? titolo}) {
+    showDialog(
+      context: context,
+      builder: (context) => InfoDialogAlert(
+        titolo: titolo,
+        messaggio: messaggio,
+      ),
+    );
   }
 }
 

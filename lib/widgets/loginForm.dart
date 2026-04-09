@@ -24,7 +24,7 @@ class _LoginFormState extends State<LoginForm> {
       child: FormBuilder(
         key: _formKey,
         child: Column(
-          mainAxisAlignment: .center,
+          mainAxisAlignment: MainAxisAlignment.center,
           children: [
             FormBuilderTextField(
               name: 'email',
@@ -62,37 +62,90 @@ class _LoginFormState extends State<LoginForm> {
             ),
 
             ElevatedButton(
-              onPressed: () async {
-                if (_formKey.currentState!.saveAndValidate()) {
-                  final data = _formKey.currentState!.value;
-                  try {
-                    await signIn(data['email'], data['password']);
-                  } on FirebaseAuthException catch (e) {
-                    String error = "Errore generico. Riprova";
-
-                    if (e.code == ErrorsEnums.INVALID_CREDENTIAL.label) {
-                      error = "Email o password errate. Riprova.";
-                    }
-
-                    showDialog(
-                      context: context,
-                      builder: (BuildContext context) {
-                        return InfoDialogAlert(messaggio: error);
-                      },
-                    );
-                  }
-                }
-              },
+              onPressed: _signIn,
               child: const Text("Accedi"),
             ),
+
+            TextButton(
+              onPressed: _restorePassword,
+              child: const Text(
+                'Password dimenticata?',
+                style: TextStyle(
+                  color: Colors.blue,
+                  decoration: TextDecoration.underline,
+                ),
+              ),
+            )
           ],
         ),
       ),
     );
   }
 
-  Future<void> signIn(String email, String password) async {
-    await AuthController().signIn(email: email, password: password);
+  Future<void> _signIn() async {
+    if (!_formKey.currentState!.saveAndValidate()) {
+      return;
+    }
+
+      final data = _formKey.currentState!.value;
+
+      try {
+        await AuthController().signIn(email: data['email'], password: data['password']);
+      } on FirebaseAuthException catch (e) {
+        String error = "Errore generico. Riprova";
+
+        if (e.code == ErrorsEnums.INVALID_CREDENTIAL.label) {
+          error = "Email o password errate. Riprova.";
+        }
+        _showAlert(messaggio: error);
+      }
+  }
+
+  Future<void> _restorePassword() async {
+    final formState = _formKey.currentState;
+
+    if (formState != null) {
+      formState.save();
+      final email = formState.value['email'];
+
+      if (email == null || email.isEmpty) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(content: Text("Inserisci prima l'email nel campo apposito")),
+        );
+        return;
+      }
+
+      try {
+        await AuthController().restorePassword(email);
+
+        if (context.mounted) {
+          _showAlert(
+              titolo: "Reset password",
+              messaggio: "Se l'email è registrata, riceverai a breve un link per reimpostare la password."
+          );
+        }
+      } on FirebaseAuthException catch (e) {
+        String error = "Errore durante il recupero. Riprova.";
+
+        if (e.code == ErrorsEnums.INVALID_EMAIL.label) {
+          error = "Il formato dell'email non è valido.";
+        }
+
+        if (context.mounted) {
+          _showAlert(messaggio: error);
+        }
+      }
+    }
+  }
+
+  void _showAlert({required String messaggio, String? titolo}) {
+    showDialog(
+      context: context,
+      builder: (context) => InfoDialogAlert(
+        titolo: titolo,
+        messaggio: messaggio,
+      ),
+    );
   }
 }
 
