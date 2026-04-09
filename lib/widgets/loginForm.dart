@@ -61,10 +61,26 @@ class _LoginFormState extends State<LoginForm> {
               ]),
             ),
 
-            ElevatedButton(
-              onPressed: _signIn,
-              child: const Text("Accedi"),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                ElevatedButton(
+                  onPressed: _signIn,
+                  child: const Text("Accedi"),
+                ),
+
+                const Padding(
+                  padding: EdgeInsets.symmetric(horizontal: 12),
+                  child: Text("oppure", style: TextStyle(color: Colors.grey)),
+                ),
+
+                TextButton(
+                  onPressed: _signAsGuest,
+                  child: const Text("Entra come ospite"),
+                ),
+              ],
             ),
+
 
             TextButton(
               onPressed: _restorePassword,
@@ -99,6 +115,16 @@ class _LoginFormState extends State<LoginForm> {
         }
         _showAlert(messaggio: error);
       }
+  }
+
+  Future<void> _signAsGuest() async {
+    try {
+      UserCredential? user = await AuthController().signAsGuest();
+    } on FirebaseAuthException catch (e) {
+      String error = "Errore generico. Riprova";
+
+      _showAlert(messaggio: error);
+    }
   }
 
   Future<void> _restorePassword() async {

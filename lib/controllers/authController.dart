@@ -75,7 +75,16 @@ class AuthController {
       print(e.message);
       rethrow;
     }
+  }
 
+  //Funzione per l'accesso come opite
+  Future<UserCredential?> signAsGuest() async {
+    try {
+      return await FirebaseAuth.instance.signInAnonymously();
+    } catch (e) {
+      print("Errore accesso ospite: $e");
+      return null;
+    }
   }
 }
 // Salvare lo username dell'utente.
