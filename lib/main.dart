@@ -1,6 +1,6 @@
-import 'package:f1_news/controllers/authController.dart';
-import 'package:f1_news/widgets/auth.dart';
-import 'package:f1_news/widgets/homepage.dart';
+import 'package:f1_news/controllers/auth_controller.dart';
+import 'package:f1_news/screens/auth.dart';
+import 'package:f1_news/screens/is_email_verified.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'firebase_options.dart';
@@ -29,7 +29,7 @@ class MyApp extends StatelessWidget {
           stream: AuthController().authStateChanges,
           builder: (context, snapshot) {
             if(snapshot.hasData) {
-              return homepage(user: snapshot.data?.email);
+              return IsEmailVerified();
             } else {
               return Auth();
             }

@@ -1,7 +1,7 @@
-import 'package:f1_news/widgets/registerForm.dart';
+import 'package:f1_news/widgets/register_form.dart';
 import 'package:flutter/material.dart';
 
-import 'loginForm.dart';
+import '../widgets/login_form.dart';
 
 class Auth extends StatelessWidget {
   const Auth({super.key});
