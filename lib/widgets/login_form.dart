@@ -1,10 +1,10 @@
 import 'package:f1_news/utils/enums.dart';
-import 'package:f1_news/widgets/infoDialogAlert.dart';
+import 'package:f1_news/widgets/info_dialog_alert.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_form_builder/flutter_form_builder.dart';
 import 'package:form_builder_validators/form_builder_validators.dart';
-import '../controllers/authController.dart';
+import '../controllers/auth_controller.dart';
 
 class LoginForm extends StatefulWidget {
   const LoginForm({super.key});
@@ -16,6 +16,7 @@ class LoginForm extends StatefulWidget {
 class _LoginFormState extends State<LoginForm> {
   final _formKey = GlobalKey<FormBuilderState>();
   bool obscuredPassword = true;
+  final AuthController _authController = AuthController();
 
   @override
   Widget build(BuildContext context) {
@@ -64,10 +65,7 @@ class _LoginFormState extends State<LoginForm> {
             Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                ElevatedButton(
-                  onPressed: _signIn,
-                  child: const Text("Accedi"),
-                ),
+                ElevatedButton(onPressed: _signIn, child: const Text("Accedi")),
 
                 const Padding(
                   padding: EdgeInsets.symmetric(horizontal: 12),
@@ -80,7 +78,6 @@ class _LoginFormState extends State<LoginForm> {
                 ),
               ],
             ),
-
 
             TextButton(
               onPressed: _restorePassword,
@@ -113,24 +110,34 @@ class _LoginFormState extends State<LoginForm> {
       return;
     }
 
-      final data = _formKey.currentState!.value;
+    final data = _formKey.currentState!.value;
 
-      try {
-        await AuthController().signIn(email: data['email'], password: data['password']);
-      } on FirebaseAuthException catch (e) {
-        String error = "Errore generico. Riprova";
-
-        if (e.code == ErrorsEnums.INVALID_CREDENTIAL.label) {
-          error = "Email o password errate. Riprova.";
-        }
-        _showAlert(messaggio: error);
+    try {
+      await _authController.signIn(
+        email: data['email'],
+        password: data['password'],
+      );
+    } on FirebaseAuthException catch (e) {
+      if (!mounted) {
+        return;
       }
+      String error = "Errore generico. Riprova";
+
+      if (e.code == ErrorsEnums.INVALID_CREDENTIAL.label) {
+        error = "Email o password errate. Riprova.";
+      }
+      _showAlert(messaggio: error);
+    }
   }
 
   Future<void> _signAsGuest() async {
     try {
-      UserCredential? user = await AuthController().signAsGuest();
+      await _authController.signAsGuest();
     } on FirebaseAuthException catch (e) {
+      if (!mounted) {
+        return;
+      }
+
       String error = "Errore generico. Riprova";
 
       _showAlert(messaggio: error);
@@ -158,18 +165,21 @@ class _LoginFormState extends State<LoginForm> {
 
       if (email == null || email.isEmpty) {
         ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(content: Text("Inserisci prima l'email nel campo apposito")),
+          const SnackBar(
+            content: Text("Inserisci prima l'email nel campo apposito"),
+          ),
         );
         return;
       }
 
       try {
-        await AuthController().restorePassword(email);
+        await _authController.restorePassword(email);
 
         if (context.mounted) {
           _showAlert(
-              titolo: "Reset password",
-              messaggio: "Se l'email è registrata, riceverai a breve un link per reimpostare la password."
+            titolo: "Reset password",
+            messaggio:
+                "Se l'email è registrata, riceverai a breve un link per reimpostare la password.",
           );
         }
       } on FirebaseAuthException catch (e) {
@@ -189,12 +199,8 @@ class _LoginFormState extends State<LoginForm> {
   void _showAlert({required String messaggio, String? titolo}) {
     showDialog(
       context: context,
-      builder: (context) => InfoDialogAlert(
-        titolo: titolo,
-        messaggio: messaggio,
-      ),
+      builder: (context) =>
+          InfoDialogAlert(titolo: titolo, messaggio: messaggio),
     );
   }
 }
-
-

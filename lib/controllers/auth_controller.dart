@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:google_sign_in/google_sign_in.dart';
@@ -8,14 +10,17 @@ class AuthController {
   final GoogleSignIn _googleAuth = GoogleSignIn.instance;
 
   User? get currentUser => _firebaseAuth.currentUser;
+
   Stream<User?> get authStateChanges => _firebaseAuth.authStateChanges();
 
   //Funzione per il login.
   Future<void> signIn({required String email, required String password}) async {
     try {
       await _firebaseAuth.signInWithEmailAndPassword(
-          email: email, password: password);
-    } on FirebaseAuthException catch(e) {
+        email: email,
+        password: password,
+      );
+    } on FirebaseAuthException catch (e) {
       print('Failed with error code: ${e.code}');
       print(e.message);
       rethrow;
@@ -23,15 +28,21 @@ class AuthController {
   }
 
   //Funzione per la registrazione.
-  Future<void> signUp({required String displayName, required String email, required String password}) async {
+  Future<void> signUp({
+    required String displayName,
+    required String email,
+    required String password,
+  }) async {
     try {
-      UserCredential user = await _firebaseAuth.createUserWithEmailAndPassword(email: email, password: password);
+      UserCredential user = await _firebaseAuth.createUserWithEmailAndPassword(
+        email: email,
+        password: password,
+      );
 
       _saveUserData(displayName, email, user);
 
       await sendVerificationEmail();
-
-    } on FirebaseAuthException catch(e) {
+    } on FirebaseAuthException catch (e) {
       print('Failed with error code: ${e.code}');
       print(e.message);
       rethrow;
@@ -88,7 +99,7 @@ class AuthController {
   //Funzione per l'accesso come opite
   Future<UserCredential?> signAsGuest() async {
     try {
-      return await FirebaseAuth.instance.signInAnonymously();
+      return await _firebaseAuth.signInAnonymously();
     } catch (e) {
       print("Errore accesso ospite: $e");
       return null;

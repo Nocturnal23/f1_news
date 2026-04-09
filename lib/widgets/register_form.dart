@@ -1,10 +1,10 @@
-import 'package:f1_news/controllers/authController.dart';
+import 'package:f1_news/controllers/auth_controller.dart';
 import 'package:f1_news/utils/enums.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_form_builder/flutter_form_builder.dart';
 import 'package:form_builder_validators/form_builder_validators.dart';
-import 'infoDialogAlert.dart';
+import 'info_dialog_alert.dart';
 
 class RegisterForm extends StatefulWidget {
   const RegisterForm({super.key});
@@ -14,8 +14,12 @@ class RegisterForm extends StatefulWidget {
 }
 
 class _RegisterFormState extends State<RegisterForm> {
-  final _formKey = GlobalKey<FormBuilderState>(); // Questa chiave serve per verificare la validità del form.
+  final _formKey =
+      GlobalKey<
+        FormBuilderState
+      >(); // Questa chiave serve per verificare la validità del form.
   bool obscuredPassword = true;
+  final AuthController _authController = AuthController();
 
   @override
   Widget build(BuildContext context) {
@@ -28,7 +32,8 @@ class _RegisterFormState extends State<RegisterForm> {
           children: [
             FormBuilderTextField(
               name: 'displayName',
-              textInputAction: TextInputAction.next, //Con invio passo al campo successivo.
+              textInputAction: TextInputAction.next,
+              //Con invio passo al campo successivo.
               decoration: const InputDecoration(
                 icon: Icon(Icons.person),
                 labelText: 'Username',
@@ -67,7 +72,8 @@ class _RegisterFormState extends State<RegisterForm> {
                   },
                 ),
                 labelText: 'Password',
-                helperText: 'Inserisci almeno 6 caratteri di cui:\n'
+                helperText:
+                    'Inserisci almeno 6 caratteri di cui:\n'
                     '• 1 minuscola;\n'
                     '• 1 maiuscola;\n'
                     '• 1 numero;\n'
@@ -77,11 +83,22 @@ class _RegisterFormState extends State<RegisterForm> {
               ),
               validator: FormBuilderValidators.aggregate([
                 FormBuilderValidators.required(),
-                FormBuilderValidators.hasLowercaseChars(errorText: 'Almeno un carattere minuscolo'),
-                FormBuilderValidators.hasUppercaseChars(errorText: 'Almeno un carattere maiuscolo'),
-                FormBuilderValidators.hasNumericChars(errorText: 'Almeno un numero'),
-                FormBuilderValidators.hasSpecialChars(errorText: 'Almeno un carattere speciale'),
-                FormBuilderValidators.minLength(6, errorText: 'Minimo 6 caratteri'),
+                FormBuilderValidators.hasLowercaseChars(
+                  errorText: 'Almeno un carattere minuscolo',
+                ),
+                FormBuilderValidators.hasUppercaseChars(
+                  errorText: 'Almeno un carattere maiuscolo',
+                ),
+                FormBuilderValidators.hasNumericChars(
+                  errorText: 'Almeno un numero',
+                ),
+                FormBuilderValidators.hasSpecialChars(
+                  errorText: 'Almeno un carattere speciale',
+                ),
+                FormBuilderValidators.minLength(
+                  6,
+                  errorText: 'Minimo 6 caratteri',
+                ),
               ]),
             ),
 
@@ -106,8 +123,15 @@ class _RegisterFormState extends State<RegisterForm> {
     if (_formKey.currentState!.saveAndValidate()) {
       final data = _formKey.currentState!.value;
       try {
-        await AuthController().signUp(displayName: data['displayName'], email: data['email'], password: data['password']);
-      } on FirebaseAuthException catch(e) {
+        await _authController.signUp(
+          displayName: data['displayName'],
+          email: data['email'],
+          password: data['password'],
+        );
+      } on FirebaseAuthException catch (e) {
+        if (!mounted) {
+          return;
+        }
         String error = "Errore generico. Riprova";
 
         if (e.code == ErrorsEnums.EMAIL_ALREADY_IN_USE.label) {
@@ -134,11 +158,8 @@ class _RegisterFormState extends State<RegisterForm> {
   void _showAlert({required String messaggio, String? titolo}) {
     showDialog(
       context: context,
-      builder: (context) => InfoDialogAlert(
-        titolo: titolo,
-        messaggio: messaggio,
-      ),
+      builder: (context) =>
+          InfoDialogAlert(titolo: titolo, messaggio: messaggio),
     );
   }
 }
-

@@ -1,6 +1,6 @@
 import 'dart:async';
 
-import 'package:f1_news/controllers/authController.dart';
+import 'package:f1_news/controllers/auth_controller.dart';
 import 'package:flutter/material.dart';
 
 import 'homepage.dart';
