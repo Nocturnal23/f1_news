@@ -1,4 +1,5 @@
 import 'package:f1_news/controllers/authController.dart';
+import 'package:f1_news/utils/enums.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_form_builder/flutter_form_builder.dart';
@@ -93,7 +94,7 @@ class _RegisterFormState extends State<RegisterForm> {
                   } on FirebaseAuthException catch(e) {
                     String error = "Errore generico. Riprova";
 
-                    if (e.code == 'email-already-in-use') {
+                    if (e.code == ErrorsEnums.EMAIL_ALREADY_IN_USE.label) {
                       error = "La mail inserita è già in uso da un altro utente.";
                     }
 

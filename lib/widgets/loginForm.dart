@@ -1,3 +1,4 @@
+import 'package:f1_news/utils/enums.dart';
 import 'package:f1_news/widgets/infoDialogAlert.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
@@ -69,7 +70,7 @@ class _LoginFormState extends State<LoginForm> {
                   } on FirebaseAuthException catch (e) {
                     String error = "Errore generico. Riprova";
 
-                    if (e.code == 'invalid-credential') {
+                    if (e.code == ErrorsEnums.INVALID_CREDENTIAL.label) {
                       error = "Email o password errate. Riprova.";
                     }
 
