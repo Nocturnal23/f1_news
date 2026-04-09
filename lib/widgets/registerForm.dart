@@ -27,7 +27,7 @@ class _RegisterFormState extends State<RegisterForm> {
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
             FormBuilderTextField(
-              name: 'username',
+              name: 'displayName',
               textInputAction: TextInputAction.next, //Con invio passo al campo successivo.
               decoration: const InputDecoration(
                 icon: Icon(Icons.person),
@@ -99,7 +99,7 @@ class _RegisterFormState extends State<RegisterForm> {
     if (_formKey.currentState!.saveAndValidate()) {
       final data = _formKey.currentState!.value;
       try {
-        await AuthController().signUp(user: data['username'], email: data['email'], password: data['password']);
+        await AuthController().signUp(displayName: data['displayName'], email: data['email'], password: data['password']);
       } on FirebaseAuthException catch(e) {
         String error = "Errore generico. Riprova";
 
