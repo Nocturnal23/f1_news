@@ -1,19 +1,19 @@
 import 'package:flutter/material.dart';
 
 class InfoDialogAlert extends StatelessWidget {
-  String? titolo;
-  String messaggio;
+  final String? titolo;
+  final String messaggio;
 
   InfoDialogAlert({
     super.key,
-    this.titolo = "Errore",
+    this.titolo,
     required this.messaggio,
   });
 
   @override
   Widget build(BuildContext context) {
     return AlertDialog(
-      title: Text(titolo!),
+      title: Text(titolo ?? "Attenzione"),
       content: Text(messaggio),
       actions: [
         TextButton(
