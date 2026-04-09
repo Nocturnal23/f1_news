@@ -65,6 +65,18 @@ class AuthController {
       return false;
     }
   }
+
+  //Funzione per il recupero password.
+  Future<void> restorePassword(email) async {
+    try {
+      await _firebaseAuth.sendPasswordResetEmail(email: email);
+    } on FirebaseAuthException catch (e) {
+      print('Failed with error code: ${e.code}');
+      print(e.message);
+      rethrow;
+    }
+
+  }
 }
 // Salvare lo username dell'utente.
 // Conferma account via mail. OK.
