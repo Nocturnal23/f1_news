@@ -25,11 +25,7 @@ class AuthController {
     try {
       UserCredential user = await _firebaseAuth.createUserWithEmailAndPassword(email: email, password: password);
 
-      await _firestore.collection('users').doc(user.user!.uid).set({
-        'displayName': displayName,
-        'email': email,
-        'createdAt': FieldValue.serverTimestamp(),
-      });
+      _saveUserData(displayName, email, user);
 
       await sendVerificationEmail();
 
