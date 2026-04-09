@@ -106,3 +106,16 @@ class AuthController {
 Magari costruire un enum dove vengono associati gli errori cosi da usare questa
 classe in giro per il codice anzichè inserire a mano le stringhe.
  */
+  //Funzione per salvare i dati dell'utente
+  Future<void> _saveUserData(
+    String displayName,
+    String email,
+    UserCredential user,
+  ) async {
+    await _firestore.collection('users').doc(user.user!.uid).set({
+      'displayName': displayName,
+      'email': email,
+      'createdAt': FieldValue.serverTimestamp(),
+    });
+  }
+}
