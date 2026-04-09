@@ -85,9 +85,16 @@ class _RegisterFormState extends State<RegisterForm> {
               ]),
             ),
 
-            ElevatedButton(
-              onPressed: _signUp,
-              child: const Text("Registrati"),
+            ElevatedButton(onPressed: _signUp, child: const Text("Registrati")),
+
+            const Padding(
+              padding: EdgeInsets.symmetric(horizontal: 12),
+              child: Text("oppure", style: TextStyle(color: Colors.grey)),
+            ),
+
+            TextButton(
+              onPressed: _signInWithGoogle,
+              child: const Text("Accedi con Google"),
             ),
           ],
         ),
@@ -109,6 +116,18 @@ class _RegisterFormState extends State<RegisterForm> {
 
         _showAlert(messaggio: error);
       }
+    }
+  }
+
+  Future<void> _signInWithGoogle() async {
+    try {
+      await _authController.googleSignIn();
+    } on FirebaseAuthException catch (e) {
+      if (!mounted) {
+        return;
+      }
+      String error = "Errore generico. Riprova";
+      _showAlert(messaggio: error);
     }
   }
 

@@ -91,7 +91,17 @@ class _LoginFormState extends State<LoginForm> {
                   decoration: TextDecoration.underline,
                 ),
               ),
-            )
+            ),
+
+            const Padding(
+              padding: EdgeInsets.symmetric(horizontal: 12),
+              child: Text("oppure", style: TextStyle(color: Colors.grey)),
+            ),
+
+            TextButton(
+              onPressed: _signInWithGoogle,
+              child: const Text("Accedi con Google"),
+            ),
           ],
         ),
       ),
@@ -123,6 +133,18 @@ class _LoginFormState extends State<LoginForm> {
     } on FirebaseAuthException catch (e) {
       String error = "Errore generico. Riprova";
 
+      _showAlert(messaggio: error);
+    }
+  }
+
+  Future<void> _signInWithGoogle() async {
+    try {
+      await _authController.googleSignIn();
+    } on FirebaseAuthException catch (e) {
+      String error = "Errore generico. Riprova";
+      if (!mounted) {
+        return;
+      }
       _showAlert(messaggio: error);
     }
   }
