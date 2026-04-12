@@ -3,6 +3,7 @@ import 'package:f1_news/screens/auth.dart';
 import 'package:f1_news/screens/is_email_verified.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'firebase_options.dart';
 
 void main() async {
@@ -11,7 +12,11 @@ void main() async {
     options: DefaultFirebaseOptions.currentPlatform,
   );
 
-  runApp(const MyApp());
+  runApp(
+    const ProviderScope( //Questo serve per permettere al provider di funzionar.e
+      child: MyApp(),
+    ),
+  );
 }
 
 class MyApp extends StatelessWidget {
