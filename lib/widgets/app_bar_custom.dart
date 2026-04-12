@@ -21,22 +21,19 @@ class AppBarCustom extends StatelessWidget implements PreferredSizeWidget {
   Widget build(BuildContext context) {
     return AppBar(
       backgroundColor: Colors.red,
-      leadingWidth: 100,
-
-      leading: isAnonymous
-          ? Padding(
-              padding: const EdgeInsets.symmetric(vertical: 8.0, horizontal: 3.0),
-              child: ElevatedButton(
-                onPressed: onSignOut,
-                child: const Text("Accedi"),
-              ),
-            )
-          : null,
-
       centerTitle: true,
       title: Text(title),
 
       actions: [
+        if(isAnonymous)
+          Padding(
+            padding: const EdgeInsets.symmetric(vertical: 8.0, horizontal: 3.0),
+            child: ElevatedButton(
+              onPressed: onSignOut,
+              child: const Text("Accedi"),
+            ),
+          ),
+
         if (!isAnonymous)
           PopupMenuButton<MenuOptions>(
             icon: const Icon(Icons.account_circle_outlined),
