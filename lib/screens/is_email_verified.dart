@@ -47,7 +47,7 @@ class _IsEmailVerifiedState extends State<IsEmailVerified> with WidgetsBindingOb
     }
 
     if (_isEmailVerified || AuthController().currentUser!.isAnonymous) {
-      return const homepage();
+      return const Homepage();
     }
 
     return Scaffold(
