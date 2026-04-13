@@ -7,14 +7,12 @@ enum MenuOptions { impostazioniAccount, impostazioniApp, preferiti, logout }
 class AppBarCustom extends StatelessWidget implements PreferredSizeWidget {
   final String title;
   final bool isAnonymous;
-  final VoidCallback onSignOut;
   final user = AuthController().currentUser;
 
   AppBarCustom({
     super.key,
     required this.title,
     required this.isAnonymous,
-    required this.onSignOut,
   });
 
   @override
@@ -29,7 +27,7 @@ class AppBarCustom extends StatelessWidget implements PreferredSizeWidget {
           Padding(
             padding: const EdgeInsets.symmetric(vertical: 8.0, horizontal: 3.0),
             child: ElevatedButton(
-              onPressed: onSignOut,
+              onPressed: _clearSession,
               child: const Text("Accedi"),
             ),
           ),
@@ -53,7 +51,7 @@ class AppBarCustom extends StatelessWidget implements PreferredSizeWidget {
                   print("Gestisci i tuoi preferiti");
                   break;
                 case MenuOptions.logout:
-                  onSignOut();
+                  _signOut();
                   break;
               }
             },
@@ -95,4 +93,12 @@ class AppBarCustom extends StatelessWidget implements PreferredSizeWidget {
 
   @override
   Size get preferredSize => const Size.fromHeight(kToolbarHeight);
+
+  Future<void> _clearSession() async {
+    await AuthController().clearSession();
+  }
+
+  Future<void> _signOut() async {
+    await AuthController().signOut();
+  }
 }
