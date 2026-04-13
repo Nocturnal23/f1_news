@@ -1,18 +1,19 @@
 import 'package:flutter/material.dart';
 
 import '../controllers/auth_controller.dart';
+import '../core/utils/routes.dart';
 
 enum MenuOptions { impostazioniAccount, impostazioniApp, preferiti, logout }
 
 class AppBarCustom extends StatelessWidget implements PreferredSizeWidget {
   final String title;
-  final bool isAnonymous;
+  final bool isNull;
   final user = AuthController().currentUser;
 
   AppBarCustom({
     super.key,
     required this.title,
-    required this.isAnonymous,
+    required this.isNull,
   });
 
   @override
@@ -23,16 +24,18 @@ class AppBarCustom extends StatelessWidget implements PreferredSizeWidget {
       title: Text(title),
 
       actions: [
-        if(isAnonymous)
+        if(isNull)
           Padding(
             padding: const EdgeInsets.symmetric(vertical: 8.0, horizontal: 3.0),
             child: ElevatedButton(
-              onPressed: _clearSession,
+              onPressed: () {
+                Navigator.pushNamed(context, Routes.auth);
+              },
               child: const Text("Accedi"),
             ),
           ),
 
-        if (!isAnonymous)
+        if (!isNull)
           PopupMenuButton<MenuOptions>(
             icon: const Icon(Icons.account_circle_outlined),
             shape: RoundedRectangleBorder(
@@ -93,10 +96,6 @@ class AppBarCustom extends StatelessWidget implements PreferredSizeWidget {
 
   @override
   Size get preferredSize => const Size.fromHeight(kToolbarHeight);
-
-  Future<void> _clearSession() async {
-    await AuthController().clearSession();
-  }
 
   Future<void> _signOut() async {
     await AuthController().signOut();
