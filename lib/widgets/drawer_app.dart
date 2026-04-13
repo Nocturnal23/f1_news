@@ -1,6 +1,7 @@
+import 'package:f1_news/core/utils/routes.dart';
 import 'package:flutter/material.dart';
 
-import '../chequered_flag.dart';
+import 'chequered_flag.dart';
 
 class DrawerApp extends StatelessWidget {
   const DrawerApp({super.key});
@@ -42,13 +43,31 @@ class DrawerApp extends StatelessWidget {
           ListTile(
             leading: const Icon(Icons.home),
             title: const Text('Homepage'),
-            onTap: () => {},
+            onTap: () {
+              Navigator.pop(context); // Questo permette di chiudere il drawer.
+
+              /*
+              Ottengo il nome della route corrente.
+              ModalRoute.of(context) -> Recupera la route associata al contesto corrente.
+              settings -> Contiene le varie informazioni della route compreso il nome.
+              name -> Prende appunto il nome.
+
+              Questo mi permette di controllare che la route di destinazione non corrisponda
+              a quella di partenza.
+              */
+              final String? currentRoute = ModalRoute.of(context)?.settings.name;
+              if (currentRoute != Routes.homepage) {
+                //pushReplacementNamed serve per non accumulare pagine nello stack.
+                Navigator.pushReplacementNamed(context, Routes.homepage);
+              }
+            },
           ),
 
           ListTile(
             leading: const Icon(Icons.article),
             title: const Text('Ultime Notizie'),
-            onTap: () {},
+            onTap: () {
+            },
           ),
 
           ListTile(
