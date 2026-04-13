@@ -1,9 +1,11 @@
 import 'package:f1_news/controllers/auth_controller.dart';
 import 'package:f1_news/screens/auth.dart';
+import 'package:f1_news/screens/homepage.dart';
 import 'package:f1_news/screens/is_email_verified.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'core/utils/routes.dart';
 import 'firebase_options.dart';
 
 void main() async {
@@ -26,10 +28,6 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'Flutter Demo',
-      theme: ThemeData(
-        colorScheme: .fromSeed(seedColor: Colors.deepPurple),
-      ),
       home: StreamBuilder(
           stream: AuthController().authStateChanges,
           builder: (context, snapshot) {
@@ -40,6 +38,18 @@ class MyApp extends StatelessWidget {
             }
           }
       ),
+
+      routes: {
+        Routes.homepage: (context) => const Homepage(),
+        Routes.auth: (context) => const Auth(),
+        Routes.verified: (context) => const IsEmailVerified(),
+        // Routes.profile: (context) => const Profile(),
+        // Routes.settings: (contex) => const Settings(),
+        // Routes.favorite: (context) => const Favorite(),
+        // Routes.news: (contex) => const News(),
+        // Routes.rank: (contex) => const Rank(),
+        // Routes.races: (contex) => const Races(),
+      },
     );
   }
 }
