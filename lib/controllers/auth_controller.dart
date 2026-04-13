@@ -49,6 +49,13 @@ class AuthController {
     }
   }
 
+  //Gestire l'utente anonimo quando esce.
+  Future<void> clearSession() async {
+    if (currentUser != null) {
+      await currentUser!.delete();
+    }
+  }
+
   //Funzione pr il logout.
   Future<void> signOut() async {
     try {
