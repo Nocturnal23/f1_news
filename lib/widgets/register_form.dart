@@ -22,6 +22,11 @@ class _RegisterFormState extends State<RegisterForm> {
   final AuthController _authController = AuthController();
 
   @override
+  void dispose() {
+    super.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
     return Padding(
       padding: EdgeInsets.all(16.0),
@@ -111,7 +116,7 @@ class _RegisterFormState extends State<RegisterForm> {
 
             TextButton(
               onPressed: _signInWithGoogle,
-              child: const Text("Accedi con Google"),
+              child: const Text("Registrati con Google"),
             ),
           ],
         ),
@@ -128,6 +133,17 @@ class _RegisterFormState extends State<RegisterForm> {
           email: data['email'],
           password: data['password'],
         );
+
+        // Registrazione fatta, quindi compare popup d'avviso.
+        await FirebaseAuth.instance.signOut();
+
+        if (mounted) {
+          _showAlert(
+            titolo: "Registrazione completata",
+            messaggio: "Registrazione completata! Riceverai una mail dove verificare il tuo account.",
+          );
+        }
+
       } on FirebaseAuthException catch (e) {
         if (!mounted) {
           return;
@@ -146,12 +162,19 @@ class _RegisterFormState extends State<RegisterForm> {
   Future<void> _signInWithGoogle() async {
     try {
       await _authController.googleSignIn();
-    } on FirebaseAuthException catch (e) {
+
+      if (mounted) {
+        Navigator.pop(context);
+      }
+
+    } catch (e) {
       if (!mounted) {
         return;
       }
-      String error = "Errore generico. Riprova";
-      _showAlert(messaggio: error);
+
+      if (e.toString().contains(ErrorsEnums.GOOGLE_SIGNIN_ABORTED.label)) {
+        return;
+      }
     }
   }
 
