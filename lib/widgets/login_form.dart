@@ -19,6 +19,11 @@ class _LoginFormState extends State<LoginForm> {
   final AuthController _authController = AuthController();
 
   @override
+  void dispose() {
+    super.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
     return Padding(
       padding: EdgeInsets.all(16.0),
@@ -73,8 +78,8 @@ class _LoginFormState extends State<LoginForm> {
                 ),
 
                 TextButton(
-                  onPressed: _signAsGuest,
-                  child: const Text("Entra come ospite"),
+                  onPressed: _signInWithGoogle,
+                  child: const Text("Accedi con Google"),
                 ),
               ],
             ),
@@ -88,16 +93,6 @@ class _LoginFormState extends State<LoginForm> {
                   decoration: TextDecoration.underline,
                 ),
               ),
-            ),
-
-            const Padding(
-              padding: EdgeInsets.symmetric(horizontal: 12),
-              child: Text("oppure", style: TextStyle(color: Colors.grey)),
-            ),
-
-            TextButton(
-              onPressed: _signInWithGoogle,
-              child: const Text("Accedi con Google"),
             ),
           ],
         ),
@@ -117,42 +112,47 @@ class _LoginFormState extends State<LoginForm> {
         email: data['email'],
         password: data['password'],
       );
-    } on FirebaseAuthException catch (e) {
+
+      if (mounted) { //Credenziali corrette e verificate.
+        Navigator.pop(context);
+      }
+    } catch (e) {
       if (!mounted) {
         return;
       }
+
       String error = "Errore generico. Riprova";
 
-      if (e.code == ErrorsEnums.INVALID_CREDENTIAL.label) {
+      if (e.toString().contains(ErrorsEnums.EMAIL_NOT_VERIFIED.label) ) {
+        _showAlert(
+          titolo: "Accesso Negato",
+          messaggio: "Devi prima confermare il tuo indirizzo email cliccando sul link che ti abbiamo inviato.",
+        );
+      } else if (e is FirebaseAuthException && e.code == ErrorsEnums.INVALID_CREDENTIAL.label) {
         error = "Email o password errate. Riprova.";
+      } else {
+        _showAlert(messaggio: error);
       }
-      _showAlert(messaggio: error);
-    }
-  }
-
-  Future<void> _signAsGuest() async {
-    try {
-      await _authController.signAsGuest();
-    } on FirebaseAuthException catch (e) {
-      if (!mounted) {
-        return;
-      }
-
-      String error = "Errore generico. Riprova";
-
-      _showAlert(messaggio: error);
+      return;
     }
   }
 
   Future<void> _signInWithGoogle() async {
     try {
       await _authController.googleSignIn();
-    } on FirebaseAuthException catch (e) {
-      String error = "Errore generico. Riprova";
+
+      if (mounted) {
+        Navigator.pop(context);
+      }
+
+    } catch (e) {
       if (!mounted) {
         return;
       }
-      _showAlert(messaggio: error);
+
+      if (e.toString().contains(ErrorsEnums.GOOGLE_SIGNIN_ABORTED.label)) {
+        return;
+      }
     }
   }
 
