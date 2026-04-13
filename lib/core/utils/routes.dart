@@ -1,7 +1,6 @@
 class Routes {
   static const String homepage = '/home';
   static const String auth = '/auth';
-  static const String verified = '/emailVerified';
   static const String profile = '/profile';
   static const String settings = '/setting';
   static const String favorite = '/favorite';
