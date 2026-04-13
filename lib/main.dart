@@ -1,7 +1,5 @@
-import 'package:f1_news/controllers/auth_controller.dart';
 import 'package:f1_news/screens/auth.dart';
 import 'package:f1_news/screens/homepage.dart';
-import 'package:f1_news/screens/is_email_verified.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -28,27 +26,17 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      home: StreamBuilder(
-          stream: AuthController().authStateChanges,
-          builder: (context, snapshot) {
-            if(snapshot.hasData) {
-              return IsEmailVerified();
-            } else {
-              return Auth();
-            }
-          }
-      ),
+      home: Homepage(),
 
       routes: {
         Routes.homepage: (context) => const Homepage(),
         Routes.auth: (context) => const Auth(),
-        Routes.verified: (context) => const IsEmailVerified(),
         // Routes.profile: (context) => const Profile(),
-        // Routes.settings: (contex) => const Settings(),
+        // Routes.settings: (context) => const Settings(),
         // Routes.favorite: (context) => const Favorite(),
-        // Routes.news: (contex) => const News(),
-        // Routes.rank: (contex) => const Rank(),
-        // Routes.races: (contex) => const Races(),
+        // Routes.news: (context) => const News(),
+        // Routes.rank: (context) => const Rank(),
+        // Routes.races: (context) => const Races(),
       },
     );
   }
