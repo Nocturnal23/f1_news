@@ -4,6 +4,8 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 
+import '../core/utils/enums.dart';
+
 class AuthController {
   final FirebaseAuth _firebaseAuth = FirebaseAuth.instance;
   final FirebaseFirestore _firestore = FirebaseFirestore.instance;
@@ -20,6 +22,14 @@ class AuthController {
         email: email,
         password: password,
       );
+
+      //Logica di controllo sulla email verificata.
+      final user = _firebaseAuth.currentUser;
+      if (user != null && !user.emailVerified) { //Utente non verificato.
+        await _firebaseAuth.signOut();
+        throw Exception(ErrorsEnums.EMAIL_NOT_VERIFIED.label);
+      }
+
     } on FirebaseAuthException catch (e) {
       print('Failed with error code: ${e.code}');
       print(e.message);
@@ -28,11 +38,7 @@ class AuthController {
   }
 
   //Funzione per la registrazione.
-  Future<void> signUp({
-    required String displayName,
-    required String email,
-    required String password,
-  }) async {
+  Future<void> signUp({required String displayName, required String email, required String password}) async {
     try {
       UserCredential user = await _firebaseAuth.createUserWithEmailAndPassword(
         email: email,
@@ -46,13 +52,6 @@ class AuthController {
       print('Failed with error code: ${e.code}');
       print(e.message);
       rethrow;
-    }
-  }
-
-  //Gestire l'utente anonimo quando esce.
-  Future<void> clearSession() async {
-    if (currentUser != null) {
-      await currentUser!.delete();
     }
   }
 
@@ -103,56 +102,37 @@ class AuthController {
     }
   }
 
-  //Funzione per l'accesso come opite
-  Future<UserCredential?> signAsGuest() async {
-    try {
-      return await _firebaseAuth.signInAnonymously();
-    } catch (e) {
-      print("Errore accesso ospite: $e");
-      return null;
-    }
-  }
-
   //Funzione per accesso via google.
   Future<void> googleSignIn() async {
-    try {
-      await GoogleSignIn.instance.initialize(
-        serverClientId:
-            "253313055688-jhtius7u4q5mf1ej0kcvm8nql8rmuiqm.apps.googleusercontent.com",
-      );
-      final GoogleSignInAccount? googleUser = await _googleAuth.authenticate();
-      if (googleUser == null) {
-        throw Exception("Google Sign-In aborted by user");
-      }
+    await GoogleSignIn.instance.initialize(
+      serverClientId:
+          "253313055688-jhtius7u4q5mf1ej0kcvm8nql8rmuiqm.apps.googleusercontent.com",
+    );
+    final GoogleSignInAccount? googleUser = await _googleAuth.authenticate();
+    if (googleUser == null) {
+      throw Exception(ErrorsEnums.GOOGLE_SIGNIN_ABORTED.label);
+    }
 
-      final GoogleSignInAuthentication googleAuth =
-          await googleUser.authentication;
-      final credentials = GoogleAuthProvider.credential(
-        idToken: googleAuth.idToken,
-      );
-      final userCredential = await _firebaseAuth.signInWithCredential(
-        credentials,
-      );
+    final GoogleSignInAuthentication googleAuth =
+        await googleUser.authentication;
+    final credentials = GoogleAuthProvider.credential(
+      idToken: googleAuth.idToken,
+    );
+    final userCredential = await _firebaseAuth.signInWithCredential(
+      credentials,
+    );
 
-      if (userCredential.additionalUserInfo?.isNewUser == true) {
-        await _saveUserData(
-          userCredential.user!.displayName ?? "Utente Google",
-          userCredential.user!.email ?? "",
-          userCredential,
-        );
-      }
-    } on FirebaseAuthException catch (e) {
-      print('Failed with error code: ${e.code}');
-      print(e.message);
+    if (userCredential.additionalUserInfo?.isNewUser == true) {
+      await _saveUserData(
+        userCredential.user!.displayName ?? "Utente Google",
+        userCredential.user!.email ?? "",
+        userCredential,
+      );
     }
   }
 
   //Funzione per salvare i dati dell'utente
-  Future<void> _saveUserData(
-    String displayName,
-    String email,
-    UserCredential user,
-  ) async {
+  Future<void> _saveUserData(String displayName, String email, UserCredential user) async {
     await _firestore.collection('users').doc(user.user!.uid).set({
       'displayName': displayName,
       'email': email,
