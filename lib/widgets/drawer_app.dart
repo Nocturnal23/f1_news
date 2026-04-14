@@ -1,13 +1,18 @@
 import 'package:f1_news/core/utils/routes.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 
+import '../core/utils/provider.dart';
 import 'chequered_flag.dart';
 
-class DrawerApp extends StatelessWidget {
+class DrawerApp extends ConsumerWidget {
   const DrawerApp({super.key});
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context,WidgetRef ref) {
+    final authState = ref.watch(authStateProvider);
+    final user = authState.value;
+
     return Drawer(
       child: ListView(
         padding: EdgeInsets.zero,
@@ -39,6 +44,7 @@ class DrawerApp extends StatelessWidget {
               ],
             ),
           ),
+
 
           ListTile(
             leading: const Icon(Icons.home),
@@ -75,6 +81,20 @@ class DrawerApp extends StatelessWidget {
             title: const Text('Classifiche'),
             onTap: () {},
           ),
+
+          ListTile(
+            leading: const Icon(Icons.person),
+            title: const Text('Piloti'),
+            onTap: () {
+              Navigator.pop(context);
+
+              final String? currentRoute = ModalRoute.of(context)?.settings.name;
+              if (currentRoute != Routes.drivers) {
+                Navigator.pushReplacementNamed(context, Routes.drivers);
+              }
+            },
+          ),
+
           ListTile(
             leading: const Icon(Icons.calendar_month),
             title: const Text('Calendario'),
