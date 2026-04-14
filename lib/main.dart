@@ -1,4 +1,5 @@
 import 'package:f1_news/screens/auth.dart';
+import 'package:f1_news/screens/drivers.dart';
 import 'package:f1_news/screens/homepage.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
@@ -31,6 +32,7 @@ class MyApp extends StatelessWidget {
       routes: {
         Routes.homepage: (context) => const Homepage(),
         Routes.auth: (context) => const Auth(),
+        Routes.drivers: (context) => const Drivers(),
         // Routes.profile: (context) => const Profile(),
         // Routes.settings: (context) => const Settings(),
         // Routes.favorite: (context) => const Favorite(),
