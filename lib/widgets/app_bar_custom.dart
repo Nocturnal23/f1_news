@@ -1,30 +1,32 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../controllers/auth_controller.dart';
+import '../core/utils/provider.dart';
 import '../core/utils/routes.dart';
 
 enum MenuOptions { impostazioniAccount, impostazioniApp, preferiti, logout }
 
-class AppBarCustom extends StatelessWidget implements PreferredSizeWidget {
+class AppBarCustom extends ConsumerWidget implements PreferredSizeWidget {
   final String title;
-  final bool isNull;
-  final user = AuthController().currentUser;
 
   AppBarCustom({
     super.key,
     required this.title,
-    required this.isNull,
   });
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
+    final authState = ref.watch(authStateProvider);
+    final user = authState.value;
+
     return AppBar(
       backgroundColor: Colors.red,
       centerTitle: true,
       title: Text(title),
 
       actions: [
-        if(isNull)
+        if(user == null)
           Padding(
             padding: const EdgeInsets.symmetric(vertical: 8.0, horizontal: 3.0),
             child: ElevatedButton(
@@ -33,9 +35,8 @@ class AppBarCustom extends StatelessWidget implements PreferredSizeWidget {
               },
               child: const Text("Accedi"),
             ),
-          ),
-
-        if (!isNull)
+          )
+        else
           PopupMenuButton<MenuOptions>(
             icon: const Icon(Icons.account_circle_outlined),
             shape: RoundedRectangleBorder(
