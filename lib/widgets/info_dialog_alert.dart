@@ -3,11 +3,13 @@ import 'package:flutter/material.dart';
 class InfoDialogAlert extends StatelessWidget {
   final String? titolo;
   final String messaggio;
+  final VoidCallback? onPressed;
 
   InfoDialogAlert({
     super.key,
     this.titolo,
     required this.messaggio,
+    this.onPressed,
   });
 
   @override
@@ -19,6 +21,10 @@ class InfoDialogAlert extends StatelessWidget {
         TextButton(
           onPressed: () {
             Navigator.of(context).pop();
+
+            if (onPressed != null) {
+              onPressed!();
+            }
           },
           child: const Text('OK'),
         ),

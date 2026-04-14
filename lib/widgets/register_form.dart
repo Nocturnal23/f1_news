@@ -141,6 +141,9 @@ class _RegisterFormState extends State<RegisterForm> {
           _showAlert(
             titolo: "Registrazione completata",
             messaggio: "Registrazione completata! Riceverai una mail dove verificare il tuo account.",
+            onConfirm: () {
+              Navigator.of(context).pushReplacementNamed('/home');
+            },
           );
         }
 
@@ -178,11 +181,15 @@ class _RegisterFormState extends State<RegisterForm> {
     }
   }
 
-  void _showAlert({required String messaggio, String? titolo}) {
+  void _showAlert({required String messaggio, String? titolo, VoidCallback? onConfirm}) {
     showDialog(
       context: context,
       builder: (context) =>
-          InfoDialogAlert(titolo: titolo, messaggio: messaggio),
+          InfoDialogAlert(
+              titolo: titolo,
+              messaggio: messaggio,
+              onPressed: onConfirm,
+          ),
     );
   }
 }
