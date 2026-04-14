@@ -3,20 +3,22 @@ import 'package:f1_news/widgets/info_dialog_alert.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_form_builder/flutter_form_builder.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:form_builder_validators/form_builder_validators.dart';
 import '../controllers/auth_controller.dart';
+import '../core/utils/provider.dart';
 
-class LoginForm extends StatefulWidget {
+class LoginForm extends ConsumerStatefulWidget {
   const LoginForm({super.key});
 
   @override
-  State<LoginForm> createState() => _LoginFormState();
+  ConsumerState<LoginForm> createState() => _LoginFormState();
 }
 
-class _LoginFormState extends State<LoginForm> {
+class _LoginFormState extends ConsumerState<LoginForm> {
   final _formKey = GlobalKey<FormBuilderState>();
   bool obscuredPassword = true;
-  final AuthController _authController = AuthController();
+  // final AuthController _authController = AuthController();
 
   @override
   void dispose() {
@@ -100,6 +102,8 @@ class _LoginFormState extends State<LoginForm> {
     );
   }
 
+  AuthController get _auth => ref.read(authControllerProvider);
+
   Future<void> _signIn() async {
     if (!_formKey.currentState!.saveAndValidate()) {
       return;
@@ -108,7 +112,7 @@ class _LoginFormState extends State<LoginForm> {
     final data = _formKey.currentState!.value;
 
     try {
-      await _authController.signIn(
+      await _auth.signIn(
         email: data['email'],
         password: data['password'],
       );
@@ -139,7 +143,7 @@ class _LoginFormState extends State<LoginForm> {
 
   Future<void> _signInWithGoogle() async {
     try {
-      await _authController.googleSignIn();
+      await _auth.googleSignIn();
 
       if (mounted) {
         Navigator.pop(context);
@@ -173,7 +177,7 @@ class _LoginFormState extends State<LoginForm> {
       }
 
       try {
-        await _authController.restorePassword(email);
+        await _auth.restorePassword(email);
 
         if (context.mounted) {
           _showAlert(

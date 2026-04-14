@@ -3,23 +3,25 @@ import 'package:f1_news/core/utils/enums.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_form_builder/flutter_form_builder.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:form_builder_validators/form_builder_validators.dart';
+import '../core/utils/provider.dart';
 import 'info_dialog_alert.dart';
 
-class RegisterForm extends StatefulWidget {
+class RegisterForm extends ConsumerStatefulWidget {
   const RegisterForm({super.key});
 
   @override
-  State<RegisterForm> createState() => _RegisterFormState();
+  ConsumerState<RegisterForm> createState() => _RegisterFormState();
 }
 
-class _RegisterFormState extends State<RegisterForm> {
+class _RegisterFormState extends ConsumerState<RegisterForm> {
   final _formKey =
       GlobalKey<
         FormBuilderState
       >(); // Questa chiave serve per verificare la validità del form.
   bool obscuredPassword = true;
-  final AuthController _authController = AuthController();
+  // final AuthController _authController = AuthController();
 
   @override
   void dispose() {
@@ -124,11 +126,13 @@ class _RegisterFormState extends State<RegisterForm> {
     );
   }
 
+  AuthController get _auth => ref.read(authControllerProvider);
+
   Future<void> _signUp() async {
     if (_formKey.currentState!.saveAndValidate()) {
       final data = _formKey.currentState!.value;
       try {
-        await _authController.signUp(
+        await _auth.signUp(
           displayName: data['displayName'],
           email: data['email'],
           password: data['password'],
@@ -164,7 +168,7 @@ class _RegisterFormState extends State<RegisterForm> {
 
   Future<void> _signInWithGoogle() async {
     try {
-      await _authController.googleSignIn();
+      await _auth.googleSignIn();
 
       if (mounted) {
         Navigator.pop(context);
