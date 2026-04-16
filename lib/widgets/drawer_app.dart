@@ -96,6 +96,19 @@ class DrawerApp extends ConsumerWidget {
           ),
 
           ListTile(
+            leading: const Icon(Icons.factory),
+            title: const Text('Squadre'),
+            onTap: () {
+              Navigator.pop(context);
+
+              final String? currentRoute = ModalRoute.of(context)?.settings.name;
+              if (currentRoute != Routes.teams) {
+                Navigator.pushReplacementNamed(context, Routes.teams);
+              }
+            },
+          ),
+
+          ListTile(
             leading: const Icon(Icons.calendar_month),
             title: const Text('Calendario'),
             onTap: () {},
