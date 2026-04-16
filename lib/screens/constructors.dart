@@ -78,11 +78,20 @@ class _ConstructorsState extends State<Constructors> {
 
                 title: Text(
                   team.name,
-                  style: TextStyle(fontWeight: FontWeight.bold),
+                  style: TextStyle(
+                    fontWeight: FontWeight.bold,
+                    color: Colors.white,
+                    shadows: [Shadow(blurRadius: 2, color: Colors.black26)],
+                  ),
                 ),
                 subtitle: Text(
                   team.nationality,
-                  style: TextStyle(fontWeight: FontWeight.bold, fontStyle: FontStyle.italic),
+                  style: TextStyle(
+                    fontWeight: FontWeight.bold,
+                    fontStyle: FontStyle.italic,
+                    color: Colors.white,
+                    shadows: [Shadow(blurRadius: 2, color: Colors.black26)],
+                  ),
                 ),
 
                 trailing: IconButton(
