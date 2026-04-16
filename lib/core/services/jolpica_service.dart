@@ -39,7 +39,7 @@ class ApiService {
 
   //Endpoint per la classifica teams.
   Future<Map<String, dynamic>> getTeamsStandings() async {
-    final response = await http.get(Uri.parse('$baseUrl/${DateTime.now().year}/constructorsStandings.json'));
+    final response = await http.get(Uri.parse('$baseUrl/${DateTime.now().year}/constructorStandings.json'));
 
     if (response.statusCode == 200) {
       return jsonDecode(response.body);
