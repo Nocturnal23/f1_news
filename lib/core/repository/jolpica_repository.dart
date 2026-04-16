@@ -1,5 +1,6 @@
 import '../models/drivers_models_standings.dart';
 import '../models/drivers_models.dart';
+import '../models/constructors_models.dart';
 import '../services/jolpica_service.dart';
 
 class F1Repository {
@@ -49,6 +50,30 @@ class F1Repository {
 
         return driversJson
             .map((json) => DriverModel.fromJson(json))
+            .toList();
+      }
+
+      return [];
+    } catch (e) {
+      print("Errore nel repository: $e");
+      rethrow;
+    }
+  }
+
+  //Repo per tutti i tutti teams.
+  Future<List<ConstructorModel>> fetchTeams() async {
+    try {
+      final data = await apiService.getTeams();
+
+      if (data['MRData'] != null &&
+          data['MRData']['ConstructorTable'] != null &&
+          data['MRData']['ConstructorTable']['Constructors'] != null) {
+
+        final List<dynamic> teamsJson =
+        data['MRData']['ConstructorTable']['Constructors'];
+
+        return teamsJson
+            .map((json) => ConstructorModel.fromJson(json))
             .toList();
       }
 
