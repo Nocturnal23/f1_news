@@ -1,6 +1,7 @@
 import '../models/drivers_models_standings.dart';
 import '../models/drivers_models.dart';
 import '../models/constructors_models.dart';
+import '../models/constructors_models_standings.dart';
 import '../services/jolpica_service.dart';
 
 class F1Repository {
@@ -76,6 +77,12 @@ class F1Repository {
             .map((json) => ConstructorModel.fromJson(json))
             .toList();
       }
+      return [];
+    } catch (e) {
+      print("Errore nel repository: $e");
+      rethrow;
+    }
+  }
 
   //Repo per i teams in classifica.
   Future<List<ConstructorModelStandings>> fetchTeamsStandings() async {
