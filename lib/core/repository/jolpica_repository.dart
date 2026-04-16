@@ -112,4 +112,22 @@ class F1Repository {
       rethrow;
     }
   }
+
+  // Questo filtro mi permette di selezionare i piloti ufficiali, senza seguire la classifica.
+  Future<List<DriverModelStandings>> fetchOfficialDriversByTeam() async {
+    // Qui vengono recuperati i piloti ufficiali.
+    final List<DriverModelStandings> standings = await fetchDriversStandings();
+
+    // Quindi prendo i piloti ufficuali e li ordino per team di appartenenza.
+    // Se ho fatto bene se durante la stagione un pilota viene sostituito
+    // temporaneamente o definitivamente viene comunque mostrato e viene
+    // mostrato anche il sostituto.
+    standings.sort((a, b) {
+      int compareTeam = a.teamName.compareTo(b.teamName);
+      if (compareTeam != 0) return compareTeam;
+      return a.driver.surname.compareTo(b.driver.surname);
+    });
+
+    return standings;
+  }
 }
