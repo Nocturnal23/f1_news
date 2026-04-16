@@ -3,6 +3,9 @@
 *.log
 *.pyc
 *.swp
+*.doc*
+*.avif
+*.html
 .DS_Store
 .atom/
 .build/
