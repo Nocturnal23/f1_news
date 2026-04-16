@@ -1,4 +1,5 @@
 import 'package:f1_news/screens/auth.dart';
+import 'package:f1_news/screens/constructors.dart';
 import 'package:f1_news/screens/drivers.dart';
 import 'package:f1_news/screens/homepage.dart';
 import 'package:flutter/material.dart';
@@ -33,6 +34,7 @@ class MyApp extends StatelessWidget {
         Routes.homepage: (context) => const Homepage(),
         Routes.auth: (context) => const Auth(),
         Routes.drivers: (context) => const Drivers(),
+        Routes.teams: (context) => const Constructors()
         // Routes.profile: (context) => const Profile(),
         // Routes.settings: (context) => const Settings(),
         // Routes.favorite: (context) => const Favorite(),
