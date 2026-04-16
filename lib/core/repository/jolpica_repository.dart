@@ -77,6 +77,28 @@ class F1Repository {
             .toList();
       }
 
+  //Repo per i teams in classifica.
+  Future<List<ConstructorModelStandings>> fetchTeamsStandings() async {
+    try {
+      final data = await apiService.getTeamsStandings();
+
+      if (data['MRData'] != null &&
+          data['MRData']['StandingsTable'] != null &&
+          data['MRData']['StandingsTable']['StandingsLists'] != null) {
+        final List<
+            dynamic> standingsLists = data['MRData']['StandingsTable']['StandingsLists'];
+
+        if (standingsLists.isNotEmpty) {
+          final List<
+              dynamic>? standingsJson = standingsLists[0]['ConstructorStandings'];
+
+          if (standingsJson != null) {
+            return standingsJson
+                .map((json) => ConstructorModelStandings.fromJson(json))
+                .toList();
+          }
+        }
+      }
       return [];
     } catch (e) {
       print("Errore nel repository: $e");
