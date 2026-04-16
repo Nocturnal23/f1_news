@@ -1,34 +1,39 @@
+import 'drivers_models.dart';
+
 class DriverModelStandings {
-  final String id;
-  final String name;
-  final String surname;
-  final String nationality;
-  final String code;
+  final DriverModel driver;
+  final String teamId;
   final String teamName;
+  final String position;
+  final String points;
 
   DriverModelStandings({
-    required this.id,
-    required this.name,
-    required this.surname,
-    required this.nationality,
-    required this.code,
-    required this.teamName
+    required this.driver,
+    required this.teamId,
+    required this.teamName,
+    required this.position,
+    required this.points,
   });
 
   factory DriverModelStandings.fromJson(Map<String, dynamic> json) {
+    // Questi sono i due oggetti annidati nello stadings.
     final driverJson = json['Driver'] ?? {};
     final constructors = json['Constructors'] as List<dynamic>?;
+    final retrieveTeamID = constructors != null && constructors.isNotEmpty;
 
     return DriverModelStandings(
-      id: driverJson['driverId'],
-      name: driverJson['givenName'] ?? 'N/A',
-      surname: driverJson['familyName'] ?? 'N/A',
-      nationality: driverJson['nationality'] ?? 'N/A',
-      code: driverJson['code'] ?? 'N/A',
+      //Qua vengono salvate le info base del pilota.
+      driver: DriverModel.fromJson(driverJson),
 
+      teamId: retrieveTeamID
+          ? (constructors[0]['constructorId'] ?? 'N/A')
+          : 'N/A',
       teamName: (constructors != null && constructors.isNotEmpty)
           ? (constructors[0]['name'] ?? 'N/A')
           : 'N/A',
+
+      position: json['position'] ?? '0',
+      points: json['points'] ?? '0',
     );
   }
 }
