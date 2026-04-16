@@ -26,8 +26,20 @@ class ApiService {
     }
   }
 
+  //Endpoint per i teams.
   Future<Map<String, dynamic>> getTeams() async {
     final response = await http.get(Uri.parse('$baseUrl/${DateTime.now().year}/constructors.json'));
+
+    if (response.statusCode == 200) {
+      return jsonDecode(response.body);
+    } else {
+      throw Exception('Errore nel caricamento dei team: ${response.statusCode}');
+    }
+  }
+
+  //Endpoint per la classifica teams.
+  Future<Map<String, dynamic>> getTeamsStandings() async {
+    final response = await http.get(Uri.parse('$baseUrl/${DateTime.now().year}/constructorsStandings.json'));
 
     if (response.statusCode == 200) {
       return jsonDecode(response.body);
