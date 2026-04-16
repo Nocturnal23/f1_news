@@ -8,6 +8,30 @@ class F1Repository {
 
   F1Repository(this.apiService);
 
+  //Repo per tutti i piloti che hanno preso parte ad almeno una sessione ufficiela.
+  Future<List<DriverModel>> fetchDrivers() async {
+    try {
+      final data = await apiService.getDrivers();
+
+      if (data['MRData'] != null &&
+          data['MRData']['DriverTable'] != null &&
+          data['MRData']['DriverTable']['Drivers'] != null) {
+
+        final List<dynamic> driversJson =
+        data['MRData']['DriverTable']['Drivers'];
+
+        return driversJson
+            .map((json) => DriverModel.fromJson(json))
+            .toList();
+      }
+
+      return [];
+    } catch (e) {
+      print("Errore nel repository: $e");
+      rethrow;
+    }
+  }
+
   //Repo per i piloti che sono in classifica.
   Future<List<DriverModelStandings>> fetchDriversStandings() async {
     try {
@@ -29,30 +53,6 @@ class F1Repository {
           }
         }
       }
-      return [];
-    } catch (e) {
-      print("Errore nel repository: $e");
-      rethrow;
-    }
-  }
-
-  //Repo per tutti i piloti che hanno preso parte ad almeno una sessione ufficiela.
-  Future<List<DriverModel>> fetchDrivers() async {
-    try {
-      final data = await apiService.getDrivers();
-
-      if (data['MRData'] != null &&
-          data['MRData']['DriverTable'] != null &&
-          data['MRData']['DriverTable']['Drivers'] != null) {
-
-        final List<dynamic> driversJson =
-        data['MRData']['DriverTable']['Drivers'];
-
-        return driversJson
-            .map((json) => DriverModel.fromJson(json))
-            .toList();
-      }
-
       return [];
     } catch (e) {
       print("Errore nel repository: $e");
