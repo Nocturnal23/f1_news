@@ -1,7 +1,9 @@
+import 'package:f1_news/core/utils/teams_cols.dart';
 import 'package:flutter/material.dart';
 
 import '../controllers/auth_controller.dart';
 import '../core/repository/jolpica_repository.dart';
+import '../core/models/drivers_models_standings.dart';
 import '../core/models/drivers_models.dart';
 import '../core/services/jolpica_service.dart';
 import '../widgets/app_bar_custom.dart';
@@ -22,21 +24,17 @@ class _DriversState extends State<Drivers> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBarCustom(
-        title: "Piloti ${DateTime.now().year}",
-      ),
+      appBar: AppBarCustom(title: "Piloti ${DateTime.now().year}"),
 
       drawer: const DrawerApp(),
 
-      body: Center(
-        child: _buildDriverList(),
-      ),
+      body: Center(child: _buildDriverList()),
     );
   }
 
   Widget _buildDriverList() {
-    return FutureBuilder<List<DriverModel>>(
-      future: _repository.fetchDrivers(),
+    return FutureBuilder<List<DriverModelStandings>>(
+      future: _repository.fetchOfficialDriversByTeam(),
       builder: (context, snapshot) {
         if (snapshot.connectionState == ConnectionState.waiting) {
           return const CircularProgressIndicator(color: Colors.red);
@@ -48,33 +46,96 @@ class _DriversState extends State<Drivers> {
 
         final drivers = snapshot.data!;
 
-        return ListView.builder(
+        return ListView.separated(
+          separatorBuilder: (context, index) => const SizedBox(height: 1),
           itemCount: drivers.length,
           itemBuilder: (context, index) {
-            final driver = drivers[index];
+            final driverStand = drivers[index];
+            final driver = driverStand.driver;
             final isFav = _favoriteIds.contains(driver.id);
 
-            return ListTile(
-              leading: CircleAvatar(
-                backgroundColor: Colors.grey[200],
-                child: Text('${driver.name.substring(0,1)}${driver.surname.substring(0,1)}')
-              ),
-              title: Text("${driver.name} ${driver.surname}"),
-              subtitle: Text(driver.nationality),
-              trailing: IconButton(
-                icon: Icon(
-                  isFav ? Icons.star : Icons.star_border,
-                  color: isFav ? Colors.amber : null,
+            return Container(
+              color: TeamsCols.getBackground(driverStand.teamId),
+              child: ListTile(
+                leading: CircleAvatar(
+                  backgroundColor: TeamsCols.getForeground(driverStand.teamId),
+                  child: SizedBox(
+                    child: Image(
+                      width: 50,
+                      height: 50,
+                      image: AssetImage("lib/assets/drivers/${driver.id}.webp"),
+                      fit: BoxFit.cover,
+                      alignment: Alignment.topCenter,
+                      errorBuilder: (context, error, stackTrace) {
+                        return Text(
+                          '${driver.name.substring(0, 1)}${driver.surname.substring(0, 1)}',
+                        );
+                      },
+                    ),
+                  ),
                 ),
-                onPressed: () {
-                  setState(() {
-                    if (isFav) {
-                      _favoriteIds.remove(driver.id);
-                    } else {
-                      _favoriteIds.add(driver.id);
-                    }
-                  });
-                },
+
+                title: Row(
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: [
+                    Expanded(
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(
+                            "${driver.name} ${driver.surname}",
+                            style: TextStyle(
+                              fontWeight: FontWeight.bold,
+                              color: Colors.white,
+                              shadows: [
+                                Shadow(blurRadius: 2, color: Colors.black26),
+                              ],
+                            ),
+                          ),
+                          Text(
+                            driverStand.teamName,
+                            style: TextStyle(
+                              fontWeight: FontWeight.bold,
+                              fontStyle: FontStyle.italic,
+                              color: Colors.white,
+                              shadows: [
+                                Shadow(blurRadius: 2, color: Colors.black26),
+                              ],
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+
+                    SizedBox(
+                      width: 32,
+                      height: 32,
+                      child: Image.asset(
+                        "lib/assets/logos/${driverStand.teamId}.webp",
+                        fit: BoxFit.contain,
+                        errorBuilder: (context, error, stackTrace) {
+                          return const SizedBox();
+                        },
+                      ),
+                    ),
+                  ],
+                ),
+
+                trailing: IconButton(
+                  icon: Icon(
+                    isFav ? Icons.star : Icons.star_border,
+                    color: isFav ? Colors.amber : null,
+                  ),
+                  onPressed: () {
+                    setState(() {
+                      if (isFav) {
+                        _favoriteIds.remove(driver.id);
+                      } else {
+                        _favoriteIds.add(driver.id);
+                      }
+                    });
+                  },
+                ),
               ),
             );
           },
