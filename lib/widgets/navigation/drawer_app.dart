@@ -2,8 +2,8 @@ import 'package:f1_news/core/utils/routes.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-import '../core/utils/provider.dart';
-import 'chequered_flag.dart';
+import '../../core/utils/provider.dart';
+import '../chequered_flag.dart';
 
 class DrawerApp extends ConsumerWidget {
   const DrawerApp({super.key});
