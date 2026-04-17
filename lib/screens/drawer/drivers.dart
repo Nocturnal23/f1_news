@@ -1,13 +1,12 @@
 import 'package:f1_news/core/utils/teams_cols.dart';
 import 'package:flutter/material.dart';
 
-import '../controllers/auth_controller.dart';
-import '../core/repository/jolpica_repository.dart';
-import '../core/models/drivers_models_standings.dart';
-import '../core/models/drivers_models.dart';
-import '../core/services/jolpica_service.dart';
-import '../widgets/app_bar_custom.dart';
-import '../widgets/drawer_app.dart';
+import '../../controllers/auth_controller.dart';
+import '../../core/repository/jolpica_repository.dart';
+import '../../core/models/drivers_models_standings.dart';
+import '../../core/services/jolpica_service.dart';
+import '../../widgets/navigation/app_bar_custom.dart';
+import '../../widgets/navigation/drawer_app.dart';
 
 class Drivers extends StatefulWidget {
   const Drivers({super.key});
