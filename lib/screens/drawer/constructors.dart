@@ -1,12 +1,11 @@
 import 'package:f1_news/core/models/constructors_models.dart';
-import 'package:f1_news/core/models/constructors_models_standings.dart';
 import 'package:flutter/material.dart';
 
-import '../core/repository/jolpica_repository.dart';
-import '../core/services/jolpica_service.dart';
-import '../core/utils/teams_cols.dart';
-import '../widgets/app_bar_custom.dart';
-import '../widgets/drawer_app.dart';
+import '../../core/repository/jolpica_repository.dart';
+import '../../core/services/jolpica_service.dart';
+import '../../core/utils/teams_cols.dart';
+import '../../widgets/navigation/app_bar_custom.dart';
+import '../../widgets/navigation/drawer_app.dart';
 
 class Constructors extends StatefulWidget {
   const Constructors({super.key});
