@@ -1,6 +1,6 @@
 import 'package:f1_news/screens/auth.dart';
-import 'package:f1_news/screens/constructors.dart';
-import 'package:f1_news/screens/drivers.dart';
+import 'package:f1_news/screens/drawer/constructors.dart';
+import 'package:f1_news/screens/drawer/drivers.dart';
 import 'package:f1_news/screens/homepage.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
