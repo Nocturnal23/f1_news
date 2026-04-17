@@ -134,9 +134,9 @@ class _LoginFormState extends ConsumerState<LoginForm> {
         );
       } else if (e is FirebaseAuthException && e.code == ErrorsEnums.INVALID_CREDENTIAL.label) {
         error = "Email o password errate. Riprova.";
-      } else {
-        _showAlert(messaggio: error);
       }
+
+      _showAlert(messaggio: error);
       return;
     }
   }
