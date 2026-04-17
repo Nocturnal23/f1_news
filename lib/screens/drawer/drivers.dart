@@ -19,6 +19,13 @@ class _DriversState extends State<Drivers> {
   final user = AuthController().currentUser;
   final F1Repository _repository = F1Repository(ApiService());
   final Set<String> _favoriteIds = {};
+  late Future<List<DriverModelStandings>> _driversFuture;
+
+  @override
+  void initState() {
+    super.initState();
+    _driversFuture = _repository.fetchOfficialDriversByTeam();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -33,7 +40,7 @@ class _DriversState extends State<Drivers> {
 
   Widget _buildDriverList() {
     return FutureBuilder<List<DriverModelStandings>>(
-      future: _repository.fetchOfficialDriversByTeam(),
+      future: _driversFuture,
       builder: (context, snapshot) {
         if (snapshot.connectionState == ConnectionState.waiting) {
           return const CircularProgressIndicator(color: Colors.red);

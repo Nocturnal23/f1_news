@@ -17,6 +17,13 @@ class Constructors extends StatefulWidget {
 class _ConstructorsState extends State<Constructors> {
   final F1Repository _repository = F1Repository(ApiService());
   final Set<String> _favoriteIds = {};
+  late Future<List<ConstructorModel>> _constructorFuture;
+
+  @override
+  void initState() {
+    super.initState();
+    _constructorFuture = _repository.fetchTeams();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -35,7 +42,7 @@ class _ConstructorsState extends State<Constructors> {
 
   Widget _buildConstructorList() {
     return FutureBuilder<List<ConstructorModel>>(
-      future: _repository.fetchTeams(),
+      future: _constructorFuture,
       builder: (context, snapshot) {
         if (snapshot.connectionState == ConnectionState.waiting) {
           return const CircularProgressIndicator(color: Colors.red);
