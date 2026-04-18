@@ -1,22 +1,24 @@
 import 'package:f1_news/core/utils/teams_cols.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../controllers/auth_controller.dart';
 import '../../core/repository/jolpica_repository.dart';
 import '../../core/models/drivers_models_standings.dart';
 import '../../core/services/jolpica_service.dart';
+import '../../core/utils/provider.dart';
 import '../../widgets/navigation/app_bar_custom.dart';
 import '../../widgets/navigation/drawer_app.dart';
 
-class Drivers extends StatefulWidget {
+class Drivers extends ConsumerStatefulWidget {
   const Drivers({super.key});
 
   @override
-  State<Drivers> createState() => _DriversState();
+  ConsumerState<Drivers> createState() => _DriversState();
 }
 
-class _DriversState extends State<Drivers> {
-  final user = AuthController().currentUser;
+class _DriversState extends ConsumerState<Drivers> {
   final F1Repository _repository = F1Repository(ApiService());
   final Set<String> _favoriteIds = {};
   late Future<List<DriverModelStandings>> _driversFuture;
@@ -29,16 +31,18 @@ class _DriversState extends State<Drivers> {
 
   @override
   Widget build(BuildContext context) {
+    final authState = ref.watch(authStateProvider);
+
     return Scaffold(
       appBar: AppBarCustom(title: "Piloti ${DateTime.now().year}"),
 
       drawer: const DrawerApp(),
 
-      body: Center(child: _buildDriverList()),
+      body: Center(child: _buildDriverList(authState)),
     );
   }
 
-  Widget _buildDriverList() {
+  Widget _buildDriverList(AsyncValue<User?> authState) {
     return FutureBuilder<List<DriverModelStandings>>(
       future: _driversFuture,
       builder: (context, snapshot) {
@@ -127,19 +131,27 @@ class _DriversState extends State<Drivers> {
                   ],
                 ),
 
-                trailing: IconButton(
-                  icon: Icon(
-                    isFav ? Icons.star : Icons.star_border,
-                    color: isFav ? Colors.amber : null,
-                  ),
-                  onPressed: () {
-                    setState(() {
-                      if (isFav) {
-                        _favoriteIds.remove(driver.id);
-                      } else {
-                        _favoriteIds.add(driver.id);
-                      }
-                    });
+                trailing: authState.when(
+                  error: (error, stack) => const Text("Errore durante il caricamento dei dati."),
+                  loading: () => const CircularProgressIndicator(),
+                  data: (user) {
+                    if (user == null) return const SizedBox();
+
+                    return IconButton(
+                      icon: Icon(
+                        isFav ? Icons.star : Icons.star_border,
+                        color: isFav ? Colors.amber : null,
+                      ),
+                      onPressed: () {
+                        setState(() {
+                          if (isFav) {
+                            _favoriteIds.remove(driver.id);
+                          } else {
+                            _favoriteIds.add(driver.id);
+                          }
+                        });
+                      },
+                    );
                   },
                 ),
               ),
