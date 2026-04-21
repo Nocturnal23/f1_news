@@ -157,7 +157,7 @@ class _RegisterFormState extends ConsumerState<RegisterForm> {
         }
         String error = "Errore generico. Riprova";
 
-        if (e.code == ErrorsEnums.EMAIL_ALREADY_IN_USE.label) {
+        if (e.code == 'email-already-in-use') {
           error = "La mail inserita è già in uso da un altro utente.";
         }
 
@@ -179,7 +179,7 @@ class _RegisterFormState extends ConsumerState<RegisterForm> {
         return;
       }
 
-      if (e.toString().contains(ErrorsEnums.GOOGLE_SIGNIN_ABORTED.label)) {
+      if (e.toString().contains('google-sign-in-aborted-by-user')) {
         return;
       }
     }
