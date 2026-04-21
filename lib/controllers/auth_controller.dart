@@ -27,7 +27,7 @@ class AuthController {
       final user = _firebaseAuth.currentUser;
       if (user != null && !user.emailVerified) { //Utente non verificato.
         await _firebaseAuth.signOut();
-        throw Exception(ErrorsEnums.EMAIL_NOT_VERIFIED.label);
+        throw Exception("email-not-verified");
       }
 
     } on FirebaseAuthException catch (e) {
@@ -110,7 +110,7 @@ class AuthController {
     );
     final GoogleSignInAccount? googleUser = await _googleAuth.authenticate();
     if (googleUser == null) {
-      throw Exception(ErrorsEnums.GOOGLE_SIGNIN_ABORTED.label);
+      throw Exception('google-sign-in-aborted-by-user');
     }
 
     final GoogleSignInAuthentication googleAuth =

@@ -127,12 +127,13 @@ class _LoginFormState extends ConsumerState<LoginForm> {
 
       String error = "Errore generico. Riprova";
 
-      if (e.toString().contains(ErrorsEnums.EMAIL_NOT_VERIFIED.label) ) {
+      if (e.toString().contains('email-not-verified')) {
         _showAlert(
           titolo: "Accesso Negato",
           messaggio: "Devi prima confermare il tuo indirizzo email cliccando sul link che ti abbiamo inviato.",
         );
-      } else if (e is FirebaseAuthException && e.code == ErrorsEnums.INVALID_CREDENTIAL.label) {
+        return;
+      } else if (e is FirebaseAuthException && e.code == 'invalid-credential') {
         error = "Email o password errate. Riprova.";
       }
 
@@ -154,7 +155,7 @@ class _LoginFormState extends ConsumerState<LoginForm> {
         return;
       }
 
-      if (e.toString().contains(ErrorsEnums.GOOGLE_SIGNIN_ABORTED.label)) {
+      if (e.toString().contains('google-sign-in-aborted-by-user')) {
         return;
       }
     }
@@ -189,7 +190,7 @@ class _LoginFormState extends ConsumerState<LoginForm> {
       } on FirebaseAuthException catch (e) {
         String error = "Errore durante il recupero. Riprova.";
 
-        if (e.code == ErrorsEnums.INVALID_EMAIL.label) {
+        if (e.code == 'invalid-email') {
           error = "Il formato dell'email non è valido.";
         }
 
