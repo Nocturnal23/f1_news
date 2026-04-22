@@ -9,10 +9,12 @@ enum MenuOptions { impostazioniAccount, impostazioniApp, preferiti, logout }
 
 class AppBarCustom extends ConsumerWidget implements PreferredSizeWidget {
   final String title;
+  final PreferredSizeWidget? bottom;
 
   AppBarCustom({
     super.key,
     required this.title,
+    this.bottom,
   });
 
   @override
@@ -24,6 +26,7 @@ class AppBarCustom extends ConsumerWidget implements PreferredSizeWidget {
       backgroundColor: Colors.red,
       centerTitle: true,
       title: Text(title),
+      bottom: bottom,
 
       actions: [
         if(user == null)
@@ -96,7 +99,10 @@ class AppBarCustom extends ConsumerWidget implements PreferredSizeWidget {
   }
 
   @override
-  Size get preferredSize => const Size.fromHeight(kToolbarHeight);
+  Size get preferredSize {
+    final bottomHeight = bottom?.preferredSize.height ?? 0;
+    return Size.fromHeight(kToolbarHeight + bottomHeight);
+  }
 
   Future<void> _signOut() async {
     await AuthController().signOut();
