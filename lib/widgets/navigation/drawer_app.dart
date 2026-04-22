@@ -79,7 +79,14 @@ class DrawerApp extends ConsumerWidget {
           ListTile(
             leading: const Icon(Icons.emoji_events),
             title: const Text('Classifiche'),
-            onTap: () {},
+            onTap: () {
+              Navigator.pop(context);
+
+              final String? currentRoute = ModalRoute.of(context)?.settings.name;
+              if (currentRoute != Routes.standings) {
+                Navigator.pushReplacementNamed(context, Routes.standings);
+              }
+            },
           ),
 
           ListTile(
