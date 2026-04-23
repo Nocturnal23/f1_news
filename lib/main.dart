@@ -1,6 +1,7 @@
 import 'package:f1_news/screens/auth.dart';
 import 'package:f1_news/screens/drawer/constructors.dart';
 import 'package:f1_news/screens/drawer/drivers.dart';
+import 'package:f1_news/screens/drawer/races.dart';
 import 'package:f1_news/screens/drawer/standings.dart';
 import 'package:f1_news/screens/homepage.dart';
 import 'package:flutter/material.dart';
@@ -37,11 +38,12 @@ class MyApp extends StatelessWidget {
         Routes.drivers: (context) => const Drivers(),
         Routes.teams: (context) => const Constructors(),
         Routes.standings: (context) => const Standings(),
+        Routes.races: (context) => const Races(),
         // Routes.profile: (context) => const Profile(),
         // Routes.settings: (context) => const Settings(),
         // Routes.favorite: (context) => const Favorite(),
         // Routes.news: (context) => const News(),
-        // Routes.races: (context) => const Races(),
+
       },
     );
   }

@@ -1,12 +1,13 @@
 class Routes {
   static const String homepage = '/home';
   static const String auth = '/auth';
+  static const String drivers = '/drivers';
+  static const String teams = '/teams';
+  static const String standings = '/standings';
+  static const String races = '/races';
+
+  static const String news = '/news';
   static const String profile = '/profile';
   static const String settings = '/setting';
   static const String favorite = '/favorite';
-  static const String news = '/news';
-  static const String standings = '/standings';
-  static const String drivers = '/drivers';
-  static const String teams = '/teams';
-  static const String races = '/races';
 }
