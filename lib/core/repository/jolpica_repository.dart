@@ -1,3 +1,7 @@
+import 'dart:convert';
+
+import 'package:f1_news/core/models/races_models.dart';
+
 import '../models/drivers_models_standings.dart';
 import '../models/drivers_models.dart';
 import '../models/constructors_models.dart';
@@ -92,12 +96,10 @@ class F1Repository {
       if (data['MRData'] != null &&
           data['MRData']['StandingsTable'] != null &&
           data['MRData']['StandingsTable']['StandingsLists'] != null) {
-        final List<
-            dynamic> standingsLists = data['MRData']['StandingsTable']['StandingsLists'];
+        final List<dynamic> standingsLists = data['MRData']['StandingsTable']['StandingsLists'];
 
         if (standingsLists.isNotEmpty) {
-          final List<
-              dynamic>? standingsJson = standingsLists[0]['ConstructorStandings'];
+          final List<dynamic>? standingsJson = standingsLists[0]['ConstructorStandings'];
 
           if (standingsJson != null) {
             return standingsJson
@@ -109,6 +111,26 @@ class F1Repository {
       return [];
     } catch (e) {
       print("Errore nel repository: $e");
+      rethrow;
+    }
+  }
+
+  //Repo per il calendario
+  Future<List<RacesModels>> fetchCalendar() async {
+    try {
+      final data = await apiService.getRaces();
+
+      if(data['MRData'] != null &&
+         data['MRData']['RaceTable'] != null &&
+         data['MRData']['RaceTable']['Races'] != null) {
+
+        final List<dynamic> racesList = data['MRData']['RaceTable']['Races'];
+
+        return racesList.map((json) => RacesModels.fromJson(json)).toList();
+      }
+      return [];
+    } catch (e) {
+      print("Errore nel repository $e");
       rethrow;
     }
   }
@@ -130,4 +152,6 @@ class F1Repository {
 
     return standings;
   }
+
+
 }
