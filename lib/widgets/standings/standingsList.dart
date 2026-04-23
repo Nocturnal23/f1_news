@@ -66,16 +66,15 @@ class StandingsList extends StatelessWidget {
                         ),
                       ),
                     ),
-                    if (type == "drivers")
-                      const DataColumn(
-                        label: Text(
-                          'Nazione',
-                          style: TextStyle(
-                            fontWeight: FontWeight.bold,
-                            color: Colors.white,
-                          ),
+                    const DataColumn(
+                      label: Text(
+                        'Nazione',
+                        style: TextStyle(
+                          fontWeight: FontWeight.bold,
+                          color: Colors.white,
                         ),
                       ),
+                    ),
                     const DataColumn(
                       label: Text(
                         'Punti',
@@ -106,15 +105,14 @@ class StandingsList extends StatelessWidget {
                             style: TextStyle(color: Colors.white),
                           ),
                         ),
-                        if (type == "drivers")
-                          DataCell(
-                            Text(
-                              item.driver.nationality
-                                  .substring(0, 3)
-                                  .toUpperCase(),
-                              style: TextStyle(color: Colors.white),
-                            ),
+                        DataCell(
+                          Text(
+                            type == "drivers"
+                              ? item.driver.nationality.substring(0, 3).toUpperCase()
+                              : item.constructor.nationality.substring(0, 3).toUpperCase(),
+                            style: TextStyle(color: Colors.white),
                           ),
+                        ),
                         DataCell(
                           Text(
                             "${item.points}",
