@@ -38,7 +38,7 @@ class MyApp extends StatelessWidget {
         Routes.drivers: (context) => const Drivers(),
         Routes.teams: (context) => const Constructors(),
         Routes.standings: (context) => const Standings(),
-        Routes.races: (context) => const Races(),
+        Routes.races: (context) => Races(),
         // Routes.profile: (context) => const Profile(),
         // Routes.settings: (context) => const Settings(),
         // Routes.favorite: (context) => const Favorite(),
