@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 
 import '../../core/repository/jolpica_repository.dart';
 import '../../core/services/jolpica_service.dart';
+import '../../widgets/card_custom.dart';
 import '../../widgets/navigation/app_bar_custom.dart';
 
 class Races extends StatelessWidget {
@@ -13,7 +14,7 @@ class Races extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBarCustom(title: "Calendario"),
+      appBar: AppBarCustom(title: "Calendario ${DateTime.now().year}"),
 
       drawer: const DrawerApp(),
 
@@ -32,104 +33,14 @@ class Races extends StatelessWidget {
           }
 
           final data = snapshot.data!;
-          return Container(
-            child: SingleChildScrollView(
-              child: Column(
-                children: [
-                  Padding(
-                    padding: const EdgeInsets.all(10),
-                    child: Text(
-                      "Calendario ${DateTime.now().year}",
-                      style: TextStyle(
-                        fontSize: 24,
-                        fontWeight: FontWeight.bold,
-                        // color: Colors.white,
-                      ),
-                    ),
-                  ),
 
-                  //Lista del calendario
-                  DataTable(
-                    columns: [
-                      const DataColumn(
-                        label: Text(
-                          'Round',
-                          style: TextStyle(
-                            fontWeight: FontWeight.bold,
-                            // color: Colors.white,
-                          ),
-                        ),
-                      ),
-
-                      const DataColumn(
-                        label: Text(
-                          'Gran Premio',
-                          style: TextStyle(
-                            fontWeight: FontWeight.bold,
-                            // color: Colors.white,
-                          ),
-                        ),
-                      ),
-
-                      const DataColumn(
-                        label: Text(
-                          'Circuito',
-                          style: TextStyle(
-                            fontWeight: FontWeight.bold,
-                            // color: Colors.white,
-                          ),
-                        ),
-                      ),
-
-                      const DataColumn(
-                        label: Text(
-                          'Data',
-                          style: TextStyle(
-                            fontWeight: FontWeight.bold,
-                            // color: Colors.white,
-                          ),
-                        ),
-                      ),
-                    ],
-
-                    rows: List<DataRow>.generate(data.length, (index) {
-                      final item = data[index];
-                      return DataRow(
-                        cells: [
-                          DataCell(
-                            Text(
-                              "${item.round}",
-                              // style: TextStyle(color: Colors.white),
-                            ),
-                          ),
-
-                          DataCell(
-                            Text(
-                              "${item.raceName}",
-                              // style: TextStyle(color: Colors.white),
-                            ),
-                          ),
-
-                          DataCell(
-                            Text(
-                              "${item.circuitName}",
-                              // style: TextStyle(color: Colors.white),
-                            ),
-                          ),
-
-                          DataCell(
-                            Text(
-                              "${item.date}",
-                              // style: TextStyle(color: Colors.white),
-                            ),
-                          ),
-                        ],
-                      );
-                    }),
-                  ),
-                ],
-              ),
-            ),
+          return ListView.separated(
+            separatorBuilder: (context, index) => const SizedBox(height: 1),
+            itemCount: data.length,
+            itemBuilder: (context, index) {
+              final item = data[index];
+              return CardCustom(item: item);
+            },
           );
         },
       ),
