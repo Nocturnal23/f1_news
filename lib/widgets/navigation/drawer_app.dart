@@ -1,4 +1,5 @@
 import 'package:f1_news/core/utils/routes.dart';
+import 'package:f1_news/widgets/info_dialog_alert.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
@@ -73,6 +74,17 @@ class DrawerApp extends ConsumerWidget {
             leading: const Icon(Icons.article),
             title: const Text('Ultime Notizie'),
             onTap: () {
+              Navigator.pop(context);
+
+              final String? currentRoute = ModalRoute.of(context)?.settings.name;
+              if (currentRoute != Routes.news) {
+                showDialog(
+                  context: context,
+                  builder: (context) => InfoDialogAlert(
+                    messaggio: 'Funzionalità in arrivo',
+                  ),
+                );
+              }
             },
           ),
 

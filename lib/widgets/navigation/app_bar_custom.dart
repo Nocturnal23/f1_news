@@ -4,6 +4,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../controllers/auth_controller.dart';
 import '../../core/utils/provider.dart';
 import '../../core/utils/routes.dart';
+import '../info_dialog_alert.dart';
 
 enum MenuOptions { impostazioniAccount, impostazioniApp, preferiti, logout }
 
@@ -49,13 +50,13 @@ class AppBarCustom extends ConsumerWidget implements PreferredSizeWidget {
             onSelected: (MenuOptions value) {
               switch (value) {
                 case MenuOptions.impostazioniAccount:
-                  print("Vai al profilo");
+                  _showAlert(context);
                   break;
                 case MenuOptions.impostazioniApp:
-                  print("Apri impostazioni");
+                  _showAlert(context);
                   break;
                 case MenuOptions.preferiti:
-                  print("Gestisci i tuoi preferiti");
+                  _showAlert(context);
                   break;
                 case MenuOptions.logout:
                   _signOut();
@@ -106,5 +107,13 @@ class AppBarCustom extends ConsumerWidget implements PreferredSizeWidget {
 
   Future<void> _signOut() async {
     await AuthController().signOut();
+  }
+
+  void _showAlert(BuildContext context){
+    showDialog(
+      context: context,
+      builder: (context) =>
+          InfoDialogAlert(messaggio: "Funzionalità in arrivo"),
+    );
   }
 }
