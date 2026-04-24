@@ -50,7 +50,7 @@ class ApiService {
 
   //Endpoit per le gare in calendario
   Future<Map<String, dynamic>> getRaces() async {
-    final response = await http.get(Uri.parse('$baseUrl/${DateTime.now().year}/races'));
+    final response = await http.get(Uri.parse('$baseUrl/${DateTime.now().year}/races.json'));
 
     if (response.statusCode == 200) {
       return jsonDecode(response.body);
