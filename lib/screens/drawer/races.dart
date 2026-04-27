@@ -33,6 +33,7 @@ class Races extends StatelessWidget {
           }
 
           final data = snapshot.data!;
+          _precacheImages(context, data);
 
           return ListView.separated(
             separatorBuilder: (context, index) => const SizedBox(height: 1),
@@ -45,5 +46,16 @@ class Races extends StatelessWidget {
         },
       ),
     );
+  }
+
+  void _precacheImages(BuildContext context, List<dynamic> data) {
+    for (var item in data) {
+      if (item.circuitName != null) {
+        precacheImage(
+          AssetImage("lib/assets/circuits/${item.circuitName}.webp"),
+          context,
+        );
+      }
+    }
   }
 }

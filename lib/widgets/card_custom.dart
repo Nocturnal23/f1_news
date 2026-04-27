@@ -51,6 +51,7 @@ class CardCustom extends StatelessWidget {
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
                         Text(
+                          // "Round ${item.round}\n${item.raceName}",
                           item.raceName ?? "Grand Prix",
                           style: const TextStyle(
                             color: Colors.white,
