@@ -1,6 +1,7 @@
 import 'package:country_flags/country_flags.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 
 import '../core/utils/country_helper.dart';
 
@@ -67,8 +68,23 @@ class CardCustom extends StatelessWidget {
                       ],
                     ),
                   ),
-                  const Icon(Icons.map, size: 80, color: Colors.white),
-                  //Image.asset(assetsUrl)
+                  //const Icon(Icons.map, size: 80, color: Colors.white),
+                  // SizedBox(
+                  //   width: 150,
+                  //   height: 150,
+                  //   // child: SvgPicture.asset("lib/assets/circuits/${item.circuitName}.svg", color: Colors.black),
+                  //   child: Image.asset(
+                  //     "lib/assets/circuits/${item.circuitName}.webp",
+                  //     fit: BoxFit.contain,
+                  //   ),
+                  // )
+
+                  Flexible(
+                    child: Image.asset(
+                      "lib/assets/circuits/${item.circuitName}.webp",
+                      fit: BoxFit.contain,
+                    ),
+                  )
                 ],
               ),
             ),
