@@ -41,6 +41,7 @@ dependencies:
   http: ^1.6.0
   country_flags: ^4.0.0
   countries_utils: ^1.0.1
+  flutter_svg: ^2.2.4
 
   # The following adds the Cupertino Icons font to your application.
   # Use with the CupertinoIcons class for iOS style icons.
@@ -73,6 +74,7 @@ flutter:
     - lib/assets/drivers/
     - lib/assets/teams/
     - lib/assets/logos/
+    - lib/assets/circuits/
   #   - images/a_dot_ham.jpeg
 
   # An image asset can refer to one or more resolution-specific "variants", see
