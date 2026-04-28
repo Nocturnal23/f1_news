@@ -50,93 +50,76 @@ class _ConstructorsState extends ConsumerState<Constructors> {
     );
   }
 
-  Widget _buildConstructorList(AsyncValue<User?> authState) {
-    return FutureBuilder<List<ConstructorModel>>(
-      future: _constructorFuture,
-      builder: (context, snapshot) {
-        if (snapshot.connectionState == ConnectionState.waiting) {
-          return const CircularProgressIndicator(color: Colors.red);
-        } else if (snapshot.hasError) {
-          return Text("Errore: ${snapshot.error}");
-        } else if (!snapshot.hasData || snapshot.data!.isEmpty) {
-          return const Text("Nessun team trovato");
-        }
+  Widget _buildConstructorList(
+    List<ConstructorModel> constructors,
+    User? user,
+  ) {
+    if (constructors.isEmpty) {
+      return const Center(child: Text("Nessun costruttore trovato."));
+    }
 
-        final teams = snapshot.data!;
+    return ListView.separated(
+      separatorBuilder: (context, index) => const SizedBox(height: 1),
+      itemCount: constructors.length,
+      itemBuilder: (context, index) {
+        final team = constructors[index];
+        final isFav = _favoriteIds.contains(team.id);
 
-        return ListView.separated(
-          separatorBuilder: (context, index) => const SizedBox(height: 1),
-          itemCount: teams.length,
-          itemBuilder: (context, index) {
-            final team = teams[index];
-            final isFav = _favoriteIds.contains(team.id);
-
-            return Container(
-              color: TeamsCols.getBackground(team.id),
-              child: ListTile(
-                leading: CircleAvatar(
-                  backgroundColor: TeamsCols.getForeground(team.id),
-                  child: SizedBox(
-                    child: Image(
-                      width: 50,
-                      height: 50,
-                      image: AssetImage("lib/assets/logos/${team.id}.webp"),
-                      fit: BoxFit.cover,
-                      alignment: Alignment.topCenter,
-                      errorBuilder: (context, error, stackTrace) {
-                        return Text(
-                          team.name.substring(0,2).toUpperCase(),
-                        );
-                      },
-                    ),
-                  ),
-                ),
-
-                title: Text(
-                  team.name,
-                  style: TextStyle(
-                    fontWeight: FontWeight.bold,
-                    color: Colors.white,
-                    shadows: [Shadow(blurRadius: 2, color: Colors.black26)],
-                  ),
-                ),
-                subtitle: Text(
-                  team.nationality,
-                  style: TextStyle(
-                    fontWeight: FontWeight.bold,
-                    fontStyle: FontStyle.italic,
-                    color: Colors.white,
-                    shadows: [Shadow(blurRadius: 2, color: Colors.black26)],
-                  ),
-                ),
-
-
-                trailing: authState.when(
-                  error: (error, stack) => const Text("Errore durante il caricamento dei dati."),
-                  loading: () => const CircularProgressIndicator(),
-                  data: (user) {
-                    if (user == null) return const SizedBox();
-
-                    return IconButton(
-                      icon: Icon(
-                        isFav ? Icons.star : Icons.star_border,
-                        color: isFav ? Colors.amber : null,
-                      ),
-                      onPressed: () {
-                        setState(() {
-                          if (isFav) {
-                            _favoriteIds.remove(team.id);
-                          } else {
-                            _favoriteIds.add(team.id);
-                          }
-                        });
-                      },
-                    );
+        return Container(
+          color: TeamsCols.getBackground(team.id),
+          child: ListTile(
+            leading: CircleAvatar(
+              backgroundColor: TeamsCols.getForeground(team.id),
+              child: SizedBox(
+                child: Image(
+                  width: 50,
+                  height: 50,
+                  image: AssetImage("lib/assets/logos/${team.id}.webp"),
+                  fit: BoxFit.cover,
+                  alignment: Alignment.topCenter,
+                  errorBuilder: (context, error, stackTrace) {
+                    return Text(team.name.substring(0, 2).toUpperCase());
                   },
                 ),
               ),
-            );
-          },
+            ),
+
+            title: Text(
+              team.name,
+              style: TextStyle(
+                fontWeight: FontWeight.bold,
+                color: Colors.white,
+                shadows: [Shadow(blurRadius: 2, color: Colors.black26)],
+              ),
+            ),
+            subtitle: Text(
+              team.nationality,
+              style: TextStyle(
+                fontWeight: FontWeight.bold,
+                fontStyle: FontStyle.italic,
+                color: Colors.white,
+                shadows: [Shadow(blurRadius: 2, color: Colors.black26)],
+              ),
+            ),
+
+            trailing: user != null
+                ? IconButton(
+                    icon: Icon(
+                      isFav ? Icons.star : Icons.star_border,
+                      color: isFav ? Colors.amber : null,
+                    ),
+                    onPressed: () {
+                      setState(() {
+                        if (isFav) {
+                          _favoriteIds.remove(team.id);
+                        } else {
+                          _favoriteIds.add(team.id);
+                        }
+                      });
+                    },
+                  )
+                : null,
+          ),
         );
       },
     );
