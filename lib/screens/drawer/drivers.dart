@@ -5,7 +5,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../controllers/auth_controller.dart';
 import '../../core/repository/jolpica_repository.dart';
-import '../../core/models/drivers_models_standings.dart';
+import '../../core/models/driver_model_standing.dart';
 import '../../core/services/jolpica_service.dart';
 import '../../core/utils/provider.dart';
 import '../../widgets/navigation/app_bar_custom.dart';
@@ -51,7 +51,7 @@ class _DriversState extends ConsumerState<Drivers> {
     );
   }
 
-  Widget _buildDriverList(List<DriverModelStandings> drivers, User? user) {
+  Widget _buildDriverList(List<DriverModelStanding> drivers, User? user) {
     if (drivers.isEmpty) {
       return const Center(child: Text("Nessun pilota trovato."));
     }

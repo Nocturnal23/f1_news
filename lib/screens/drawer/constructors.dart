@@ -1,4 +1,4 @@
-import 'package:f1_news/core/models/constructors_models.dart';
+import 'package:f1_news/core/models/constructor_model.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';

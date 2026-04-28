@@ -1,5 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-import '../models/user_models.dart';
+import '../models/user_model.dart';
 
 class UserService {
   final FirebaseFirestore _db = FirebaseFirestore.instance;
