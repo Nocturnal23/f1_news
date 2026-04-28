@@ -58,4 +58,10 @@ class ApiService {
       throw Exception('Errore nel caricamento del calendario: ${response.statusCode}');
     }
   }
+
+      return jsonDecode(response.body);
+    } else {
+      throw Exception('Errore nel caricamento del calendario: ${response.statusCode}');
+    }
+  }
 }
