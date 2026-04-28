@@ -1,20 +1,20 @@
-import 'package:f1_news/core/models/constructors_models.dart';
+import 'package:f1_news/core/models/constructor_model.dart';
 
-class ConstructorModelStandings {
+class ConstructorModelStanding {
   final ConstructorModel constructor;
   final String position;
   final String points;
 
-  ConstructorModelStandings({
+  ConstructorModelStanding({
     required this.constructor,
     required this.position,
     required this.points
   });
 
-  factory ConstructorModelStandings.fromJson(Map<String, dynamic> json) {
+  factory ConstructorModelStanding.fromJson(Map<String, dynamic> json) {
     final constructorJson = json['Constructor'] ?? {};
 
-    return ConstructorModelStandings(
+    return ConstructorModelStanding(
       constructor: ConstructorModel.fromJson(constructorJson),
 
       position: json['position'] ?? '0',

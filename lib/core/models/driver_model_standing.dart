@@ -1,13 +1,13 @@
-import 'drivers_models.dart';
+import 'driver_model.dart';
 
-class DriverModelStandings {
+class DriverModelStanding {
   final DriverModel driver;
   final String teamId;
   final String teamName;
   final String position;
   final String points;
 
-  DriverModelStandings({
+  DriverModelStanding({
     required this.driver,
     required this.teamId,
     required this.teamName,
@@ -15,13 +15,13 @@ class DriverModelStandings {
     required this.points,
   });
 
-  factory DriverModelStandings.fromJson(Map<String, dynamic> json) {
+  factory DriverModelStanding.fromJson(Map<String, dynamic> json) {
     // Questi sono i due oggetti annidati nello stadings.
     final driverJson = json['Driver'] ?? {};
     final constructors = json['Constructors'] as List<dynamic>?;
     final retrieveTeamID = constructors != null && constructors.isNotEmpty;
 
-    return DriverModelStandings(
+    return DriverModelStanding(
       //Qua vengono salvate le info base del pilota.
       driver: DriverModel.fromJson(driverJson),
 
