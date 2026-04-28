@@ -20,27 +20,32 @@ class Constructors extends ConsumerStatefulWidget {
 class _ConstructorsState extends ConsumerState<Constructors> {
   final F1Repository _repository = F1Repository(ApiService());
   final Set<String> _favoriteIds = {};
-  late Future<List<ConstructorModel>> _constructorFuture;
 
-  @override
-  void initState() {
-    super.initState();
-    _constructorFuture = _repository.fetchTeams();
-  }
+  // late Future<List<ConstructorModel>> _constructorFuture;
+  //
+  // @override
+  // void initState() {
+  //   super.initState();
+  //   _constructorFuture = _repository.fetchTeams();
+  // }
 
   @override
   Widget build(BuildContext context) {
     final authState = ref.watch(authStateProvider);
+    final constructorState = ref.watch(constructorsProvider);
 
     return Scaffold(
-      appBar: AppBarCustom(
-        title: "Costruttori ${DateTime.now().year}",
-      ),
+      appBar: AppBarCustom(title: "Costruttori ${DateTime.now().year}"),
 
       drawer: const DrawerApp(),
 
-      body: Center(
-        child: _buildConstructorList(authState),
+      body: constructorState.when(
+        loading: () =>
+            const Center(child: CircularProgressIndicator(color: Colors.red)),
+        error: (err, stack) => Center(child: Text("Errore: $err")),
+        data: (constructors) {
+          return _buildConstructorList(constructors, authState.value);
+        },
       ),
     );
   }

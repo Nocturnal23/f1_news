@@ -21,24 +21,33 @@ class Drivers extends ConsumerStatefulWidget {
 class _DriversState extends ConsumerState<Drivers> {
   final F1Repository _repository = F1Repository(ApiService());
   final Set<String> _favoriteIds = {};
-  late Future<List<DriverModelStandings>> _driversFuture;
 
-  @override
-  void initState() {
-    super.initState();
-    _driversFuture = _repository.fetchOfficialDriversByTeam();
-  }
+  // late Future<List<DriverModelStandings>> _driversFuture;
+
+  // @override
+  // void initState() {
+  //   super.initState();
+  //   _driversFuture = _repository.fetchOfficialDriversByTeam();
+  // }
 
   @override
   Widget build(BuildContext context) {
     final authState = ref.watch(authStateProvider);
+    final driversState = ref.watch(driversProvider);
 
     return Scaffold(
       appBar: AppBarCustom(title: "Piloti ${DateTime.now().year}"),
 
       drawer: const DrawerApp(),
 
-      body: Center(child: _buildDriverList(authState)),
+      body: driversState.when(
+        loading: () =>
+            const Center(child: CircularProgressIndicator(color: Colors.red)),
+        error: (err, stack) => Center(child: Text("Errore: $err")),
+        data: (drivers) {
+          return _buildDriverList(drivers, authState.value);
+        },
+      ),
     );
   }
 
