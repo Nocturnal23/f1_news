@@ -1,10 +1,10 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../controllers/auth_controller.dart';
-import '../models/constructors_models.dart';
-import '../models/drivers_models_standings.dart';
-import '../models/races_models.dart';
-import '../models/user_models.dart';
+import '../models/constructor_model.dart';
+import '../models/driver_model_standing.dart';
+import '../models/race_model.dart';
+import '../models/user_model.dart';
 import '../repository/jolpica_repository.dart';
 import '../services/jolpica_service.dart';
 import '../services/user_service.dart';
@@ -62,13 +62,13 @@ final userStreamProvider = StreamProvider.family<UserModel?, String>((ref, uid) 
 });
 
 // E' il provider che carica il calendario, cosi da usarlo sia nella lista del calendario sia nella homepage.
-final calendarProvider = FutureProvider<List<RacesModels>>((ref) async {
+final calendarProvider = FutureProvider<List<RaceModel>>((ref) async {
   final repo = ref.watch(f1RepositoryProvider);
   return await repo.fetchCalendar();
 });
 
 // Questo serve nella homepage per caricare il prossimo evento.
-final nextRaceProvider = Provider<RacesModels?>((ref) {
+final nextRaceProvider = Provider<RaceModel?>((ref) {
   final calendarAsync = ref.watch(calendarProvider);
 
   return calendarAsync.when(
@@ -86,7 +86,7 @@ final nextRaceProvider = Provider<RacesModels?>((ref) {
 });
 
 // Questo provider carica i piloti.
-final driversProvider = FutureProvider<List<DriverModelStandings>>((ref) async {
+final driversProvider = FutureProvider<List<DriverModelStanding>>((ref) async {
   final repo = ref.watch(f1RepositoryProvider);
   return await repo.fetchOfficialDriversByTeam();
 });

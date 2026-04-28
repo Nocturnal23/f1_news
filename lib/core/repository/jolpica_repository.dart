@@ -1,11 +1,12 @@
 import 'dart:convert';
 
-import 'package:f1_news/core/models/races_models.dart';
+import 'package:f1_news/core/models/race_details_model.dart';
+import 'package:f1_news/core/models/race_model.dart';
 
-import '../models/drivers_models_standings.dart';
-import '../models/drivers_models.dart';
-import '../models/constructors_models.dart';
-import '../models/constructors_models_standings.dart';
+import '../models/driver_model_standing.dart';
+import '../models/driver_model.dart';
+import '../models/constructor_model.dart';
+import '../models/constructor_model_standing.dart';
 import '../services/jolpica_service.dart';
 
 class F1Repository {
@@ -38,7 +39,7 @@ class F1Repository {
   }
 
   //Repo per i piloti che sono in classifica.
-  Future<List<DriverModelStandings>> fetchDriversStandings() async {
+  Future<List<DriverModelStanding>> fetchDriversStandings() async {
     try {
       final data = await apiService.getDriversStandings();
 
@@ -53,7 +54,7 @@ class F1Repository {
 
           if (standingsJson != null) {
             return standingsJson
-                .map((json) => DriverModelStandings.fromJson(json))
+                .map((json) => DriverModelStanding.fromJson(json))
                 .toList();
           }
         }
@@ -89,7 +90,7 @@ class F1Repository {
   }
 
   //Repo per i teams in classifica.
-  Future<List<ConstructorModelStandings>> fetchTeamsStandings() async {
+  Future<List<ConstructorModelStanding>> fetchTeamsStandings() async {
     try {
       final data = await apiService.getTeamsStandings();
 
@@ -103,7 +104,7 @@ class F1Repository {
 
           if (standingsJson != null) {
             return standingsJson
-                .map((json) => ConstructorModelStandings.fromJson(json))
+                .map((json) => ConstructorModelStanding.fromJson(json))
                 .toList();
           }
         }
@@ -116,7 +117,7 @@ class F1Repository {
   }
 
   //Repo per il calendario
-  Future<List<RacesModels>> fetchCalendar() async {
+  Future<List<RaceModel>> fetchCalendar() async {
     try {
       final data = await apiService.getRaces();
 
@@ -126,7 +127,7 @@ class F1Repository {
 
         final List<dynamic> racesList = data['MRData']['RaceTable']['Races'];
 
-        return racesList.map((json) => RacesModels.fromJson(json)).toList();
+        return racesList.map((json) => RaceModel.fromJson(json)).toList();
       }
       return [];
     } catch (e) {
@@ -136,9 +137,9 @@ class F1Repository {
   }
 
   // Questo filtro mi permette di selezionare i piloti ufficiali, senza seguire la classifica.
-  Future<List<DriverModelStandings>> fetchOfficialDriversByTeam() async {
+  Future<List<DriverModelStanding>> fetchOfficialDriversByTeam() async {
     // Qui vengono recuperati i piloti ufficiali.
-    final List<DriverModelStandings> standings = await fetchDriversStandings();
+    final List<DriverModelStanding> standings = await fetchDriversStandings();
 
     // Quindi prendo i piloti ufficuali e li ordino per team di appartenenza.
     // Se ho fatto bene se durante la stagione un pilota viene sostituito
