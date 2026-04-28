@@ -4,8 +4,7 @@ import '../../core/repository/jolpica_repository.dart';
 import '../../core/services/jolpica_service.dart';
 
 class StandingsList extends StatelessWidget {
-  final String
-  type; //Assume i valori "drivers" o "constructors" per capire cosa mostrare.
+  final String type; //Assume i valori "drivers" o "constructors" per capire cosa mostrare.
   StandingsList({super.key, required this.type});
 
   final F1Repository _repository = F1Repository(ApiService());
