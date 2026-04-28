@@ -1,7 +1,12 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../controllers/auth_controller.dart';
+import '../models/constructors_models.dart';
+import '../models/drivers_models_standings.dart';
+import '../models/races_models.dart';
 import '../models/user_models.dart';
+import '../repository/jolpica_repository.dart';
+import '../services/jolpica_service.dart';
 import '../services/user_service.dart';
 
 /*
@@ -9,6 +14,9 @@ Fornisce un'istanza di UserService a tutta l'app.
 Viene usato per interagire con Firestore (recupero dati profilo).
  */
 final userServiceProvider = Provider((ref) => UserService());
+
+final apiServiceProvider = Provider((ref) => ApiService()); //Provider Jolpica API
+final f1RepositoryProvider = Provider((ref) => F1Repository(ref.watch(apiServiceProvider))); //Provider REpository.
 
 /*
 StreamProvider che ascolta i cambiamenti di stato di Firebase Auth.
@@ -49,7 +57,42 @@ final currentUserProvider = StreamProvider<UserModel?>((ref) {
   );
 });
 
-
 final userStreamProvider = StreamProvider.family<UserModel?, String>((ref, uid) {
   return UserService().getUser(uid);
+});
+
+// E' il provider che carica il calendario, cosi da usarlo sia nella lista del calendario sia nella homepage.
+final calendarProvider = FutureProvider<List<RacesModels>>((ref) async {
+  final repo = ref.watch(f1RepositoryProvider);
+  return await repo.fetchCalendar();
+});
+
+// Questo serve nella homepage per caricare il prossimo evento.
+final nextRaceProvider = Provider<RacesModels?>((ref) {
+  final calendarAsync = ref.watch(calendarProvider);
+
+  return calendarAsync.when(
+    data: (races) {
+      final now = DateTime.now();
+      try {
+        return races.firstWhere((race) => DateTime.parse(race.date).isAfter(now));
+      } catch (e) {
+        return null;
+      }
+    },
+    loading: () => null,
+    error: (_, __) => null,
+  );
+});
+
+// Questo provider carica i piloti.
+final driversProvider = FutureProvider<List<DriverModelStandings>>((ref) async {
+  final repo = ref.watch(f1RepositoryProvider);
+  return await repo.fetchOfficialDriversByTeam();
+});
+
+// Questo provider carica i costruttori
+final constructorsProvider = FutureProvider<List<ConstructorModel>>((ref) async {
+  final repo = ref.watch(f1RepositoryProvider);
+  return await repo.fetchTeams();
 });
