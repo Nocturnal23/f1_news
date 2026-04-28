@@ -1,4 +1,4 @@
-class RacesModels {
+class RaceModel {
   final String round;
   final String raceName; //Es. Monaco Grand Prix
   final String date; //Formato YYYY-MM-GG.
@@ -24,7 +24,7 @@ class RacesModels {
   final String sprintDate;
   final String sprintTime;
 
-  RacesModels({
+  RaceModel({
     required this.round,
     required this.raceName,
     required this.date,
@@ -48,7 +48,14 @@ class RacesModels {
     required this.sprintTime,
   });
 
-  factory RacesModels.fromJson(Map<String, dynamic> json) {
+  String getEventRange() {
+    String fp1Day = fp1Date.split("-").last;
+    String raceDay = date.split("-").last;
+
+    return "$fp1Day - $raceDay";
+  }
+
+  factory RaceModel.fromJson(Map<String, dynamic> json) {
     final circuit = json['Circuit'] ?? {};
     final location = circuit['Location'] ?? {};
 
@@ -57,7 +64,7 @@ class RacesModels {
       return session?[key] ?? 'N/A';
     }
 
-    return RacesModels(
+    return RaceModel(
       round: json['round'] ?? 'N/A',
       raceName: json['raceName'] ?? 'N/A',
       date: json['date'] ?? 'N/A',
