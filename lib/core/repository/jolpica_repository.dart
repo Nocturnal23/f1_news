@@ -1,6 +1,3 @@
-import 'dart:convert';
-
-import 'package:f1_news/core/models/race_details_model.dart';
 import 'package:f1_news/core/models/race_model.dart';
 
 import '../models/driver_model_standing.dart';
@@ -153,6 +150,4 @@ class F1Repository {
 
     return standings;
   }
-
-
 }
