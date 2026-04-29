@@ -150,4 +150,53 @@ class F1Repository {
 
     return standings;
   }
+
+  // Filtro per recuperare le prima edizione di un GP.
+  Future<String> fetchFirstEdition(String circuit_id) async {
+    try {
+      final data = await apiService.getFirstEdition(circuit_id);
+
+      if (data['MRData'] != null &&
+          data['MRData']['RaceTable'] != null &&
+          data['MRData']['RaceTable']['Races'] != null) {
+        final List<dynamic> racesList = data['MRData']['RaceTable']['Races'];
+
+        if (racesList.isNotEmpty) {
+          return racesList[0]['season'].toString();
+        }
+      }
+      return 'N/A';
+    } catch (e) {
+      print("Errore nel repository $e");
+      rethrow;
+    }
+  }
+
+  //Questo serve per recuperare il totale delle edizioni di un GP.
+  Future<int> fetchTotalEditions(String circuitId) async {
+    try {
+      final data = await apiService.getWinnersMetadata(circuitId);
+      return int.parse(data['MRData']['total'] ?? '0');
+    } catch (e) {
+      print("Errore nel recupero edizioni totali: $e");
+      return 0;
+    }
+  }
+
+  // Filtro per recuperare l'ultimo vincitore.
+  Future<String> fetchLastWinner(String circuitId, int total) async {
+    if (total <= 0) return "N/A";
+
+    try {
+      final data = await apiService.getLastWinner(circuitId, total - 1);
+
+      final lastRace = data['MRData']['RaceTable']['Races'][0];
+      final driver = lastRace['Results'][0]['Driver'];
+
+      return "${driver['givenName']['familyName']} (${lastRace['season']})";
+    } catch (e) {
+      print("Errore nel recupero ultimo vincitore: $e");
+      return "N/A";
+    }
+  }
 }
