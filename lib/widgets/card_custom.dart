@@ -1,17 +1,20 @@
 import 'package:country_flags/country_flags.dart';
+import 'package:f1_news/widgets/card_info.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 
 import '../core/utils/country_helper.dart';
+import '../core/utils/provider.dart';
 
-class CardCustom extends StatelessWidget {
+class CardCustom extends ConsumerWidget {
   dynamic item;
 
   CardCustom({super.key, this.item});
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
     final String isoCode = CountryHelper.getIsoCode(item.country);
 
     return SizedBox(
@@ -69,21 +72,27 @@ class CardCustom extends StatelessWidget {
                       ],
                     ),
                   ),
-                  //const Icon(Icons.map, size: 80, color: Colors.white),
-                  // SizedBox(
-                  //   width: 150,
-                  //   height: 150,
-                  //   // child: SvgPicture.asset("lib/assets/circuits/${item.circuitName}.svg", color: Colors.black),
-                  //   child: Image.asset(
-                  //     "lib/assets/circuits/${item.circuitName}.webp",
-                  //     fit: BoxFit.contain,
-                  //   ),
-                  // )
 
                   Flexible(
-                    child: Image.asset(
-                      "lib/assets/circuits/${item.circuitName}.webp",
-                      fit: BoxFit.contain,
+                    child: InkWell(
+                      child: Image.asset(
+                        "lib/assets/circuits/${item.circuitName}.webp",
+                        fit: BoxFit.contain,
+                      ),
+                      onTap: () async {
+                        final repository = ref.read(f1RepositoryProvider);
+                        final details = await repository.fetchRaceDetails(item.circuitId);
+
+                        if (context.mounted) {
+                          showDialog(
+                            context: context,
+                            builder: (context) => CardInfo(
+                              img: "lib/assets/circuits/${item.circuitName}.webp",
+                              details: details,
+                            ),
+                          );
+                        }
+                      },
                     ),
                   )
                 ],
