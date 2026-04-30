@@ -4,6 +4,7 @@ import '../models/driver_model_standing.dart';
 import '../models/driver_model.dart';
 import '../models/constructor_model.dart';
 import '../models/constructor_model_standing.dart';
+import '../models/race_details_model.dart';
 import '../services/jolpica_service.dart';
 
 class F1Repository {
@@ -151,52 +152,85 @@ class F1Repository {
     return standings;
   }
 
-  // Filtro per recuperare le prima edizione di un GP.
-  Future<String> fetchFirstEdition(String circuit_id) async {
-    try {
-      final data = await apiService.getFirstEdition(circuit_id);
+  //----------------------------------------------------------------------------
 
-      if (data['MRData'] != null &&
-          data['MRData']['RaceTable'] != null &&
-          data['MRData']['RaceTable']['Races'] != null) {
-        final List<dynamic> racesList = data['MRData']['RaceTable']['Races'];
+  // Recupero dei dati per la prima edizione e ultimo vincitore.
+  Future<Map<String, dynamic>> _getMetadata(String circuitId) {
+    return apiService.getWinnersMetadata(circuitId);
+  }
 
-        if (racesList.isNotEmpty) {
-          return racesList[0]['season'].toString();
-        }
+  // Future<int> _fetchTotalEditions(String circuitId) async {
+  //   final data = await _getMetadata(circuitId);
+  //   return int.tryParse(data['MRData']?['total'] ?? '') ?? 0;
+  // }
+
+  //----------------------------------------------------------------------------
+
+  // // Recupero dei dati del primo edizione.
+  // Future<String> fetchFirstEdition(String circuitId) async {
+  //   final data = await _getMetadata(circuitId); // I dati sono qua. Qui ci sono i dati anche della prima edizione
+  //   final races = data['MRData']?['RaceTable']?['Races'] as List?;
+  //   return (races != null && races.isNotEmpty)
+  //       ? races.first['season'].toString()
+  //       : 'N/A';
+  // }
+  //
+  // //Recupero del ultimo vincitore.
+  // Future<String> fetchLastWinner(String circuitId) async {
+  //   try {
+  //     final total = await _fetchTotalEditions(circuitId);
+  //     if (total <= 0) return "N/A";
+  //
+  //     /*
+  //     Per recuperare l'ultimo vincitore occorre sottrarre -1 al totale
+  //     A quanto pare il totale indica il GP non acora corso.
+  //      */
+  //     final data = await apiService.getLastWinner(circuitId, total -1);
+  //
+  //     final race = data['MRData']?['RaceTable']?['Races']?[0];
+  //     final driver = race?['Results']?[0]?['Driver'];
+  //
+  //     if (driver == null) return "N/A";
+  //
+  //     return "${driver['givenName']} ${driver['familyName']} (${race['season']})";
+  //   } catch (e) {
+  //     print("Errore fetchLastWinner: $e");
+  //     return "N/A";
+  //   }
+  // }
+
+  Future<RaceDetailsModel> fetchRaceDetails(String circuitId) async {
+    final metadata = await _getMetadata(circuitId); //Prende i dati necessari.
+
+    /*
+    Quindi "smista i dati in base alle esigenze.
+     */
+    final races = metadata['MRData']?['RaceTable']?['Races'] as List?;
+
+    final firstEdition = (races != null && races.isNotEmpty)
+        ? races.first['season'].toString()
+        : 'N/A';
+
+    final total = int.tryParse(metadata['MRData']?['total'] ?? '') ?? 0;
+
+    String lastWinner = 'N/A';
+
+    if (total > 0) {
+      final last = await apiService.getLastWinner(circuitId, total - 1);
+
+      final race = last['MRData']?['RaceTable']?['Races']?[0];
+      final driver = race?['Results']?[0]?['Driver'];
+
+      if (driver != null) {
+        lastWinner = "${driver['givenName']} ${driver['familyName']} (${race['season']})";
       }
-      return 'N/A';
-    } catch (e) {
-      print("Errore nel repository $e");
-      rethrow;
     }
-  }
 
-  //Questo serve per recuperare il totale delle edizioni di un GP.
-  Future<int> fetchTotalEditions(String circuitId) async {
-    try {
-      final data = await apiService.getWinnersMetadata(circuitId);
-      return int.parse(data['MRData']['total'] ?? '0');
-    } catch (e) {
-      print("Errore nel recupero edizioni totali: $e");
-      return 0;
-    }
-  }
+    final dataCircuit = {
+      'firstEdition': firstEdition,
+      'lastWinner': lastWinner,
+    };
 
-  // Filtro per recuperare l'ultimo vincitore.
-  Future<String> fetchLastWinner(String circuitId, int total) async {
-    if (total <= 0) return "N/A";
-
-    try {
-      final data = await apiService.getLastWinner(circuitId, total - 1);
-
-      final lastRace = data['MRData']['RaceTable']['Races'][0];
-      final driver = lastRace['Results'][0]['Driver'];
-
-      return "${driver['givenName']['familyName']} (${lastRace['season']})";
-    } catch (e) {
-      print("Errore nel recupero ultimo vincitore: $e");
-      return "N/A";
-    }
+    return RaceDetailsModel.fromMultiJson(dataCircuit);
   }
 }
