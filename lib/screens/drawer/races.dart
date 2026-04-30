@@ -1,50 +1,45 @@
+import 'package:f1_news/core/models/race_model.dart';
+import 'package:f1_news/core/utils/provider.dart';
 import 'package:f1_news/widgets/navigation/drawer_app.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../core/repository/jolpica_repository.dart';
 import '../../core/services/jolpica_service.dart';
 import '../../widgets/card_custom.dart';
 import '../../widgets/navigation/app_bar_custom.dart';
 
-class Races extends StatelessWidget {
+class Races extends ConsumerWidget {
   Races({super.key});
 
-  final F1Repository _repository = F1Repository(ApiService());
-
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
+    final calendar = ref.watch(calendarProvider);
+
     return Scaffold(
       appBar: AppBarCustom(title: "Calendario ${DateTime.now().year}"),
 
       drawer: const DrawerApp(),
 
-      body: FutureBuilder<List<dynamic>>(
-        future: _repository.fetchCalendar(),
-
-        builder: (context, snapshot) {
-          if (snapshot.connectionState == ConnectionState.waiting) {
-            return const Scaffold(
-              body: Center(child: CircularProgressIndicator(color: Colors.red)),
-            );
-          } else if (snapshot.hasError) {
-            return Text("Errore: ${snapshot.error}");
-          } else if (!snapshot.hasData || snapshot.data!.isEmpty) {
-            return const Text("Nessun dato disponibile!");
+      body: calendar.when(
+          loading: () => const Center(child: CircularProgressIndicator(color: Colors.red)),
+          error: (err, stack) => Center(child: Text("Errore: $err")),
+          data: (races) {
+            _precacheImages(context, races);
+            return _buildCalendar(races);
           }
-
-          final data = snapshot.data!;
-          _precacheImages(context, data);
-
-          return ListView.separated(
-            separatorBuilder: (context, index) => const SizedBox(height: 1),
-            itemCount: data.length,
-            itemBuilder: (context, index) {
-              final item = data[index];
-              return CardCustom(item: item);
-            },
-          );
-        },
       ),
+    );
+  }
+
+  Widget _buildCalendar(List<RaceModel> races) {
+    return ListView.separated(
+      separatorBuilder: (context, index) => const SizedBox(height: 1),
+      itemCount: races.length,
+      itemBuilder: (context, index) {
+        final item = races[index];
+        return CardCustom(item: item);
+      },
     );
   }
 
