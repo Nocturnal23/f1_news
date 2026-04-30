@@ -59,21 +59,23 @@ class ApiService {
     }
   }
 
-  //Endpoint per recuperare la prima edizione di un GP.
-  Future<Map<String, dynamic>> getFirstEdition(String circuit_id) async {
-    final response = await http.get(Uri.parse('$baseUrl/circuits/$circuit_id/results/1.json?limit=1&offset=0'));
-
-    if (response.statusCode == 200) {
-      return jsonDecode(response.body);
-    } else {
-      throw Exception('Errore nel caricamento del calendario: ${response.statusCode}');
-    }
-  }
+  // //Endpoint per recuperare la prima edizione di un GP.
+  // Future<Map<String, dynamic>> getFirstEdition(String circuit_id) async {
+  //   final response = await http.get(Uri.parse('$baseUrl/circuits/$circuit_id/results/1.json?limit=1&offset=0'));
+  //
+  //   if (response.statusCode == 200) {
+  //     print("Contenuto risposta prima edizione: ${response.body}");
+  //     return jsonDecode(response.body);
+  //   } else {
+  //     throw Exception('Errore nel caricamento del calendario: ${response.statusCode}');
+  //   }
+  // }
 
   //E' parte del recupero del ultimo vincitore.
   Future<Map<String, dynamic>> getWinnersMetadata(String circuit_id) async {
     final response = await http.get(Uri.parse('$baseUrl/circuits/$circuit_id/results/1.json?limit=1'));
     if (response.statusCode == 200) {
+      print("Contenuto risposta metadata: ${response.body}");
       return jsonDecode(response.body);
     } else {
       throw Exception('Errore caricamento metadati');
@@ -85,6 +87,7 @@ class ApiService {
     final response = await http.get(Uri.parse('$baseUrl/circuits/$circuit_id/results/1.json?limit=1&offset=$offset'));
 
     if (response.statusCode == 200) {
+      print("Contenuto risposta ultimo vincitore: ${response.body}");
       return jsonDecode(response.body);
     } else {
       throw Exception('Errore nel caricamento del calendario: ${response.statusCode}');
