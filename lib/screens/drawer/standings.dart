@@ -1,7 +1,5 @@
 import 'package:f1_news/widgets/navigation/app_bar_custom.dart';
 import 'package:f1_news/widgets/navigation/drawer_app.dart';
-import '../../widgets/standings/constructorsStandings.dart';
-import '../../widgets/standings/driversStandings.dart';
 import 'package:flutter/material.dart';
 
 import '../../widgets/standings/standingsList.dart';
