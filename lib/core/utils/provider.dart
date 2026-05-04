@@ -4,6 +4,7 @@ import '../../controllers/auth_controller.dart';
 import '../models/constructor_model.dart';
 import '../models/driver_model_standing.dart';
 import '../models/race_model.dart';
+import '../models/sessions/race_result_model.dart';
 import '../models/user_model.dart';
 import '../repository/jolpica_repository.dart';
 import '../services/jolpica_service.dart';
@@ -95,4 +96,21 @@ final driversProvider = FutureProvider<List<DriverModelStanding>>((ref) async {
 final constructorsProvider = FutureProvider<List<ConstructorModel>>((ref) async {
   final repo = ref.watch(f1RepositoryProvider);
   return await repo.fetchTeams();
+});
+
+// Caricamento dei risultati della Sprint di un round specifico
+final sprintResultsProvider = FutureProvider.family<List<RaceResultModel>, String>((ref, round) async {
+  final repo = ref.watch(f1RepositoryProvider);
+  return await repo.fetchSprintResult(round);
+});
+
+// Usato per ordinare la griglia di partenza.
+final sprintGridProvider = Provider.family<AsyncValue<List<RaceResultModel>>, String>((ref, round) {
+  final rawAsync = ref.watch(sprintResultsProvider(round));
+
+  return rawAsync.whenData((list) {
+    List<RaceResultModel> sortedList = List.from(list);
+    sortedList.sort((a, b) => int.parse(a.grid).compareTo(int.parse(b.grid)));
+    return sortedList;
+  });
 });
