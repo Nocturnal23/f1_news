@@ -103,3 +103,31 @@ class RaceModel {
     );
   }
 }
+
+extension RaceSessions on RaceModel {
+  List<Map<String, String>> get weekendSessions {
+    List<Map<String, String>> sessions = [];
+
+    void addSession(String name, String date, String time) {
+      if (date != 'N/A' && time != 'N/A') {
+        sessions.add({'name': name, 'date': date, 'time': time});
+      }
+    }
+
+    addSession("Prove Libere 1", fp1Date, fp1Time);
+
+    if (sprintDate != 'N/A') {
+      addSession("Sprint Qualifying", sprintQualiDate, sprintQualiTime);
+      addSession("Sprint Race", sprintDate, sprintTime);
+      addSession("Qualifiche", qualiDate, qualiTime);
+    } else {
+      addSession("Prove Libere 2", fp2Date, fp2Time);
+      addSession("Prove Libere 3", fp3Date, fp3Time);
+      addSession("Qualifiche", qualiDate, qualiTime);
+    }
+
+    addSession("Gara", date, time);
+
+    return sessions;
+  }
+}
