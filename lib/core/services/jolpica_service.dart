@@ -58,4 +58,15 @@ class ApiService {
       throw Exception('Errore nel caricamento del calendario: ${response.statusCode}');
     }
   }
+
+  //Endpoint per i risultati della Sprint
+  Future<Map<String, dynamic>> getSprintResult(String round) async {
+    final response = await http.get(Uri.parse('$baseUrl/${DateTime.now().year}/${round}/sprint.json'));
+
+    if (response.statusCode == 200) {
+      return jsonDecode(response.body);
+    } else {
+      throw Exception('Errore nel caricamento della sprint: ${response.statusCode}');
+    }
+  }
 }
