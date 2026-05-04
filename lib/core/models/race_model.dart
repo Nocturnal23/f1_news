@@ -2,6 +2,7 @@ class RaceModel {
   final String round;
   final String raceName; //Es. Monaco Grand Prix
   final String date; //Formato YYYY-MM-GG.
+  final String time;
 
   // I seguenti 2 campi appartengono all'oggetto Circut
   final String circuitId;
@@ -28,6 +29,7 @@ class RaceModel {
     required this.round,
     required this.raceName,
     required this.date,
+    required this.time,
 
     required this.circuitId,
     required this.circuitName,
@@ -68,6 +70,7 @@ class RaceModel {
       round: json['round'] ?? 'N/A',
       raceName: json['raceName'] ?? 'N/A',
       date: json['date'] ?? 'N/A',
+      time: json['time'] ?? 'N/A',
 
       circuitId: circuit['circuitId'] ?? 'N/A',
       circuitName: circuit['circuitName'] ?? 'N/A',
