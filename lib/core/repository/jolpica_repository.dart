@@ -1,4 +1,5 @@
 import 'package:f1_news/core/models/race_model.dart';
+import 'package:f1_news/core/models/sessions/race_result_model.dart';
 
 import '../models/driver_model_standing.dart';
 import '../models/driver_model.dart';
@@ -149,5 +150,27 @@ class F1Repository {
     });
 
     return standings;
+  }
+
+  //I dati dalla sprint.
+  Future<List<RaceResultModel>> fetchSprintResult(String round) async {
+    try {
+      final data = await apiService.getSprintResult(round);
+
+      if (data['MRData'] != null &&
+          data['MRData']['RaceTable'] != null &&
+          data['MRData']['RaceTable']['Races'] != null) {
+        final List<dynamic> sprintResult = data['MRData']['RaceTable']['Races'];
+
+        final List<dynamic> results = sprintResult[0]['SprintResults'] ?? [];
+
+        return results.map((json) => RaceResultModel.fromJson(json)).toList();
+      }
+
+      return [];
+    } catch (e) {
+      print("Errore nel repository $e");
+      rethrow;
+    }
   }
 }
