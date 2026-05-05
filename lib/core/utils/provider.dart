@@ -108,9 +108,14 @@ final sprintResultsProvider = FutureProvider.family<List<RaceResultModel>, Strin
 final sprintGridProvider = Provider.family<AsyncValue<List<RaceResultModel>>, String>((ref, round) {
   final rawAsync = ref.watch(sprintResultsProvider(round));
 
-  return rawAsync.whenData((list) {
-    List<RaceResultModel> sortedList = List.from(list);
-    sortedList.sort((a, b) => int.parse(a.grid).compareTo(int.parse(b.grid)));
-    return sortedList;
-  });
+// Carica i dati della qualifica.
+final qualiResultsProvider = FutureProvider.family<List<QualifyingResultModel>, String>((ref, round) async {
+  final repo = ref.watch(f1RepositoryProvider);
+  return await repo.fetchQualiResult(round);
+});
+
+// Caricamento dei risultati di gara.
+final raceResultsProvider = FutureProvider.family<List<RaceResultModel>, String>((ref, round) async {
+  final repo = ref.watch(f1RepositoryProvider);
+  return await repo.fetchRaceResult(round);
 });
