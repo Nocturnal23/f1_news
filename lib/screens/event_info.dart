@@ -4,6 +4,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:intl/intl.dart';
 
 import '../core/models/race_model.dart';
+import '../core/utils/session_type.dart';
 
 class EventInfo extends ConsumerWidget {
   final RaceModel raceModel;
@@ -39,6 +40,11 @@ class EventInfo extends ConsumerWidget {
                 1: FlexColumnWidth(2),
               },
               children: raceModel.weekendSessions.map((session) {
+                final SessionType type = session['type'];
+                final String sessionName = type == SessionType.unknown
+                    ? session['defaultName']
+                    : type.displayName;
+
                 final sessionDateTime = DateTime.parse(
                   "${session['date']}T${session['time']}",
                 );
@@ -52,13 +58,13 @@ class EventInfo extends ConsumerWidget {
                     Padding(
                       padding: const EdgeInsets.symmetric(vertical: 12.0),
                       child: Text(
-                        session['name']!,
+                        sessionName,
                         style: const TextStyle(fontWeight: FontWeight.w600),
                       ),
                     ),
                     Padding(
                       padding: const EdgeInsets.symmetric(vertical: 12.0),
-                      child: isPast && (session['name']!.contains("Sprint"))
+                      child: isPast && type.hasResults
                           ? Row(
                               mainAxisSize: MainAxisSize.min,
                               children: [
@@ -66,14 +72,11 @@ class EventInfo extends ConsumerWidget {
                                   onTap: () => _openResultsDialog(
                                     context,
                                     raceModel.round,
-                                    session['name']!,
+                                    type,
                                   ),
                                   child: const Text(
                                     "Risultati",
-                                    style: TextStyle(
-                                      color: Colors.blue,
-                                      decoration: TextDecoration.underline,
-                                    ),
+                                    style: TextStyle(color: Colors.blue),
                                   ),
                                 ),
                               ],
@@ -95,11 +98,12 @@ class EventInfo extends ConsumerWidget {
     );
   }
 
-  void _openResultsDialog(BuildContext context, String round, String session) {
+  void _openResultsDialog(BuildContext context, String round, SessionType type) {
     showDialog(
       barrierColor: Colors.white,
       context: context,
-      builder: (context) => ResultsList(sessionName: session, round: round),
+      builder: (context) =>
+          ResultsList(sessionName: type, round: round),
     );
   }
 }
