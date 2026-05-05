@@ -23,6 +23,24 @@ extension SessionTypeExtension on SessionType {
   }
 
   bool get hasResults => this != SessionType.unknown;
+
+  List<String> get headers {
+    switch (this) {
+      case SessionType.qualifying:
+        return ["Pos", "Pilota", "Naz", "Team", "Q1", "Q2", "Q3"];
+
+      case SessionType.sprintRace:
+      case SessionType.race:
+        return ["Pos", "Pilota", "Naz", "Team", "Tempo", "Pts"];
+
+      case SessionType.sprintQualifying:
+        return ["Pos", "Pilota", "Naz", "Team"];
+
+      default:
+        return ["Pos", "Pilota", "Naz", "Team"];
+    }
+  }
+
   bool get hasFastestLap {
     return this == SessionType.race || this == SessionType.sprintRace;
   }
