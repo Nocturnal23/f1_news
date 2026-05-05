@@ -22,4 +22,8 @@ extension SessionTypeExtension on SessionType {
     }
   }
 
+  bool get hasResults => this != SessionType.unknown;
+  bool get hasFastestLap {
+    return this == SessionType.race || this == SessionType.sprintRace;
+  }
 }
