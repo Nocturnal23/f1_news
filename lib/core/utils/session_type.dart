@@ -11,3 +11,15 @@ enum SessionType {
   unknown,
 }
 
+extension SessionTypeExtension on SessionType {
+  String get displayName {
+    switch (this) {
+      case SessionType.sprintQualifying: return "Sprint Qualifying";
+      case SessionType.sprintRace: return "Sprint Race";
+      case SessionType.qualifying: return "Qualifying";
+      case SessionType.race: return "Race";
+      default: return "Free Practice";
+    }
+  }
+
+}
