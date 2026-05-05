@@ -44,4 +44,23 @@ extension SessionTypeExtension on SessionType {
   bool get hasFastestLap {
     return this == SessionType.race || this == SessionType.sprintRace;
   }
+
+  AsyncValue getResults(WidgetRef ref, String round) {
+    switch (this) {
+      case SessionType.sprintQualifying:
+        return ref.watch(sprintGridProvider(round));
+
+      case SessionType.qualifying:
+        return ref.watch(qualiResultsProvider(round));
+
+      case SessionType.sprintRace:
+        return ref.watch(sprintResultsProvider(round));
+
+      case SessionType.race:
+        return ref.watch(raceResultsProvider(round));
+
+      default:
+        return const AsyncValue.data([]);
+    }
+  }
 }

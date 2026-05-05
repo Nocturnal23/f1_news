@@ -1,11 +1,12 @@
 import 'package:f1_news/core/models/sessions/race_result_model.dart';
+import 'package:f1_news/core/utils/session_type.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../core/utils/provider.dart';
 
 class ResultsList extends ConsumerWidget {
-  final String sessionName; //Identifica la sessione (Sprint Quali, Sprint, Gara..)
+  final SessionType sessionName; //Identifica la sessione (Sprint Quali, Sprint, Gara..)
   final String round;
 
   const ResultsList({
@@ -16,13 +17,10 @@ class ResultsList extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final result = sessionName.contains("Qualifying")
-        ? ref.watch(sprintGridProvider(round))
-        : ref.watch(sprintResultsProvider(round));
+    final result = sessionName.getResults(ref, round);
 
     return result.when(
-      loading: () =>
-          const Center(child: CircularProgressIndicator(color: Colors.red)),
+      loading: () => const Center(child: CircularProgressIndicator(color: Colors.red)),
       error: (err, stack) => Center(child: Text("Errore: $err")),
       data: (results) => Padding(
         padding: const EdgeInsets.all(16.0),
@@ -30,7 +28,7 @@ class ResultsList extends ConsumerWidget {
           mainAxisSize: MainAxisSize.min,
           children: [
             Text(
-              sessionName,
+              sessionName.displayName,
               style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
             ),
             const Divider(),
@@ -93,19 +91,6 @@ class ResultsList extends ConsumerWidget {
         ),
         if (!isQualy) _buildFastestLap(results),
       ],
-    );
-  }
-
-  Widget _headerText(String text, {bool isHeader = false}) {
-    return Padding(
-      padding: const EdgeInsets.symmetric(vertical: 8.0, horizontal: 2.0),
-      child: Text(
-        text,
-        style: TextStyle(
-          fontSize: isHeader ? 13 : 14,
-        ),
-        overflow: TextOverflow.ellipsis,
-      ),
     );
   }
 
