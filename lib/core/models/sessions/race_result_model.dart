@@ -57,4 +57,16 @@ class RaceResultModel extends BaseResultModel{
       fastestLapTime: fastestTimeData['time'] ?? 'N/A',
     );
   }
+
+  @override
+  String get displayPosition => position;
+
+  @override
+  List<String> get extraColumns => [
+    totalTime == 'N/A' ? status : totalTime,
+    points,
+  ];
+
+  @override
+  bool get hasFastestLap => true;
 }
