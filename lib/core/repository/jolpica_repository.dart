@@ -1,10 +1,12 @@
 import 'package:f1_news/core/models/race_model.dart';
+import 'package:f1_news/core/models/sessions/qualifying_result_model.dart';
 import 'package:f1_news/core/models/sessions/race_result_model.dart';
 
 import '../models/driver_model_standing.dart';
 import '../models/driver_model.dart';
 import '../models/constructor_model.dart';
 import '../models/constructor_model_standing.dart';
+import '../models/sessions/sprint_quali_result_model.dart';
 import '../services/jolpica_service.dart';
 
 class F1Repository {
@@ -152,25 +154,72 @@ class F1Repository {
     return standings;
   }
 
-  //I dati dalla sprint.
-  Future<List<RaceResultModel>> fetchSprintResult(String round) async {
+  //Repo generico che va poi a differenziare SQ, SR e race.
+  Future<List<T>> _fetchSession<T>({
+    required String round,
+    required Future<Map<String, dynamic>> Function(String round) apiCall,
+    required List<T> Function(List<dynamic> json) mapper,
+    required List<dynamic> Function(Map<String, dynamic> race) extractResults,
+  }) async {
     try {
-      final data = await apiService.getSprintResult(round);
+      final data = await apiCall(round);
 
-      if (data['MRData'] != null &&
-          data['MRData']['RaceTable'] != null &&
-          data['MRData']['RaceTable']['Races'] != null) {
-        final List<dynamic> sprintResult = data['MRData']['RaceTable']['Races'];
+      final races = data['MRData']?['RaceTable']?['Races'] ?? [];
 
-        final List<dynamic> results = sprintResult[0]['SprintResults'] ?? [];
-
-        return results.map((json) => RaceResultModel.fromJson(json)).toList();
+      if (races.isEmpty) {
+        return [];
       }
 
-      return [];
+      final results = extractResults(races[0]);
+
+      return mapper(results);
     } catch (e) {
-      print("Errore nel repository $e");
+      print("Errore repo: $e");
       rethrow;
     }
+  }
+
+  //SQ
+  Future<List<SprintGridResultModel>> fetchSprintGrid(String round) {
+    return _fetchSession<SprintGridResultModel>(
+      round: round,
+      apiCall: apiService.getSprintResult,
+      mapper: (jsonList) =>
+          jsonList.map((j) => SprintGridResultModel.fromJson(j)).toList(),
+      extractResults: (race) => race['SprintResults'] ?? [],
+    );
+  }
+
+  //SR
+  Future<List<RaceResultModel>> fetchSprintResult(String round) {
+    return _fetchSession<RaceResultModel>(
+      round: round,
+      apiCall: apiService.getSprintResult,
+      mapper: (jsonList) =>
+          jsonList.map((j) => RaceResultModel.fromJson(j)).toList(),
+      extractResults: (race) => race['SprintResults'] ?? [],
+    );
+  }
+
+  //Qualifica
+  Future<List<QualifyingResultModel>> fetchQualiResult(String round) {
+    return _fetchSession<QualifyingResultModel>(
+      round: round,
+      apiCall: apiService.getQualiResult,
+      mapper: (jsonList) =>
+          jsonList.map((j) => QualifyingResultModel.fromJson(j)).toList(),
+      extractResults: (race) => race['QualifyingResults'] ?? [],
+    );
+  }
+
+  // Race
+  Future<List<RaceResultModel>> fetchRaceResult(String round) {
+    return _fetchSession<RaceResultModel>(
+      round: round,
+      apiCall: apiService.getRaceResult,
+      mapper: (jsonList) =>
+          jsonList.map((j) => RaceResultModel.fromJson(j)).toList(),
+      extractResults: (race) => race['Results'] ?? [],
+    );
   }
 }
