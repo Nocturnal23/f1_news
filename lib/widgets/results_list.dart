@@ -3,7 +3,7 @@ import 'package:f1_news/core/utils/session_type.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-import '../core/utils/provider.dart';
+import '../core/models/sessions/base_result_model.dart';
 
 class ResultsList extends ConsumerWidget {
   final SessionType sessionName; //Identifica la sessione (Sprint Quali, Sprint, Gara..)
@@ -47,49 +47,33 @@ class ResultsList extends ConsumerWidget {
 
   //Se è qualifica: grid, nome, nazion, team, (se è qualifica normale mostrare Q1, Q2, Q3)
   //Se è gara/sprint: pos, nome, nazion, team, punti, tempo. In fondo alla lista mostra giro veloce.
-  Widget _buildStanding(List<RaceResultModel> results) {
-    final bool isQualy = sessionName.contains("Qualifying");
-    final bool isSprintQualy = sessionName.contains("Sprint Qualifying");
-    final bool isStandardQualy = isQualy && !isSprintQualy;
+  Widget _buildStanding(List<BaseResultModel> results) {
 
     return Column(
+      crossAxisAlignment: CrossAxisAlignment.stretch,
       children: [
-        Table(
-          defaultVerticalAlignment: TableCellVerticalAlignment.middle,
-          columnWidths: {
-            0: const FlexColumnWidth(0.8),
-            1: const FlexColumnWidth(2.2),
-            2: const FlexColumnWidth(1.0),
-            3: const FlexColumnWidth(2.5),
-            if (!isQualy) 4: const FlexColumnWidth(0.8),
-            if (!isQualy) 5: const FlexColumnWidth(2.0),
-          },
-          children: [
-            TableRow(
-              children: [
-                _headerText("Pos", isHeader: true),
-                _headerText("Pilota", isHeader: true),
-                _headerText("Naz", isHeader: true),
-                _headerText("Team", isHeader: true),
-                if (!isQualy) _headerText("Pts", isHeader: true),
-                if (!isQualy) _headerText("Tempo", isHeader: true),
-              ],
-            ),
-            ...results.map(
-              (res) => TableRow(
-                children: [
-                  _headerText(isQualy ? res.grid : res.position),
-                  _headerText(res.driver.surname),
-                  _headerText(res.driver.nationality.substring(0, 3).toUpperCase()),
-                  _headerText(res.constructor.name),
-                  if (!isQualy) _headerText(res.points),
-                  if (!isQualy) _headerText(res.totalTime == 'N/A' ? res.status : res.totalTime),
+        SingleChildScrollView(
+          scrollDirection: Axis.horizontal,
+          child: DataTable(
+            columnSpacing: 16,
+            columns: sessionName.headers
+                .map((h) => DataColumn(label: Text(h, style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 13))))
+                .toList(),
+            rows: results.map((res) {
+              return DataRow(
+                cells: [
+                  DataCell(Text(res.displayPosition)),
+                  DataCell(Text(res.driver.surname)),
+                  DataCell(Text(res.driver.nationality.substring(0, 3).toUpperCase())),
+                  DataCell(Text(res.constructor.name)),
+                  ...res.extraColumns.map((e) => DataCell(Text(e))),
                 ],
-              ),
-            ),
-          ],
+              );
+            }).toList(),
+          ),
         ),
-        if (!isQualy) _buildFastestLap(results),
+        if (sessionName.hasFastestLap && results.isNotEmpty)
+          _buildFastestLap(results.cast<RaceResultModel>())
       ],
     );
   }
