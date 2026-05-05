@@ -1,3 +1,5 @@
+import '../utils/session_type.dart';
+
 class RaceModel {
   final String round;
   final String raceName; //Es. Monaco Grand Prix
@@ -105,28 +107,32 @@ class RaceModel {
 }
 
 extension RaceSessions on RaceModel {
-  List<Map<String, String>> get weekendSessions {
-    List<Map<String, String>> sessions = [];
+  List<Map<String, dynamic>> get weekendSessions {
+    List<Map<String, dynamic>> sessions = [];
 
-    void addSession(String name, String date, String time) {
+    void addSession(SessionType type, String date, String time, String defaultName) {
       if (date != 'N/A' && time != 'N/A') {
-        sessions.add({'name': name, 'date': date, 'time': time});
+        sessions.add({
+          'type': type,
+          'date': date,
+          'time': time,
+          'defaultName': defaultName,
+        });
       }
     }
 
-    addSession("Prove Libere 1", fp1Date, fp1Time);
+    addSession(SessionType.unknown, fp1Date, fp1Time, "FP1");
 
     if (sprintDate != 'N/A') {
-      addSession("Sprint Qualifying", sprintQualiDate, sprintQualiTime);
-      addSession("Sprint Race", sprintDate, sprintTime);
-      addSession("Qualifiche", qualiDate, qualiTime);
+      addSession(SessionType.sprintQualifying, sprintQualiDate, sprintQualiTime, "Sprint Qualifying");
+      addSession(SessionType.sprintRace, sprintDate, sprintTime, "Sprint Race");
     } else {
-      addSession("Prove Libere 2", fp2Date, fp2Time);
-      addSession("Prove Libere 3", fp3Date, fp3Time);
-      addSession("Qualifiche", qualiDate, qualiTime);
+      addSession(SessionType.unknown, fp2Date, fp2Time, "FP2");
+      addSession(SessionType.unknown, fp3Date, fp3Time, "FP3");
     }
 
-    addSession("Gara", date, time);
+    addSession(SessionType.qualifying, qualiDate, qualiTime, "Qualifying");
+    addSession(SessionType.race, date, time, "Race");
 
     return sessions;
   }
