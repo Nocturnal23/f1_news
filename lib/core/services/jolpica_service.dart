@@ -69,4 +69,26 @@ class ApiService {
       throw Exception('Errore nel caricamento della sprint: ${response.statusCode}');
     }
   }
+
+  //Endpoint per i risultati della qualifica
+  Future<Map<String, dynamic>> getQualiResult(String round) async {
+    final response = await http.get(Uri.parse('$baseUrl/${DateTime.now().year}/${round}/qualifying.json'));
+
+    if (response.statusCode == 200) {
+      return jsonDecode(response.body);
+    } else {
+      throw Exception('Errore nel caricamento delle qualifiche: ${response.statusCode}');
+    }
+  }
+
+  //Endpoint per i risultati di gara.
+  Future<Map<String, dynamic>> getRaceResult(String round) async {
+    final response = await http.get(Uri.parse('$baseUrl/${DateTime.now().year}/${round}/results.json'));
+
+    if (response.statusCode == 200) {
+      return jsonDecode(response.body);
+    } else {
+      throw Exception('Errore nel caricamento delle qualifiche: ${response.statusCode}');
+    }
+  }
 }
