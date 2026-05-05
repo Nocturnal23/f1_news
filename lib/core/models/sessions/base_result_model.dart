@@ -14,4 +14,11 @@ abstract class BaseResultModel {
     required this.driver,
     required this.constructor,
   });
+
+  //Getter per capire quali colonne considerare in base alla sessione:
+  String get displayPosition;
+
+  List<String> get extraColumns; //Colonna dinamica.
+
+  bool get hasFastestLap => false;
 }
