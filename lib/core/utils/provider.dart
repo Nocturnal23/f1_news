@@ -1,9 +1,12 @@
+import 'package:f1_news/core/models/sessions/qualifying_result_model.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../controllers/auth_controller.dart';
 import '../models/constructor_model.dart';
 import '../models/driver_model_standing.dart';
 import '../models/race_model.dart';
+import '../models/sessions/race_result_model.dart';
+import '../models/sessions/sprint_quali_result_model.dart';
 import '../models/user_model.dart';
 import '../repository/jolpica_repository.dart';
 import '../services/jolpica_service.dart';
@@ -95,4 +98,34 @@ final driversProvider = FutureProvider<List<DriverModelStanding>>((ref) async {
 final constructorsProvider = FutureProvider<List<ConstructorModel>>((ref) async {
   final repo = ref.watch(f1RepositoryProvider);
   return await repo.fetchTeams();
+});
+
+// Caricamento dei risultati della Sprint di un round specifico
+final sprintResultsProvider = FutureProvider.family<List<RaceResultModel>, String>((ref, round) async {
+  final repo = ref.watch(f1RepositoryProvider);
+  return await repo.fetchSprintResult(round);
+});
+
+// Usato per ordinare la griglia di partenza.
+final sprintGridProvider =
+FutureProvider.family<List<SprintGridResultModel>, String>((ref, round) async {
+  final repo = ref.watch(f1RepositoryProvider);
+  final list = await repo.fetchSprintGrid(round);
+
+  final sorted = List<SprintGridResultModel>.from(list)
+    ..sort((a, b) => int.parse(a.grid).compareTo(int.parse(b.grid)));
+
+  return sorted;
+});
+
+// Carica i dati della qualifica.
+final qualiResultsProvider = FutureProvider.family<List<QualifyingResultModel>, String>((ref, round) async {
+  final repo = ref.watch(f1RepositoryProvider);
+  return await repo.fetchQualiResult(round);
+});
+
+// Caricamento dei risultati di gara.
+final raceResultsProvider = FutureProvider.family<List<RaceResultModel>, String>((ref, round) async {
+  final repo = ref.watch(f1RepositoryProvider);
+  return await repo.fetchRaceResult(round);
 });
