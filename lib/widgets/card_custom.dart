@@ -1,4 +1,5 @@
 import 'package:country_flags/country_flags.dart';
+import 'package:f1_news/screens/event_info.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
@@ -46,27 +47,37 @@ class CardCustom extends StatelessWidget {
               child: Row(
                 children: [
                   Expanded(
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        Text(
-                          // "Round ${item.round}\n${item.raceName}",
-                          item.raceName ?? "Grand Prix",
-                          style: const TextStyle(
-                            color: Colors.white,
-                            fontSize: 22,
-                            fontWeight: FontWeight.bold,
+                    child: InkWell(
+                      onTap: () {
+                        if(context.mounted) {
+                          showDialog(
+                            context: context,
+                            builder: (context) => EventInfo(raceModel: item)
+                          );
+                        }
+                      },
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Text(
+                            // "Round ${item.round}\n${item.raceName}",
+                            item.raceName ?? "Grand Prix",
+                            style: const TextStyle(
+                              color: Colors.white,
+                              fontSize: 22,
+                              fontWeight: FontWeight.bold,
+                            ),
                           ),
-                        ),
-                        Text(
-                          "${item.fp1Date} - ${item.date}",
-                          style: const TextStyle(
-                            color: Colors.white70,
-                            fontSize: 16,
+                          Text(
+                            "${item.fp1Date} - ${item.date}",
+                            style: const TextStyle(
+                              color: Colors.white70,
+                              fontSize: 16,
+                            ),
                           ),
-                        ),
-                      ],
+                        ],
+                      ),
                     ),
                   ),
                   //const Icon(Icons.map, size: 80, color: Colors.white),

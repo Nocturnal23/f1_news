@@ -1,3 +1,5 @@
+import '../utils/session_type.dart';
+
 class RaceModel {
   final String round;
   final String raceName; //Es. Monaco Grand Prix
@@ -101,5 +103,37 @@ class RaceModel {
       sprintDate: getSessionData(json['Sprint'], 'date'),
       sprintTime: getSessionData(json['Sprint'], 'time'),
     );
+  }
+}
+
+extension RaceSessions on RaceModel {
+  List<Map<String, dynamic>> get weekendSessions {
+    List<Map<String, dynamic>> sessions = [];
+
+    void addSession(SessionType type, String date, String time, String defaultName) {
+      if (date != 'N/A' && time != 'N/A') {
+        sessions.add({
+          'type': type,
+          'date': date,
+          'time': time,
+          'defaultName': defaultName,
+        });
+      }
+    }
+
+    addSession(SessionType.unknown, fp1Date, fp1Time, "FP1");
+
+    if (sprintDate != 'N/A') {
+      addSession(SessionType.sprintQualifying, sprintQualiDate, sprintQualiTime, "Sprint Qualifying");
+      addSession(SessionType.sprintRace, sprintDate, sprintTime, "Sprint Race");
+    } else {
+      addSession(SessionType.unknown, fp2Date, fp2Time, "FP2");
+      addSession(SessionType.unknown, fp3Date, fp3Time, "FP3");
+    }
+
+    addSession(SessionType.qualifying, qualiDate, qualiTime, "Qualifying");
+    addSession(SessionType.race, date, time, "Race");
+
+    return sessions;
   }
 }
