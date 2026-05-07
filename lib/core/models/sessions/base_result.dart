@@ -1,5 +1,5 @@
-import '../constructor_model.dart';
-import '../driver_model.dart';
+import '../constructor.dart';
+import '../driver.dart';
 
 //Classe comune ai modelli relativi a gare (sprint e gara) e qualifica.
 abstract class BaseResultModel {

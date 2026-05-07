@@ -1,4 +1,4 @@
-import 'driver_model.dart';
+import 'driver.dart';
 
 class DriverModelStanding {
   final DriverModel driver;

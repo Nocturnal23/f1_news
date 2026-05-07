@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:intl/intl.dart';
 
-import '../core/models/race_model.dart';
+import '../core/models/race.dart';
 import '../core/utils/session_type.dart';
 
 class EventInfo extends ConsumerWidget {
