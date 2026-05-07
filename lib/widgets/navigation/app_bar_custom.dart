@@ -2,9 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../controllers/auth_controller.dart';
-import '../../core/utils/provider.dart';
-import '../../core/utils/routes.dart';
 import '../../core/providers/provider.dart';
+import '../../core/navigation/routes.dart';
 import '../info_dialog_alert.dart';
 
 enum MenuOptions { impostazioniAccount, impostazioniApp, preferiti, logout }
