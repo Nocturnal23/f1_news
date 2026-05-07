@@ -1,12 +1,12 @@
-import 'package:f1_news/core/models/sessions/qualifying_result_model.dart';
+import 'package:f1_news/core/models/sessions/qualifying_result.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../controllers/auth_controller.dart';
 import '../models/constructor_model.dart';
 import '../models/driver_model_standing.dart';
 import '../models/race_model.dart';
-import '../models/sessions/race_result_model.dart';
-import '../models/sessions/sprint_quali_result_model.dart';
+import '../models/sessions/race_result.dart';
+import '../models/sessions/sprint_quali_result.dart';
 import '../models/user_model.dart';
 import '../repository/jolpica_repository.dart';
 import '../services/jolpica_service.dart';

@@ -1,13 +1,13 @@
 import 'package:f1_news/core/models/race_model.dart';
-import 'package:f1_news/core/models/sessions/qualifying_result_model.dart';
-import 'package:f1_news/core/models/sessions/race_result_model.dart';
+import 'package:f1_news/core/models/sessions/qualifying_result.dart';
+import 'package:f1_news/core/models/sessions/race_result.dart';
 
 import '../models/driver_model_standing.dart';
 import '../models/driver_model.dart';
 import '../models/constructor_model.dart';
 import '../models/constructor_model_standing.dart';
 import '../models/race_details_model.dart';
-import '../models/sessions/sprint_quali_result_model.dart';
+import '../models/sessions/sprint_quali_result.dart';
 import '../services/jolpica_service.dart';
 
 class F1Repository {
