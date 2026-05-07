@@ -7,7 +7,7 @@ import 'package:f1_news/screens/homepage.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'core/utils/routes.dart';
+import 'core/navigation/routes.dart';
 import 'firebase_options.dart';
 
 void main() async {

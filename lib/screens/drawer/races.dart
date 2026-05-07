@@ -4,8 +4,6 @@ import 'package:f1_news/widgets/navigation/drawer_app.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-import '../../core/repository/jolpica_repository.dart';
-import '../../core/services/jolpica_service.dart';
 import '../../widgets/card_custom.dart';
 import '../../widgets/navigation/app_bar_custom.dart';
 

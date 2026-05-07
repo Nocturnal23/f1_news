@@ -1,4 +1,4 @@
-import 'package:f1_news/core/utils/routes.dart';
+import 'package:f1_news/core/navigation/routes.dart';
 import 'package:f1_news/widgets/info_dialog_alert.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
