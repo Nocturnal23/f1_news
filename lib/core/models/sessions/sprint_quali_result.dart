@@ -1,5 +1,5 @@
-import '../constructor_model.dart';
-import '../driver_model.dart';
+import '../constructor.dart';
+import '../driver.dart';
 import 'base_result.dart';
 
 class SprintGridResultModel extends BaseResultModel {

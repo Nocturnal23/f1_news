@@ -1,4 +1,4 @@
-import 'package:f1_news/core/models/race_details_model.dart';
+import 'package:f1_news/core/models/race_details.dart';
 import 'package:flutter/material.dart';
 
 class CardInfo extends StatelessWidget {

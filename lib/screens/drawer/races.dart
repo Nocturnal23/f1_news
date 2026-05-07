@@ -1,4 +1,4 @@
-import 'package:f1_news/core/models/race_model.dart';
+import 'package:f1_news/core/models/race.dart';
 import 'package:f1_news/core/utils/provider.dart';
 import 'package:f1_news/widgets/navigation/drawer_app.dart';
 import 'package:flutter/material.dart';

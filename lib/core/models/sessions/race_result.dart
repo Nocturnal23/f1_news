@@ -1,5 +1,5 @@
-import 'package:f1_news/core/models/constructor_model.dart';
-import 'package:f1_news/core/models/driver_model.dart';
+import 'package:f1_news/core/models/constructor.dart';
+import 'package:f1_news/core/models/driver.dart';
 import 'package:f1_news/core/models/sessions/base_result.dart';
 
 //Questo modello è comune alla Sprint e alla gara.
