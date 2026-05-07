@@ -1,24 +1,26 @@
 class RaceDetailsModel {
   final String firstEdition;
   final String lastWinner;
-  // final String trackLength;
-  // final String lapRecord;
+  final double trackLength;
+  final String lapRecord;
+  final int lapsNumber;
 
   RaceDetailsModel({
     required this.firstEdition,
     required this.lastWinner,
-    // required this.trackLength,
-    // required this.lapRecord,
+    required this.trackLength,
+    required this.lapRecord,
+    required this.lapsNumber
   });
 
-  //La struttura della seguente factory è temporanea
-  // Dovranno essere aggiunti trackLenght e lapRecord
-  // Che provenendo da un diverso JSON dovrà essere
-  // riscritto.
-  factory RaceDetailsModel.fromMultiJson(Map<String, dynamic> data){
+  factory RaceDetailsModel.fromMultiJson(Map<String, dynamic> data, Map<String, dynamic>? extraData){
     return RaceDetailsModel(
       firstEdition: data['firstEdition'] ?? 'N/A',
       lastWinner: data['lastWinner'] ?? 'N/A',
+
+      trackLength: (extraData?['trackLength'] ?? 0).toDouble(),
+      lapRecord: extraData?['lapRecord'] ?? 'N/A',
+      lapsNumber: (extraData?['lapsNumber'] ?? 0),
     );
   }
 }
