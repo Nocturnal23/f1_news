@@ -1,10 +1,10 @@
-import 'package:f1_news/widgets/results_list.dart';
+import 'package:f1_news/widgets/dialogs/results_list.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:intl/intl.dart';
 
-import '../core/models/race.dart';
-import '../core/utils/session_type.dart';
+import '../../core/models/race.dart';
+import '../../core/utils/session_type.dart';
 
 class EventInfo extends ConsumerWidget {
   final RaceModel raceModel;
