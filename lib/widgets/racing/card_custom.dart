@@ -1,13 +1,13 @@
 import 'package:country_flags/country_flags.dart';
-import 'package:f1_news/widgets/card_info.dart';
-import 'package:f1_news/screens/event_info.dart';
+import 'package:f1_news/widgets/dialogs/card_info.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 
-import '../core/utils/country_helper.dart';
-import '../core/providers/provider.dart';
+import '../../core/utils/country_helper.dart';
+import '../../core/providers/provider.dart';
+import '../dialogs/event_info.dart';
 
 class CardCustom extends ConsumerWidget {
   dynamic item;

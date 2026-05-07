@@ -4,7 +4,7 @@ import 'package:f1_news/widgets/navigation/drawer_app.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-import '../../widgets/card_custom.dart';
+import '../../widgets/racing/card_custom.dart';
 import '../../widgets/navigation/app_bar_custom.dart';
 
 class Races extends ConsumerWidget {
