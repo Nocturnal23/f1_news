@@ -1,4 +1,3 @@
-import 'package:f1_news/core/utils/enums.dart';
 import 'package:f1_news/widgets/info_dialog_alert.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
