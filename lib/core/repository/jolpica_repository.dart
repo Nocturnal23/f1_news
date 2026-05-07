@@ -6,6 +6,7 @@ import '../models/driver_model_standing.dart';
 import '../models/driver_model.dart';
 import '../models/constructor_model.dart';
 import '../models/constructor_model_standing.dart';
+import '../models/race_details_model.dart';
 import '../models/sessions/sprint_quali_result_model.dart';
 import '../services/jolpica_service.dart';
 
@@ -13,6 +14,8 @@ class F1Repository {
   final ApiService apiService;
 
   F1Repository(this.apiService);
+
+  Map<String, dynamic>? _cachedExtraData;
 
   //Repo per tutti i piloti che hanno preso parte ad almeno una sessione ufficiela.
   Future<List<DriverModel>> fetchDrivers() async {
@@ -138,13 +141,8 @@ class F1Repository {
 
   // Questo filtro mi permette di selezionare i piloti ufficiali, senza seguire la classifica.
   Future<List<DriverModelStanding>> fetchOfficialDriversByTeam() async {
-    // Qui vengono recuperati i piloti ufficiali.
     final List<DriverModelStanding> standings = await fetchDriversStandings();
 
-    // Quindi prendo i piloti ufficuali e li ordino per team di appartenenza.
-    // Se ho fatto bene se durante la stagione un pilota viene sostituito
-    // temporaneamente o definitivamente viene comunque mostrato e viene
-    // mostrato anche il sostituto.
     standings.sort((a, b) {
       int compareTeam = a.teamName.compareTo(b.teamName);
       if (compareTeam != 0) return compareTeam;
@@ -154,6 +152,59 @@ class F1Repository {
     return standings;
   }
 
+  // Recupero dei dati per la prima edizione e ultimo vincitore.
+  Future<Map<String, dynamic>> _getMetadata(String circuitId) {
+    return apiService.getWinnersMetadata(circuitId);
+  }
+
+  // Recupero dati extra (con cache)
+  Future<Map<String, dynamic>> _getExtraData() async {
+    if (_cachedExtraData != null) {
+      return _cachedExtraData!;
+    }
+
+    try {
+      _cachedExtraData = await apiService.getExtraInfo();
+      return _cachedExtraData!;
+    } catch (e) {
+      print("Errore nel recupero dati extra: $e");
+      return {};
+    }
+  }
+
+  Future<RaceDetailsModel> fetchRaceDetails(String circuitId) async {
+    final metadata = await _getMetadata(circuitId);
+
+    final allExtraData = await _getExtraData();
+
+    final currentCircuitExtraData = allExtraData[circuitId];
+
+    final races = metadata['MRData']?['RaceTable']?['Races'] as List?;
+
+    final firstEdition = (races != null && races.isNotEmpty)
+        ? races.first['season'].toString()
+        : 'N/A';
+
+    final total = int.tryParse(metadata['MRData']?['total'] ?? '') ?? 0;
+
+    String lastWinner = 'N/A';
+
+    if (total > 0) {
+      final last = await apiService.getLastWinner(circuitId, total - 1);
+      final race = last['MRData']?['RaceTable']?['Races']?[0];
+      final driver = race?['Results']?[0]?['Driver'];
+
+      if (driver != null) {
+        lastWinner = "${driver['givenName']} ${driver['familyName']} (${race['season']})";
+      }
+    }
+
+    final dataCircuit = {
+      'firstEdition': firstEdition,
+      'lastWinner': lastWinner,
+    };
+
+    return RaceDetailsModel.fromMultiJson(dataCircuit, currentCircuitExtraData);
   //Repo generico che va poi a differenziare SQ, SR e race.
   Future<List<T>> _fetchSession<T>({
     required String round,
