@@ -3,7 +3,7 @@ import 'package:f1_news/widgets/info_dialog_alert.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-import '../../core/utils/provider.dart';
+import '../../core/providers/provider.dart';
 import '../chequered_flag.dart';
 
 class DrawerApp extends ConsumerWidget {

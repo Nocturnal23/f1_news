@@ -7,7 +7,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 
 import '../core/utils/country_helper.dart';
-import '../core/utils/provider.dart';
+import '../core/providers/provider.dart';
 
 class CardCustom extends ConsumerWidget {
   dynamic item;
