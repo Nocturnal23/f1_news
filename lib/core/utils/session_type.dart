@@ -1,4 +1,4 @@
-import 'package:f1_news/core/utils/provider.dart';
+import 'package:f1_news/core/providers/provider.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../models/sessions/base_result.dart';

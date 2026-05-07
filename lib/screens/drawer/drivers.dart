@@ -3,11 +3,10 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-import '../../controllers/auth_controller.dart';
 import '../../core/repository/jolpica_repository.dart';
 import '../../core/models/driver_standing.dart';
 import '../../core/services/jolpica_service.dart';
-import '../../core/utils/provider.dart';
+import '../../core/providers/provider.dart';
 import '../../widgets/navigation/app_bar_custom.dart';
 import '../../widgets/navigation/drawer_app.dart';
 

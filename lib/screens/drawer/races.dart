@@ -1,5 +1,5 @@
 import 'package:f1_news/core/models/race.dart';
-import 'package:f1_news/core/utils/provider.dart';
+import 'package:f1_news/core/providers/provider.dart';
 import 'package:f1_news/widgets/navigation/drawer_app.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';

@@ -5,8 +5,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../core/repository/jolpica_repository.dart';
 import '../../core/services/jolpica_service.dart';
-import '../../core/utils/provider.dart';
-import '../../core/utils/teams_cols.dart';
+import '../../core/providers/provider.dart';
 import '../../core/theme/teams_cols.dart';
 import '../../widgets/navigation/app_bar_custom.dart';
 import '../../widgets/navigation/drawer_app.dart';
