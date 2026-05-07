@@ -1,9 +1,9 @@
-import 'package:f1_news/core/models/sessions/race_result_model.dart';
+import 'package:f1_news/core/models/sessions/race_result.dart';
 import 'package:f1_news/core/utils/session_type.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-import '../core/models/sessions/base_result_model.dart';
+import '../core/models/sessions/base_result.dart';
 
 class ResultsList extends ConsumerWidget {
   final SessionType sessionName; //Identifica la sessione (Sprint Quali, Sprint, Gara..)
