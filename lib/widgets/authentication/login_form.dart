@@ -1,4 +1,4 @@
-import 'package:f1_news/widgets/info_dialog_alert.dart';
+import 'package:f1_news/widgets/dialogs/info_dialog_alert.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_form_builder/flutter_form_builder.dart';
