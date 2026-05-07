@@ -59,18 +59,6 @@ class ApiService {
     }
   }
 
-  // //Endpoint per recuperare la prima edizione di un GP.
-  // Future<Map<String, dynamic>> getFirstEdition(String circuit_id) async {
-  //   final response = await http.get(Uri.parse('$baseUrl/circuits/$circuit_id/results/1.json?limit=1&offset=0'));
-  //
-  //   if (response.statusCode == 200) {
-  //     print("Contenuto risposta prima edizione: ${response.body}");
-  //     return jsonDecode(response.body);
-  //   } else {
-  //     throw Exception('Errore nel caricamento del calendario: ${response.statusCode}');
-  //   }
-  // }
-
   //E' parte del recupero del ultimo vincitore.
   Future<Map<String, dynamic>> getWinnersMetadata(String circuit_id) async {
     final response = await http.get(Uri.parse('$baseUrl/circuits/$circuit_id/results/1.json?limit=1'));
@@ -91,6 +79,17 @@ class ApiService {
       return jsonDecode(response.body);
     } else {
       throw Exception('Errore nel caricamento del calendario: ${response.statusCode}');
+    }
+  }
+  
+  Future<Map<String, dynamic>> getExtraInfo() async {
+    final response = await http.get(Uri.parse('https://gist.githubusercontent.com/Nocturnal23/421160de818f6c42d40a57b0edfbb4a5/raw/f1_news_circuits_extra_data.json'));
+
+    if (response.statusCode == 200) {
+      print("Contenuto risposta dati extra: ${response.body}");
+      return jsonDecode(response.body);
+    } else {
+      throw Exception('Errore nel caricamento del json personalizzato: ${response.statusCode}');
     }
   }
 }
