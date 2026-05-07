@@ -25,13 +25,10 @@ class F1Repository {
       if (data['MRData'] != null &&
           data['MRData']['DriverTable'] != null &&
           data['MRData']['DriverTable']['Drivers'] != null) {
-
         final List<dynamic> driversJson =
-        data['MRData']['DriverTable']['Drivers'];
+            data['MRData']['DriverTable']['Drivers'];
 
-        return driversJson
-            .map((json) => DriverModel.fromJson(json))
-            .toList();
+        return driversJson.map((json) => DriverModel.fromJson(json)).toList();
       }
 
       return [];
@@ -49,11 +46,12 @@ class F1Repository {
       if (data['MRData'] != null &&
           data['MRData']['StandingsTable'] != null &&
           data['MRData']['StandingsTable']['StandingsLists'] != null) {
-
-        final List<dynamic> standingsLists = data['MRData']['StandingsTable']['StandingsLists'];
+        final List<dynamic> standingsLists =
+            data['MRData']['StandingsTable']['StandingsLists'];
 
         if (standingsLists.isNotEmpty) {
-          final List<dynamic>? standingsJson = standingsLists[0]['DriverStandings'];
+          final List<dynamic>? standingsJson =
+              standingsLists[0]['DriverStandings'];
 
           if (standingsJson != null) {
             return standingsJson
@@ -77,9 +75,8 @@ class F1Repository {
       if (data['MRData'] != null &&
           data['MRData']['ConstructorTable'] != null &&
           data['MRData']['ConstructorTable']['Constructors'] != null) {
-
         final List<dynamic> teamsJson =
-        data['MRData']['ConstructorTable']['Constructors'];
+            data['MRData']['ConstructorTable']['Constructors'];
 
         return teamsJson
             .map((json) => ConstructorModel.fromJson(json))
@@ -100,10 +97,12 @@ class F1Repository {
       if (data['MRData'] != null &&
           data['MRData']['StandingsTable'] != null &&
           data['MRData']['StandingsTable']['StandingsLists'] != null) {
-        final List<dynamic> standingsLists = data['MRData']['StandingsTable']['StandingsLists'];
+        final List<dynamic> standingsLists =
+            data['MRData']['StandingsTable']['StandingsLists'];
 
         if (standingsLists.isNotEmpty) {
-          final List<dynamic>? standingsJson = standingsLists[0]['ConstructorStandings'];
+          final List<dynamic>? standingsJson =
+              standingsLists[0]['ConstructorStandings'];
 
           if (standingsJson != null) {
             return standingsJson
@@ -124,10 +123,9 @@ class F1Repository {
     try {
       final data = await apiService.getRaces();
 
-      if(data['MRData'] != null &&
-         data['MRData']['RaceTable'] != null &&
-         data['MRData']['RaceTable']['Races'] != null) {
-
+      if (data['MRData'] != null &&
+          data['MRData']['RaceTable'] != null &&
+          data['MRData']['RaceTable']['Races'] != null) {
         final List<dynamic> racesList = data['MRData']['RaceTable']['Races'];
 
         return racesList.map((json) => RaceModel.fromJson(json)).toList();
@@ -195,7 +193,8 @@ class F1Repository {
       final driver = race?['Results']?[0]?['Driver'];
 
       if (driver != null) {
-        lastWinner = "${driver['givenName']} ${driver['familyName']} (${race['season']})";
+        lastWinner =
+            "${driver['givenName']} ${driver['familyName']} (${race['season']})";
       }
     }
 
@@ -205,6 +204,8 @@ class F1Repository {
     };
 
     return RaceDetailsModel.fromMultiJson(dataCircuit, currentCircuitExtraData);
+  }
+
   //Repo generico che va poi a differenziare SQ, SR e race.
   Future<List<T>> _fetchSession<T>({
     required String round,
