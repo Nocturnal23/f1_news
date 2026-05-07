@@ -1,4 +1,4 @@
-import 'package:f1_news/core/utils/teams_cols.dart';
+import 'package:f1_news/core/theme/teams_cols.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
