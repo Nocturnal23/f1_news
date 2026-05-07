@@ -12,6 +12,8 @@ class F1Repository {
 
   F1Repository(this.apiService);
 
+  Map<String, dynamic>? _cachedExtraData;
+
   //Repo per tutti i piloti che hanno preso parte ad almeno una sessione ufficiela.
   Future<List<DriverModel>> fetchDrivers() async {
     try {
@@ -136,13 +138,8 @@ class F1Repository {
 
   // Questo filtro mi permette di selezionare i piloti ufficiali, senza seguire la classifica.
   Future<List<DriverModelStanding>> fetchOfficialDriversByTeam() async {
-    // Qui vengono recuperati i piloti ufficiali.
     final List<DriverModelStanding> standings = await fetchDriversStandings();
 
-    // Quindi prendo i piloti ufficuali e li ordino per team di appartenenza.
-    // Se ho fatto bene se durante la stagione un pilota viene sostituito
-    // temporaneamente o definitivamente viene comunque mostrato e viene
-    // mostrato anche il sostituto.
     standings.sort((a, b) {
       int compareTeam = a.teamName.compareTo(b.teamName);
       if (compareTeam != 0) return compareTeam;
@@ -152,59 +149,33 @@ class F1Repository {
     return standings;
   }
 
-  //----------------------------------------------------------------------------
-
   // Recupero dei dati per la prima edizione e ultimo vincitore.
   Future<Map<String, dynamic>> _getMetadata(String circuitId) {
     return apiService.getWinnersMetadata(circuitId);
   }
 
-  // Future<int> _fetchTotalEditions(String circuitId) async {
-  //   final data = await _getMetadata(circuitId);
-  //   return int.tryParse(data['MRData']?['total'] ?? '') ?? 0;
-  // }
+  // Recupero dati extra (con cache)
+  Future<Map<String, dynamic>> _getExtraData() async {
+    if (_cachedExtraData != null) {
+      return _cachedExtraData!;
+    }
 
-  //----------------------------------------------------------------------------
-
-  // // Recupero dei dati del primo edizione.
-  // Future<String> fetchFirstEdition(String circuitId) async {
-  //   final data = await _getMetadata(circuitId); // I dati sono qua. Qui ci sono i dati anche della prima edizione
-  //   final races = data['MRData']?['RaceTable']?['Races'] as List?;
-  //   return (races != null && races.isNotEmpty)
-  //       ? races.first['season'].toString()
-  //       : 'N/A';
-  // }
-  //
-  // //Recupero del ultimo vincitore.
-  // Future<String> fetchLastWinner(String circuitId) async {
-  //   try {
-  //     final total = await _fetchTotalEditions(circuitId);
-  //     if (total <= 0) return "N/A";
-  //
-  //     /*
-  //     Per recuperare l'ultimo vincitore occorre sottrarre -1 al totale
-  //     A quanto pare il totale indica il GP non acora corso.
-  //      */
-  //     final data = await apiService.getLastWinner(circuitId, total -1);
-  //
-  //     final race = data['MRData']?['RaceTable']?['Races']?[0];
-  //     final driver = race?['Results']?[0]?['Driver'];
-  //
-  //     if (driver == null) return "N/A";
-  //
-  //     return "${driver['givenName']} ${driver['familyName']} (${race['season']})";
-  //   } catch (e) {
-  //     print("Errore fetchLastWinner: $e");
-  //     return "N/A";
-  //   }
-  // }
+    try {
+      _cachedExtraData = await apiService.getExtraInfo();
+      return _cachedExtraData!;
+    } catch (e) {
+      print("Errore nel recupero dati extra: $e");
+      return {};
+    }
+  }
 
   Future<RaceDetailsModel> fetchRaceDetails(String circuitId) async {
-    final metadata = await _getMetadata(circuitId); //Prende i dati necessari.
+    final metadata = await _getMetadata(circuitId);
 
-    /*
-    Quindi "smista i dati in base alle esigenze.
-     */
+    final allExtraData = await _getExtraData();
+
+    final currentCircuitExtraData = allExtraData[circuitId];
+
     final races = metadata['MRData']?['RaceTable']?['Races'] as List?;
 
     final firstEdition = (races != null && races.isNotEmpty)
@@ -217,7 +188,6 @@ class F1Repository {
 
     if (total > 0) {
       final last = await apiService.getLastWinner(circuitId, total - 1);
-
       final race = last['MRData']?['RaceTable']?['Races']?[0];
       final driver = race?['Results']?[0]?['Driver'];
 
@@ -231,6 +201,6 @@ class F1Repository {
       'lastWinner': lastWinner,
     };
 
-    return RaceDetailsModel.fromMultiJson(dataCircuit);
+    return RaceDetailsModel.fromMultiJson(dataCircuit, currentCircuitExtraData);
   }
 }
