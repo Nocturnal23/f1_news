@@ -129,3 +129,15 @@ final raceResultsProvider = FutureProvider.family<List<RaceResultModel>, String>
   final repo = ref.watch(f1RepositoryProvider);
   return await repo.fetchRaceResult(round);
 });
+
+// Provider per la classifica piloti
+final driversStandingsProvider = FutureProvider<List<dynamic>>((ref) async {
+  final repo = ref.watch(f1RepositoryProvider);
+  return await repo.fetchDriversStandings();
+});
+
+// Provider per la classifica costruttori
+final teamsStandingsProvider = FutureProvider<List<dynamic>>((ref) async {
+  final repo = ref.watch(f1RepositoryProvider);
+  return await repo.fetchTeamsStandings();
+});

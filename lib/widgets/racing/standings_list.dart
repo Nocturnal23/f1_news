@@ -1,64 +1,55 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
+import '../../core/providers/provider.dart';
 import '../../core/providers/screenProvider.dart';
-import '../../core/repository/jolpica_repository.dart';
-import '../../core/services/jolpica_service.dart';
 
 class StandingsList extends ConsumerWidget {
   final String type; //Assume i valori "drivers" o "constructors" per capire cosa mostrare.
   StandingsList({super.key, required this.type});
 
-  final F1Repository _repository = F1Repository(ApiService());
-
   @override
   Widget build(BuildContext context, WidgetRef sRef) {
     final sizeScreen = sRef.watch(screenProvider);
 
-    return FutureBuilder<List<dynamic>>(
-      future: type == "drivers"
-          ? _repository.fetchDriversStandings()
-          : _repository.fetchTeamsStandings(),
+    final standingsAsync = sRef.watch(
+        type == "drivers" ? driversStandingsProvider : teamsStandingsProvider
+    );
 
-      builder: (context, snapshot) {
-        if (snapshot.connectionState == ConnectionState.waiting) {
-          return const Center(child: CircularProgressIndicator(color: Colors.red));
-        } else if (snapshot.hasError) {
-          return Text("Errore nel recuper della classifica: ${snapshot.error}");
-        } else if (!snapshot.hasData || snapshot.data!.isEmpty) {
-          return const Text("Nessun dato disponibile!");
-        }
 
-        final data = snapshot.data!;
-        return Container(
-          color: Colors.black,
-          width: double.infinity,
-          child: SingleChildScrollView(
-            child: Column(
-              children: [
-                Padding(
-                  padding: const EdgeInsets.all(10),
-                  child: Text(
-                    "Classifica ${DateTime.now().year}",
-                    style: TextStyle(
-                      fontSize: sizeScreen.isSmallPhone ? 20 : 24,
-                      fontWeight: FontWeight.bold,
-                      color: Colors.white,
+    return standingsAsync.when(
+        loading: () => const Center(child: CircularProgressIndicator(color: Colors.red)),
+        error: (err, stack) => Center(child: Text("Errore: $err", style: const TextStyle(color: Colors.white))),
+        data: (standings) {
+            return Container(
+              color: Colors.black,
+              width: double.infinity,
+              child: SingleChildScrollView(
+                child: Column(
+                  children: [
+                    Padding(
+                      padding: const EdgeInsets.all(10),
+                      child: Text(
+                        "Classifica ${DateTime.now().year}",
+                        style: TextStyle(
+                          fontSize: sizeScreen.isSmallPhone ? 20 : 24,
+                          fontWeight: FontWeight.bold,
+                          color: Colors.white,
+                        ),
+                      ),
                     ),
-                  ),
-                ),
 
-                SingleChildScrollView(
-                  child: DataTable(
-                    horizontalMargin: sizeScreen.isSmallPhone ? 10 : 20,
-                    columns: _buildColumns(sizeScreen.isSmallPhone),
-                    rows: _buildRows(data, sizeScreen.isSmallPhone),
-                  ),
+                    SingleChildScrollView(
+                      child: DataTable(
+                        horizontalMargin: sizeScreen.isSmallPhone ? 10 : 20,
+                        columns: _buildColumns(sizeScreen.isSmallPhone),
+                        rows: _buildRows(standings, sizeScreen.isSmallPhone),
+                      ),
+                    ),
+                  ],
                 ),
-              ],
-            ),
-          ),
-        );
+              ),
+            );
       },
     );
   }
