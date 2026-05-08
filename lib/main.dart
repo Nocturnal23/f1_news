@@ -6,6 +6,7 @@ import 'package:f1_news/screens/drawer/standings.dart';
 import 'package:f1_news/screens/homepage.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'core/navigation/routes.dart';
 import 'core/providers/screenProvider.dart';
@@ -16,6 +17,10 @@ void main() async {
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
   );
+
+  await SystemChrome.setPreferredOrientations([
+    DeviceOrientation.portraitUp,
+  ]);
 
   runApp(
     const ProviderScope( //Questo serve per permettere al provider di funzionar.e
