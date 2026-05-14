@@ -1,10 +1,9 @@
 import 'package:country_flags/country_flags.dart';
 import 'package:f1_news/widgets/dialogs/card_info.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:flutter_svg/flutter_svg.dart';
 
+import '../../core/providers/screenProvider.dart';
 import '../../core/utils/country_helper.dart';
 import '../../core/providers/provider.dart';
 import '../dialogs/event_info.dart';
@@ -16,10 +15,11 @@ class CardCustom extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    final screen = ref.watch(screenProvider);
     final String isoCode = CountryHelper.getIsoCode(item.country);
 
     return SizedBox(
-      height: 250,
+      height: screen.isSmallPhone ? 180 : 220,
       width: double.infinity,
       child: Card(
         clipBehavior: Clip.hardEdge,
@@ -63,13 +63,15 @@ class CardCustom extends ConsumerWidget {
                         crossAxisAlignment: CrossAxisAlignment.start,
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
-                          Text(
-                            // "Round ${item.round}\n${item.raceName}",
-                            item.raceName ?? "Grand Prix",
-                            style: const TextStyle(
-                              color: Colors.white,
-                              fontSize: 22,
-                              fontWeight: FontWeight.bold,
+                          FittedBox(
+                            fit: BoxFit.scaleDown,
+                            child: Text(
+                              item.raceName ?? "Grand Prix",
+                              style: TextStyle(
+                                color: Colors.white,
+                                fontSize: screen.isSmallPhone ? 18 : 22,
+                                fontWeight: FontWeight.bold,
+                              ),
                             ),
                           ),
                           Text(
@@ -89,6 +91,7 @@ class CardCustom extends ConsumerWidget {
                       child: Image.asset(
                         "lib/assets/circuits/${item.circuitName}.webp",
                         fit: BoxFit.contain,
+                        height: screen.isSmallPhone ? 80 : 120,
                       ),
                       onTap: () async {
                         final repository = ref.read(f1RepositoryProvider);
