@@ -3,9 +3,8 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-import '../../core/repository/jolpica_repository.dart';
-import '../../core/services/jolpica_service.dart';
 import '../../core/providers/provider.dart';
+import '../../core/providers/screenProvider.dart';
 import '../../core/theme/teams_cols.dart';
 import '../../widgets/navigation/app_bar_custom.dart';
 import '../../widgets/navigation/drawer_app.dart';
@@ -18,21 +17,13 @@ class Constructors extends ConsumerStatefulWidget {
 }
 
 class _ConstructorsState extends ConsumerState<Constructors> {
-  final F1Repository _repository = F1Repository(ApiService());
   final Set<String> _favoriteIds = {};
-
-  // late Future<List<ConstructorModel>> _constructorFuture;
-  //
-  // @override
-  // void initState() {
-  //   super.initState();
-  //   _constructorFuture = _repository.fetchTeams();
-  // }
 
   @override
   Widget build(BuildContext context) {
     final authState = ref.watch(authStateProvider);
     final constructorState = ref.watch(constructorsProvider);
+    final screen = ref.watch(screenProvider);
 
     return Scaffold(
       appBar: AppBarCustom(title: "Costruttori ${DateTime.now().year}"),
@@ -44,22 +35,22 @@ class _ConstructorsState extends ConsumerState<Constructors> {
             const Center(child: CircularProgressIndicator(color: Colors.red)),
         error: (err, stack) => Center(child: Text("Errore: $err")),
         data: (constructors) {
-          return _buildConstructorList(constructors, authState.value);
+          return _buildConstructorList(constructors, authState.value, screen);
         },
       ),
     );
   }
 
-  Widget _buildConstructorList(
-    List<ConstructorModel> constructors,
-    User? user,
-  ) {
+  Widget _buildConstructorList(List<ConstructorModel> constructors, User? user, ScreenProvider screen) {
     if (constructors.isEmpty) {
       return const Center(child: Text("Nessun costruttore trovato."));
     }
 
     return ListView.separated(
-      separatorBuilder: (context, index) => const SizedBox(height: 1),
+      padding: EdgeInsets.symmetric(
+          horizontal: screen.isTablet ? screen.width * 0.1 : 0
+      ),
+      separatorBuilder: (context, index) => const SizedBox(height: 2),
       itemCount: constructors.length,
       itemBuilder: (context, index) {
         final team = constructors[index];
@@ -69,11 +60,12 @@ class _ConstructorsState extends ConsumerState<Constructors> {
           color: TeamsCols.getBackground(team.id),
           child: ListTile(
             leading: CircleAvatar(
+              radius: screen.isSmallPhone ? 20 : 25,
               backgroundColor: TeamsCols.getForeground(team.id),
               child: SizedBox(
                 child: Image(
-                  width: 50,
-                  height: 50,
+                  width: screen.isSmallPhone ? 44 : 56,
+                  height: screen.isSmallPhone ? 44 : 56,
                   image: AssetImage("lib/assets/logos/${team.id}.webp"),
                   fit: BoxFit.cover,
                   alignment: Alignment.topCenter,
@@ -87,6 +79,7 @@ class _ConstructorsState extends ConsumerState<Constructors> {
             title: Text(
               team.name,
               style: TextStyle(
+                fontSize: screen.isSmallPhone ? 15 : 17,
                 fontWeight: FontWeight.bold,
                 color: Colors.white,
                 shadows: [Shadow(blurRadius: 2, color: Colors.black26)],
@@ -95,6 +88,7 @@ class _ConstructorsState extends ConsumerState<Constructors> {
             subtitle: Text(
               team.nationality,
               style: TextStyle(
+                fontSize: screen.isSmallPhone ? 12 : 14,
                 fontWeight: FontWeight.bold,
                 fontStyle: FontStyle.italic,
                 color: Colors.white,
