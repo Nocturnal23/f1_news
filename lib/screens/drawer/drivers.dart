@@ -3,10 +3,9 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-import '../../core/repository/jolpica_repository.dart';
 import '../../core/models/driver_standing.dart';
-import '../../core/services/jolpica_service.dart';
 import '../../core/providers/provider.dart';
+import '../../core/providers/screenProvider.dart';
 import '../../widgets/navigation/app_bar_custom.dart';
 import '../../widgets/navigation/drawer_app.dart';
 
@@ -18,21 +17,13 @@ class Drivers extends ConsumerStatefulWidget {
 }
 
 class _DriversState extends ConsumerState<Drivers> {
-  final F1Repository _repository = F1Repository(ApiService());
   final Set<String> _favoriteIds = {};
-
-  // late Future<List<DriverModelStandings>> _driversFuture;
-
-  // @override
-  // void initState() {
-  //   super.initState();
-  //   _driversFuture = _repository.fetchOfficialDriversByTeam();
-  // }
 
   @override
   Widget build(BuildContext context) {
     final authState = ref.watch(authStateProvider);
     final driversState = ref.watch(driversProvider);
+    final screen = ref.watch(screenProvider);
 
     return Scaffold(
       appBar: AppBarCustom(title: "Piloti ${DateTime.now().year}"),
@@ -42,21 +33,24 @@ class _DriversState extends ConsumerState<Drivers> {
       body: driversState.when(
         loading: () =>
             const Center(child: CircularProgressIndicator(color: Colors.red)),
-        error: (err, stack) => Center(child: Text("Errore: $err")),
+        error: (err, stack) => Center(child: Text("Errore nel caricamento della lista piloti: $err")),
         data: (drivers) {
-          return _buildDriverList(drivers, authState.value);
+          return _buildDriverList(drivers, authState.value, screen);
         },
       ),
     );
   }
 
-  Widget _buildDriverList(List<DriverModelStanding> drivers, User? user) {
+  Widget _buildDriverList(List<DriverModelStanding> drivers, User? user, ScreenProvider screen) {
     if (drivers.isEmpty) {
       return const Center(child: Text("Nessun pilota trovato."));
     }
 
     return ListView.separated(
-      separatorBuilder: (context, index) => const SizedBox(height: 1),
+      padding: EdgeInsets.symmetric(
+          horizontal: screen.isTablet ? screen.width * 0.1 : 0
+      ),
+      separatorBuilder: (context, index) => const SizedBox(height: 2),
       itemCount: drivers.length,
       itemBuilder: (context, index) {
         final driverStand = drivers[index];
@@ -67,18 +61,17 @@ class _DriversState extends ConsumerState<Drivers> {
           color: TeamsCols.getBackground(driverStand.teamId),
           child: ListTile(
             leading: CircleAvatar(
+              radius: screen.isSmallPhone ? 20 : 25,
               backgroundColor: TeamsCols.getForeground(driverStand.teamId),
               child: SizedBox(
                 child: Image(
-                  width: 50,
-                  height: 50,
+                  width: screen.isSmallPhone ? 44 : 56,
+                  height: screen.isSmallPhone ? 44 : 56,
                   image: AssetImage("lib/assets/drivers/${driver.id}.webp"),
                   fit: BoxFit.cover,
                   alignment: Alignment.topCenter,
                   errorBuilder: (context, error, stackTrace) {
-                    return Text(
-                      '${driver.name.substring(0, 1)}${driver.surname.substring(0, 1)}',
-                    );
+                    return Text('${driver.name.substring(0, 1)}${driver.surname.substring(0, 1)}');
                   },
                 ),
               ),
@@ -94,6 +87,7 @@ class _DriversState extends ConsumerState<Drivers> {
                       Text(
                         "${driver.name} ${driver.surname}",
                         style: TextStyle(
+                          fontSize: screen.isSmallPhone ? 18 : 20,
                           fontWeight: FontWeight.bold,
                           color: Colors.white,
                           shadows: [
@@ -104,6 +98,7 @@ class _DriversState extends ConsumerState<Drivers> {
                       Text(
                         driverStand.teamName,
                         style: TextStyle(
+                          fontSize: screen.isSmallPhone ? 14 : 16,
                           fontWeight: FontWeight.bold,
                           fontStyle: FontStyle.italic,
                           color: Colors.white,
@@ -117,8 +112,8 @@ class _DriversState extends ConsumerState<Drivers> {
                 ),
 
                 SizedBox(
-                  width: 32,
-                  height: 32,
+                  width: screen.isSmallPhone ? 28 : 35,
+                  height: screen.isSmallPhone ? 28 : 35,
                   child: Image.asset(
                     "lib/assets/logos/${driverStand.teamId}.webp",
                     fit: BoxFit.contain,
