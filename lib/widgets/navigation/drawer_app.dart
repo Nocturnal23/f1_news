@@ -1,9 +1,9 @@
 import 'package:f1_news/core/navigation/routes.dart';
+import 'package:f1_news/core/providers/screenProvider.dart';
 import 'package:f1_news/widgets/dialogs/info_dialog_alert.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-import '../../core/providers/provider.dart';
 import '../common/chequered_flag.dart';
 
 class DrawerApp extends ConsumerWidget {
@@ -11,31 +11,34 @@ class DrawerApp extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context,WidgetRef ref) {
-    final authState = ref.watch(authStateProvider);
-    final user = authState.value;
+    final screen = ref.watch(screenProvider);
 
     return Drawer(
+      width: screen.width * 0.75,
       child: ListView(
         padding: EdgeInsets.zero,
         children: [
           DrawerHeader(
+            margin: EdgeInsets.only(bottom: screen.isSmallPhone ? 8 : 16),
             padding: EdgeInsets.zero,
             decoration: const BoxDecoration(color: Colors.red),
             child: Stack(
               children: [
                 Padding(
                   padding: EdgeInsets.all(10),
-                  child: const Text(
+                  child: Text(
                     'F1 News',
-                    style: TextStyle(fontSize: 24,
-                    fontWeight: FontWeight.bold),
+                    style: TextStyle(
+                      fontSize: screen.isSmallPhone ? 20 : 24,
+                      fontWeight: FontWeight.bold
+                    ),
                   ),
                 ),
 
                 Align(
                   alignment: Alignment.bottomCenter,
                   child: SizedBox(
-                    height: 20,
+                    height: screen.isSmallPhone ? 15 : 20,
                     child: CustomPaint(
                       size: Size.infinite,
                       painter: ChequeredFlag(),

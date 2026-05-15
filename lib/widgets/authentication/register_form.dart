@@ -108,17 +108,21 @@ class _RegisterFormState extends ConsumerState<RegisterForm> {
               ]),
             ),
 
-            ElevatedButton(onPressed: _signUp, child: const Text("Registrati")),
+            Column(
+              children: [
+                ElevatedButton(onPressed: _signUp, child: const Text("Registrati")),
 
-            const Padding(
-              padding: EdgeInsets.symmetric(horizontal: 12),
-              child: Text("oppure", style: TextStyle(color: Colors.grey)),
-            ),
+                const Padding(
+                  padding: EdgeInsets.symmetric(horizontal: 12),
+                  child: Text("oppure", style: TextStyle(color: Colors.grey)),
+                ),
 
-            TextButton(
-              onPressed: _signInWithGoogle,
-              child: const Text("Registrati con Google"),
-            ),
+                ElevatedButton(
+                  onPressed: _signInWithGoogle,
+                  child: const Text("Registrati con Google"),
+                ),
+              ],
+            )
           ],
         ),
       ),

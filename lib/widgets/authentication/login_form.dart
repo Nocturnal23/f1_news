@@ -17,7 +17,6 @@ class LoginForm extends ConsumerStatefulWidget {
 class _LoginFormState extends ConsumerState<LoginForm> {
   final _formKey = GlobalKey<FormBuilderState>();
   bool obscuredPassword = true;
-  // final AuthController _authController = AuthController();
 
   @override
   void dispose() {
@@ -68,8 +67,7 @@ class _LoginFormState extends ConsumerState<LoginForm> {
               ]),
             ),
 
-            Row(
-              mainAxisAlignment: MainAxisAlignment.center,
+            Column(
               children: [
                 ElevatedButton(onPressed: _signIn, child: const Text("Accedi")),
 
@@ -78,23 +76,23 @@ class _LoginFormState extends ConsumerState<LoginForm> {
                   child: Text("oppure", style: TextStyle(color: Colors.grey)),
                 ),
 
-                TextButton(
+                ElevatedButton(
                   onPressed: _signInWithGoogle,
                   child: const Text("Accedi con Google"),
                 ),
-              ],
-            ),
 
-            TextButton(
-              onPressed: _restorePassword,
-              child: const Text(
-                'Password dimenticata?',
-                style: TextStyle(
-                  color: Colors.blue,
-                  decoration: TextDecoration.underline,
+                TextButton(
+                  onPressed: _restorePassword,
+                  child: const Text(
+                    'Password dimenticata?',
+                    style: TextStyle(
+                      color: Colors.blue,
+                      decoration: TextDecoration.underline,
+                    ),
+                  ),
                 ),
-              ),
-            ),
+              ],
+            )
           ],
         ),
       ),

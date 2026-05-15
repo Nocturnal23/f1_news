@@ -1,3 +1,4 @@
+import 'package:f1_news/core/providers/screenProvider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
@@ -22,22 +23,29 @@ class AppBarCustom extends ConsumerWidget implements PreferredSizeWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final authState = ref.watch(authStateProvider);
     final user = authState.value;
+    final screen = ref.watch(screenProvider);
 
     return AppBar(
       backgroundColor: Colors.red,
       centerTitle: true,
-      title: Text(title),
+      title: FittedBox(
+        fit: BoxFit.scaleDown,
+        child: Text(title, style: TextStyle(fontSize: screen.isSmallPhone ? 20 : 22)),
+      ),
       bottom: bottom,
 
       actions: [
         if(user == null)
           Padding(
             padding: const EdgeInsets.symmetric(vertical: 8.0, horizontal: 3.0),
-            child: ElevatedButton(
-              onPressed: () {
-                Navigator.pushNamed(context, Routes.auth);
-              },
-              child: const Text("Accedi"),
+            child: SizedBox(
+              height: screen.isSmallPhone ? 35 : 40,
+              child: ElevatedButton(
+                onPressed: () {
+                  Navigator.pushNamed(context, Routes.auth);
+                },
+                child: Text("Accedi", style: TextStyle(fontSize: screen.isSmallPhone ? 15 : 18)),
+              ),
             ),
           )
         else
