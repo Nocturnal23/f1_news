@@ -17,13 +17,13 @@ class Constructors extends ConsumerStatefulWidget {
 }
 
 class _ConstructorsState extends ConsumerState<Constructors> {
-  final Set<String> _favoriteIds = {};
 
   @override
   Widget build(BuildContext context) {
     final authState = ref.watch(authStateProvider);
     final constructorState = ref.watch(constructorsProvider);
     final screen = ref.watch(screenProvider);
+    final favoriteId = ref.watch(favoritesProvider);
 
     return Scaffold(
       appBar: AppBarCustom(title: "Costruttori ${DateTime.now().year}"),
@@ -35,13 +35,13 @@ class _ConstructorsState extends ConsumerState<Constructors> {
             const Center(child: CircularProgressIndicator(color: Colors.red)),
         error: (err, stack) => Center(child: Text("Errore: $err")),
         data: (constructors) {
-          return _buildConstructorList(constructors, authState.value, screen);
+          return _buildConstructorList(constructors, authState.value, screen, favoriteId);
         },
       ),
     );
   }
 
-  Widget _buildConstructorList(List<ConstructorModel> constructors, User? user, ScreenProvider screen) {
+  Widget _buildConstructorList(List<ConstructorModel> constructors, User? user, ScreenProvider screen, Set<String> favoriteId) {
     if (constructors.isEmpty) {
       return const Center(child: Text("Nessun costruttore trovato."));
     }
@@ -54,7 +54,7 @@ class _ConstructorsState extends ConsumerState<Constructors> {
       itemCount: constructors.length,
       itemBuilder: (context, index) {
         final team = constructors[index];
-        final isFav = _favoriteIds.contains(team.id);
+        final isFav = favoriteId.contains(team.id);
 
         return Container(
           color: TeamsCols.getBackground(team.id),
@@ -103,13 +103,7 @@ class _ConstructorsState extends ConsumerState<Constructors> {
                       color: isFav ? Colors.amber : null,
                     ),
                     onPressed: () {
-                      setState(() {
-                        if (isFav) {
-                          _favoriteIds.remove(team.id);
-                        } else {
-                          _favoriteIds.add(team.id);
-                        }
-                      });
+                      ref.read(favoritesProvider.notifier).toggleFavorite(team.id);
                     },
                   )
                 : null,

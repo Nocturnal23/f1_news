@@ -17,13 +17,12 @@ class Drivers extends ConsumerStatefulWidget {
 }
 
 class _DriversState extends ConsumerState<Drivers> {
-  final Set<String> _favoriteIds = {};
-
   @override
   Widget build(BuildContext context) {
     final authState = ref.watch(authStateProvider);
     final driversState = ref.watch(driversProvider);
     final screen = ref.watch(screenProvider);
+    final favoriteId = ref.watch(favoritesProvider);
 
     return Scaffold(
       appBar: AppBarCustom(title: "Piloti ${DateTime.now().year}"),
@@ -35,13 +34,13 @@ class _DriversState extends ConsumerState<Drivers> {
             const Center(child: CircularProgressIndicator(color: Colors.red)),
         error: (err, stack) => Center(child: Text("Errore nel caricamento della lista piloti: $err")),
         data: (drivers) {
-          return _buildDriverList(drivers, authState.value, screen);
+          return _buildDriverList(drivers, authState.value, screen, favoriteId);
         },
       ),
     );
   }
 
-  Widget _buildDriverList(List<DriverModelStanding> drivers, User? user, ScreenProvider screen) {
+  Widget _buildDriverList(List<DriverModelStanding> drivers, User? user, ScreenProvider screen, Set<String> favoriteId) {
     if (drivers.isEmpty) {
       return const Center(child: Text("Nessun pilota trovato."));
     }
@@ -55,7 +54,7 @@ class _DriversState extends ConsumerState<Drivers> {
       itemBuilder: (context, index) {
         final driverStand = drivers[index];
         final driver = driverStand.driver;
-        final isFav = _favoriteIds.contains(driver.id);
+        final isFav = favoriteId.contains(driver.id);
 
         return Container(
           color: TeamsCols.getBackground(driverStand.teamId),
@@ -132,13 +131,7 @@ class _DriversState extends ConsumerState<Drivers> {
                       color: isFav ? Colors.amber : null,
                     ),
                     onPressed: () {
-                      setState(() {
-                        if (isFav) {
-                          _favoriteIds.remove(driver.id);
-                        } else {
-                          _favoriteIds.add(driver.id);
-                        }
-                      });
+                      ref.read(favoritesProvider.notifier).toggleFavorite(driver.id);
                     },
                   )
                 : null,
