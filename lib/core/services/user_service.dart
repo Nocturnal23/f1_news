@@ -12,4 +12,16 @@ class UserService {
       return null;
     });
   }
+
+  Future<void> addFavorite(String uid, String favoriteId) async {
+    await _db.collection('users').doc(uid).update({
+      'favorites': FieldValue.arrayUnion([favoriteId]),
+    });
+  }
+
+  Future<void> removeFavorite(String uid, String favoriteId) async {
+    await _db.collection('users').doc(uid).update({
+      'favorites': FieldValue.arrayRemove([favoriteId]),
+    });
+  }
 }
