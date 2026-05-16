@@ -1,3 +1,4 @@
+import 'package:f1_news/controllers/favorites_controller.dart';
 import 'package:f1_news/core/models/sessions/qualifying_result.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -140,4 +141,9 @@ final driversStandingsProvider = FutureProvider<List<dynamic>>((ref) async {
 final teamsStandingsProvider = FutureProvider<List<dynamic>>((ref) async {
   final repo = ref.watch(f1RepositoryProvider);
   return await repo.fetchTeamsStandings();
+});
+
+// Il provider che porta i dati dei preferiti nell'app.
+final favoritesProvider = NotifierProvider<FavoritesController, Set<String>>(() {
+  return FavoritesController();
 });
