@@ -1,4 +1,5 @@
 import 'package:f1_news/core/providers/provider.dart';
+import 'package:f1_news/core/providers/screenProvider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
@@ -10,6 +11,7 @@ class ManageFavorite extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final favorite = ref.watch(favoritesProvider);
+    final screen = ref.watch(screenProvider);
 
     final driversAsync = ref.watch(driversProvider);
     final driverIds = driversAsync.value
@@ -23,21 +25,21 @@ class ManageFavorite extends ConsumerWidget {
     favorite.where((id) => !driverIds.contains(id)).toList();
 
     return Dialog(
-        insetPadding: const EdgeInsets.symmetric(
-          horizontal: 24,
+        insetPadding: EdgeInsets.symmetric(
+          horizontal: screen.isSmallPhone ? 16 : 24,
           vertical: 24,
         ),
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
       child: Container(
         padding: const EdgeInsets.all(16.0),
-        constraints: const BoxConstraints(maxHeight: 500),
+        constraints: BoxConstraints(maxHeight: screen.height * 0.7),
 
         child: Column(
           mainAxisSize: MainAxisSize.min,
           children: [
-            const Text(
+            Text(
               "I TUOI PREFERITI",
-              style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+              style: TextStyle(fontSize: screen.isSmallPhone ? 18 : 20, fontWeight: FontWeight.bold),
             ),
             const Divider(height: 24),
 
@@ -55,11 +57,12 @@ class ManageFavorite extends ConsumerWidget {
                                   ref,
                                   title: "Piloti",
                                   item: favoriteDrivers,
-                                  route: Routes.drivers
+                                  route: Routes.drivers,
+                                  screen: screen
                                 )
                             ),
 
-                            const VerticalDivider(width: 12, thickness: 1),
+                            VerticalDivider(width: screen.isSmallPhone ? 16 : 24, thickness: 1),
 
                             Expanded(
                                 child: _buildFavorite(
@@ -67,7 +70,8 @@ class ManageFavorite extends ConsumerWidget {
                                     ref,
                                     title: "Costruttori",
                                     item: favoriteTeams,
-                                    route: Routes.teams
+                                    route: Routes.teams,
+                                    screen: screen
                                 )
                             ),
                           ],
@@ -87,13 +91,13 @@ class ManageFavorite extends ConsumerWidget {
     );
   }
 
-  Widget _buildFavorite(BuildContext context, WidgetRef ref, {required String title, required List<String> item, required String route}) {
+  Widget _buildFavorite(BuildContext context, WidgetRef ref, {required String title, required List<String> item, required String route, required ScreenProvider screen,}) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Text(
           title,
-          style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 16, color: Colors.grey),
+          style: TextStyle(fontWeight: FontWeight.bold, fontSize: screen.isSmallPhone ? 15 : 16, color: Colors.grey),
         ),
         const SizedBox(height: 10),
 
@@ -105,10 +109,10 @@ class ManageFavorite extends ConsumerWidget {
                 Navigator.pushNamed(context, route);
               },
 
-              child: const Text(
+              child: Text(
                 "Nessuno selezionato.\nAggiungili qui.",
                 textAlign: TextAlign.center,
-                style: TextStyle(color: Colors.blue, decoration: TextDecoration.underline),
+                style: TextStyle(fontSize: screen.isSmallPhone ? 12 : 14, color: Colors.blue, decoration: TextDecoration.underline),
               ),
             ),
           )
@@ -124,19 +128,19 @@ class ManageFavorite extends ConsumerWidget {
                       children: [
                         Expanded(
                           child: Text(
-                            id,
+                            "${id[0].toUpperCase()}${id.substring(1)}",
                             overflow: TextOverflow.ellipsis,
-                            style: const TextStyle(fontSize: 14),
+                            style: TextStyle(fontSize: screen.isSmallPhone ? 12 : 14),
                           ),
                         ),
 
                         IconButton(
                           constraints: const BoxConstraints(),
                           padding: EdgeInsets.zero,
-                          icon: const Icon(
+                          icon: Icon(
                             Icons.close,
                             color: Colors.red,
-                            size: 18,
+                            size: screen.isSmallPhone ? 16 : 18,
                           ),
                           onPressed: () {
                             ref.read(favoritesProvider.notifier).toggleFavorite(id);

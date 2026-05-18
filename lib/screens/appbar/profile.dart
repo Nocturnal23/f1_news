@@ -4,6 +4,7 @@ import 'package:f1_news/widgets/navigation/app_bar_custom.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
+import '../../core/providers/screenProvider.dart';
 import '../../widgets/dialogs/manage_favorite.dart';
 
 class Profile extends ConsumerWidget {
@@ -12,57 +13,90 @@ class Profile extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final user = ref.watch(currentUserProvider).value;
+    final screen = ref.watch(screenProvider);
 
     return Scaffold(
-      appBar: AppBarCustom(title: "Benvenuto ${user?.displayName}"),
+      appBar: AppBarCustom(title: "Profilo"),
 
-      body: _buildBody(user, context),
+      body: _buildBody(user, screen, context),
     );
   }
 
-  Widget _buildBody(UserModel? user, BuildContext context) {
+  Widget _buildBody(
+    UserModel? user,
+    ScreenProvider screen,
+    BuildContext context,
+  ) {
     return ListView(
       padding: EdgeInsets.all(16.0),
       children: [
         ListTile(
-          title: const Text("Nome utente"),
+          title: Text(
+            "Nome utente",
+            style: TextStyle(
+              fontSize: screen.isSmallPhone ? 13 : 16,
+            ),
+          ),
           trailing: Text(
             user!.displayName,
-            style: const TextStyle(fontSize: 16, color: Colors.grey),
+            style: TextStyle(
+              fontSize: screen.isSmallPhone ? 13 : 16,
+              color: Colors.grey,
+            ),
           ),
         ),
 
         ListTile(
-          title: const Text("Email"),
+          title: Text(
+            "Email",
+            style: TextStyle(
+              fontSize: screen.isSmallPhone ? 13 : 16,
+            ),
+          ),
           trailing: Text(
             user!.email,
-            style: const TextStyle(fontSize: 16, color: Colors.grey),
+            style: TextStyle(
+              fontSize: screen.isSmallPhone ? 13 : 16,
+              color: Colors.grey,
+            ),
           ),
         ),
 
         ListTile(
-          title: const Text("Iscritto dal"),
+          title: Text(
+            "Iscritto dal",
+            style: TextStyle(
+              fontSize: screen.isSmallPhone ? 13 : 16,
+            ),
+          ),
           trailing: Text(
             "${user.createdAt.day}/${user.createdAt.month}/${user.createdAt.year}",
-            style: const TextStyle(fontSize: 16, color: Colors.grey),
+            style: TextStyle(
+              fontSize: screen.isSmallPhone ? 13 : 16,
+              color: Colors.grey,
+            ),
           ),
         ),
 
         Center(
-          child: FilledButton.icon(
-            style: FilledButton.styleFrom(
-              backgroundColor: Colors.white,
-              foregroundColor: Colors.black,
-              elevation: 2.0,
+          child: SizedBox(
+            width: screen.isSmallPhone ? double.infinity : 250,
+            height: screen.isSmallPhone ? 45 : 50,
+            child: FilledButton.icon(
+              style: FilledButton.styleFrom(
+                backgroundColor: Colors.white,
+                foregroundColor: Colors.black,
+                elevation: 2.0,
+              ),
+              onPressed: () {
+                showDialog(
+                  context: context,
+                  builder: (context) => const ManageFavorite(),
+                );
+              },
+              icon: const Icon(Icons.favorite),
+              label: const Text("Gestisci i preferiti"),
             ),
-            onPressed: () {
-              showDialog(
-                context: context,
-                builder: (context) => const ManageFavorite(),
-              );
-            },
-            icon: const Icon(Icons.favorite),
-            label: const Text("Gestisci i preferiti"),
           ),
         ),
       ],
