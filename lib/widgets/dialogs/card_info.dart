@@ -18,56 +18,58 @@ class CardInfo extends ConsumerWidget {
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
       child: ConstrainedBox(
         constraints: BoxConstraints(maxHeight: sizeScreen.height * 0.8),
-        child: Column(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            Image.asset(img, fit: BoxFit.contain),
-            Padding(
-              padding: EdgeInsets.all(sizeScreen.isSmallPhone ? 12.0 : 16.0),
+        child: SingleChildScrollView(
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              Image.asset(img, fit: BoxFit.contain),
+              Padding(
+                padding: EdgeInsets.all(sizeScreen.isSmallPhone ? 12.0 : 16.0),
 
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  GridView.count(
-                    crossAxisCount: 2,
-                    shrinkWrap: true,
-                    physics: const NeverScrollableScrollPhysics(),
-                    childAspectRatio: sizeScreen.isSmallPhone ? 1.5 : 1.8,
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    GridView.count(
+                      crossAxisCount: 2,
+                      shrinkWrap: true,
+                      physics: const NeverScrollableScrollPhysics(),
+                      childAspectRatio: sizeScreen.isSmallPhone ? 1.5 : 1.8,
 
-                    children: [
-                      _buildData("Prima edizione", "${details.firstEdition}", sizeScreen.isSmallPhone),
-                      _buildData("Ultimo vincitore", "${details.lastWinner}", sizeScreen.isSmallPhone),
-                    ],
-                  ),
+                      children: [
+                        _buildData("Prima edizione", "${details.firstEdition}", sizeScreen.isSmallPhone),
+                        _buildData("Ultimo vincitore", "${details.lastWinner}", sizeScreen.isSmallPhone),
+                      ],
+                    ),
 
 
-                  SizedBox(height: sizeScreen.isSmallPhone ? 12 : 20),
+                    SizedBox(height: sizeScreen.isSmallPhone ? 12 : 20),
 
-                  LayoutBuilder(
-                      builder: (context, constraints) {
-                        return GridView.count(
-                          crossAxisCount: 2,
-                          shrinkWrap: true,
-                          physics: const NeverScrollableScrollPhysics(),
-                          childAspectRatio: sizeScreen.isSmallPhone ? 1.5 : 1.8,
-                          mainAxisSpacing: 10,
-                          crossAxisSpacing: 10,
-                          children: [
-                            _buildData("Lunghezza", "${details.trackLength} km", sizeScreen.isSmallPhone),
+                    LayoutBuilder(
+                        builder: (context, constraints) {
+                          return GridView.count(
+                            crossAxisCount: 2,
+                            shrinkWrap: true,
+                            physics: const NeverScrollableScrollPhysics(),
+                            childAspectRatio: sizeScreen.isSmallPhone ? 1.5 : 1.8,
+                            mainAxisSpacing: 10,
+                            crossAxisSpacing: 10,
+                            children: [
+                              _buildData("Lunghezza", "${details.trackLength} km", sizeScreen.isSmallPhone),
 
-                            _buildData("Giro veloce", "${details.lapRecord}", sizeScreen.isSmallPhone),
+                              _buildData("Giro veloce", "${details.lapRecord}", sizeScreen.isSmallPhone),
 
-                            _buildData("Numero di giri", "${details.lapsNumber}", sizeScreen.isSmallPhone),
+                              _buildData("Numero di giri", "${details.lapsNumber}", sizeScreen.isSmallPhone),
 
-                            _buildData("Distanza gara", "${(details.trackLength * details.lapsNumber).toStringAsFixed(3)} km", sizeScreen.isSmallPhone),
-                          ],
-                        );
-                      },
-                  ),
-                ],
+                              _buildData("Distanza gara", "${(details.trackLength * details.lapsNumber).toStringAsFixed(3)} km", sizeScreen.isSmallPhone),
+                            ],
+                          );
+                        },
+                    ),
+                  ],
+                ),
               ),
-            ),
-          ],
+            ],
+          ),
         ),
       ),
     );
