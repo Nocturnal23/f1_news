@@ -1,3 +1,4 @@
+import 'package:f1_news/screens/appbar/profile.dart';
 import 'package:f1_news/screens/auth.dart';
 import 'package:f1_news/screens/drawer/constructors.dart';
 import 'package:f1_news/screens/drawer/drivers.dart';
@@ -60,7 +61,7 @@ class MyApp extends ConsumerWidget {
           Routes.teams: (context) => const Constructors(),
           Routes.standings: (context) => const Standings(),
           Routes.races: (context) => Races(),
-          // Routes.profile: (context) => const Profile(),
+          Routes.profile: (context) => const Profile(),
           // Routes.settings: (context) => const Settings(),
           // Routes.favorite: (context) => const Favorite(),
           // Routes.news: (context) => const News(),
