@@ -58,7 +58,10 @@ class AppBarCustom extends ConsumerWidget implements PreferredSizeWidget {
             onSelected: (MenuOptions value) {
               switch (value) {
                 case MenuOptions.impostazioniAccount:
-                  _showAlert(context);
+                  final String? currentRoute = ModalRoute.of(context)?.settings.name;
+                  if (currentRoute != Routes.profile) {
+                    Navigator.pushNamed(context, Routes.profile);
+                  }
                   break;
                 case MenuOptions.impostazioniApp:
                   _showAlert(context);
