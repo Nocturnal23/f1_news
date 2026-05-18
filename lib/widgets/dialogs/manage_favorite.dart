@@ -14,6 +14,22 @@ class ManageFavorite extends ConsumerWidget {
     final screen = ref.watch(screenProvider);
 
     final driversAsync = ref.watch(driversProvider);
+    if (driversAsync.isLoading) {
+      return Dialog(
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
+        child: const Padding(
+          padding: EdgeInsets.all(32.0),
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              CircularProgressIndicator(color: Colors.red),
+              SizedBox(height: 16),
+              Text("Caricamento preferiti...", style: TextStyle(color: Colors.grey)),
+            ],
+          ),
+        ),
+      );
+    }
     final driverIds = driversAsync.value
         ?.map((d) => d.driver.id)
         .toSet() ?? {};
