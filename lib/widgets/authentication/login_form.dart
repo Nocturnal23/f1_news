@@ -25,75 +25,77 @@ class _LoginFormState extends ConsumerState<LoginForm> {
 
   @override
   Widget build(BuildContext context) {
-    return Padding(
-      padding: EdgeInsets.all(16.0),
-      child: FormBuilder(
-        key: _formKey,
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            FormBuilderTextField(
-              name: 'email',
-              textInputAction: TextInputAction.next,
-              decoration: const InputDecoration(
-                icon: Icon(Icons.mail),
-                labelText: 'Email',
+    return SingleChildScrollView(
+      child: Padding(
+        padding: EdgeInsets.all(16.0),
+        child: FormBuilder(
+          key: _formKey,
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              FormBuilderTextField(
+                name: 'email',
+                textInputAction: TextInputAction.next,
+                decoration: const InputDecoration(
+                  icon: Icon(Icons.mail),
+                  labelText: 'Email',
+                ),
+                validator: FormBuilderValidators.compose([
+                  FormBuilderValidators.required(),
+                  FormBuilderValidators.email(),
+                ]),
               ),
-              validator: FormBuilderValidators.compose([
-                FormBuilderValidators.required(),
-                FormBuilderValidators.email(),
-              ]),
-            ),
 
-            FormBuilderTextField(
-              name: 'password',
-              obscureText: obscuredPassword,
-              decoration: InputDecoration(
-                icon: const Icon(Icons.password),
-                suffixIcon: IconButton(
-                  icon: Icon(
-                    obscuredPassword ? Icons.visibility : Icons.visibility_off,
+              FormBuilderTextField(
+                name: 'password',
+                obscureText: obscuredPassword,
+                decoration: InputDecoration(
+                  icon: const Icon(Icons.password),
+                  suffixIcon: IconButton(
+                    icon: Icon(
+                      obscuredPassword ? Icons.visibility : Icons.visibility_off,
+                    ),
+                    onPressed: () {
+                      setState(() {
+                        obscuredPassword = !obscuredPassword;
+                      });
+                    },
                   ),
-                  onPressed: () {
-                    setState(() {
-                      obscuredPassword = !obscuredPassword;
-                    });
-                  },
+                  labelText: 'Password',
                 ),
-                labelText: 'Password',
+                validator: FormBuilderValidators.compose([
+                  FormBuilderValidators.required(),
+                ]),
               ),
-              validator: FormBuilderValidators.compose([
-                FormBuilderValidators.required(),
-              ]),
-            ),
 
-            Column(
-              children: [
-                ElevatedButton(onPressed: _signIn, child: const Text("Accedi")),
+              Column(
+                children: [
+                  ElevatedButton(onPressed: _signIn, child: const Text("Accedi")),
 
-                const Padding(
-                  padding: EdgeInsets.symmetric(horizontal: 12),
-                  child: Text("oppure", style: TextStyle(color: Colors.grey)),
-                ),
+                  const Padding(
+                    padding: EdgeInsets.symmetric(horizontal: 12),
+                    child: Text("oppure", style: TextStyle(color: Colors.grey)),
+                  ),
 
-                ElevatedButton(
-                  onPressed: _signInWithGoogle,
-                  child: const Text("Accedi con Google"),
-                ),
+                  ElevatedButton(
+                    onPressed: _signInWithGoogle,
+                    child: const Text("Accedi con Google"),
+                  ),
 
-                TextButton(
-                  onPressed: _restorePassword,
-                  child: const Text(
-                    'Password dimenticata?',
-                    style: TextStyle(
-                      color: Colors.blue,
-                      decoration: TextDecoration.underline,
+                  TextButton(
+                    onPressed: _restorePassword,
+                    child: const Text(
+                      'Password dimenticata?',
+                      style: TextStyle(
+                        color: Colors.blue,
+                        decoration: TextDecoration.underline,
+                      ),
                     ),
                   ),
-                ),
-              ],
-            )
-          ],
+                ],
+              )
+            ],
+          ),
         ),
       ),
     );
