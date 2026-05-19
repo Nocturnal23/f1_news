@@ -68,44 +68,83 @@ class Profile extends ConsumerWidget {
           child: Column(
             children: [
               ListTile(
-                title: Text(
-                  "Nome utente",
-                  style: TextStyle(fontSize: screen.isSmallPhone ? 13 : 16),
-                ),
-                trailing: Text(
-                  user.displayName,
-                  style: TextStyle(
-                    fontSize: screen.isSmallPhone ? 13 : 16,
-                    color: Colors.grey,
-                  ),
+                title: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Text(
+                      "Nome utente",
+                      style: TextStyle(fontSize: screen.isSmallPhone ? 13 : 16),
+                    ),
+
+                    SizedBox(width: screen.isSmallPhone ? 13 : 16),
+
+                    Expanded(
+                        child: Text(
+                          user.displayName,
+                          textAlign: TextAlign.end,
+                          overflow: TextOverflow.ellipsis,
+                          maxLines: 1,
+                          style: TextStyle(
+                            fontSize: screen.isSmallPhone ? 13 : 16,
+                            color: Colors.grey,
+                          ),
+                        ),
+                    )
+                  ]
                 ),
               ),
 
               ListTile(
-                title: Text(
-                  "Email",
-                  style: TextStyle(fontSize: screen.isSmallPhone ? 13 : 16),
-                ),
-                trailing: Text(
-                  user.email,
-                  style: TextStyle(
-                    fontSize: screen.isSmallPhone ? 13 : 16,
-                    color: Colors.grey,
-                  ),
+                title: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Text(
+                      "Email",
+                      style: TextStyle(fontSize: screen.isSmallPhone ? 13 : 16),
+                    ),
+
+                    SizedBox(width: screen.isSmallPhone ? 13 : 16),
+
+                    Expanded(
+                        child: Text(
+                          user.email,
+                          textAlign: TextAlign.end,
+                          overflow: TextOverflow.ellipsis,
+                          maxLines: 1,
+                          style: TextStyle(
+                            fontSize: screen.isSmallPhone ? 13 : 16,
+                            color: Colors.grey,
+                          ),
+                        ),
+                    )
+                  ]
                 ),
               ),
 
               ListTile(
-                title: Text(
-                  "Iscritto dal",
-                  style: TextStyle(fontSize: screen.isSmallPhone ? 13 : 16),
-                ),
-                trailing: Text(
-                  "${user.createdAt.day}/${user.createdAt.month}/${user.createdAt.year}",
-                  style: TextStyle(
-                    fontSize: screen.isSmallPhone ? 13 : 16,
-                    color: Colors.grey,
-                  ),
+                title: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Text(
+                      "Iscritto dal",
+                      style: TextStyle(fontSize: screen.isSmallPhone ? 13 : 16),
+                    ),
+
+                    SizedBox(width: screen.isSmallPhone ? 13 : 16),
+
+                    Expanded(
+                      child: Text(
+                        "${user.createdAt.day}/${user.createdAt.month}/${user.createdAt.year}",
+                        textAlign: TextAlign.end,
+                        overflow: TextOverflow.ellipsis,
+                        maxLines: 1,
+                        style: TextStyle(
+                          fontSize: screen.isSmallPhone ? 13 : 16,
+                          color: Colors.grey,
+                        ),
+                      ),
+                    )
+                  ]
                 ),
               ),
             ],
