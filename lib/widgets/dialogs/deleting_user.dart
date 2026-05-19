@@ -95,18 +95,21 @@ class _DeletingUser extends ConsumerState<DeletingUser> {
   }
 
   Future<void> _submit() async {
-    if (!_formKey.currentState!.saveAndValidate()) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(
-          content: Text("Devi inserire la password!"),
-          backgroundColor: Colors.red,
-        ),
-      );
-      return;
-    }
-
     final authController = ref.read(authControllerProvider);
-    final password = _formKey.currentState!.value['password'];
+    var password = "";
+
+    if (!authController.isGoogleUser()) {
+      if (!_formKey.currentState!.saveAndValidate()) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(
+            content: Text("Devi inserire la password!"),
+            backgroundColor: Colors.red,
+          ),
+        );
+        return;
+      }
+      password = _formKey.currentState!.value['password'];
+    }
 
     try{
       await authController.deleteAccount(password);
