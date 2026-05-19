@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../core/models/sessions/base_result.dart';
+import '../../core/providers/screenProvider.dart';
 
 class ResultsList extends ConsumerWidget {
   final SessionType sessionName; //Identifica la sessione (Sprint Quali, Sprint, Gara..)
@@ -18,6 +19,7 @@ class ResultsList extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final result = sessionName.getResults(ref, round);
+    final screen = ref.watch(screenProvider);
 
     return result.when(
       loading: () => const Center(child: CircularProgressIndicator(color: Colors.red)),
@@ -29,11 +31,11 @@ class ResultsList extends ConsumerWidget {
           children: [
             Text(
               sessionName.displayName,
-              style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+              style: TextStyle(fontSize: screen.isTablet ? 24 : 18, fontWeight: FontWeight.bold),
             ),
             const Divider(),
             Flexible(
-              child: SingleChildScrollView(child: _buildStanding(results)),
+              child: SingleChildScrollView(child: _buildStanding(results, screen)),
             ),
             TextButton(
               onPressed: () => Navigator.pop(context),
@@ -47,34 +49,59 @@ class ResultsList extends ConsumerWidget {
 
   //Se è qualifica: grid, nome, nazion, team, (se è qualifica normale mostrare Q1, Q2, Q3)
   //Se è gara/sprint: pos, nome, nazion, team, punti, tempo. In fondo alla lista mostra giro veloce.
-  Widget _buildStanding(List<BaseResultModel> results) {
+  Widget _buildStanding(List<BaseResultModel> results, ScreenProvider screen) {
+    final Widget tableWidget = _buildTable(results, screen);
 
     return Column(
       crossAxisAlignment: CrossAxisAlignment.stretch,
       children: [
-        SingleChildScrollView(
-          scrollDirection: Axis.horizontal,
-          child: DataTable(
-            columnSpacing: 16,
-            columns: sessionName.headers
-                .map((h) => DataColumn(label: Text(h, style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 13))))
-                .toList(),
-            rows: results.map((res) {
-              return DataRow(
-                cells: [
-                  DataCell(Text(res.displayPosition)),
-                  DataCell(Text(res.driver.surname)),
-                  DataCell(Text(res.driver.nationality.substring(0, 3).toUpperCase())),
-                  DataCell(Text(res.constructor.name)),
-                  ...res.extraColumns.map((e) => DataCell(Text(e))),
-                ],
-              );
-            }).toList(),
+        screen.isTablet
+            ? Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 16.0),
+          child: SizedBox(
+            width: double.infinity,
+            child: tableWidget,
           ),
+        )
+            : SingleChildScrollView(
+          scrollDirection: Axis.horizontal,
+          child: tableWidget,
         ),
+
         if (sessionName.hasFastestLap && results.isNotEmpty)
           _buildFastestLap(results.cast<RaceResultModel>())
       ],
+    );
+  }
+
+  Widget _buildTable(List<BaseResultModel> results, ScreenProvider screen) {
+    final headerStyle = TextStyle(
+        fontWeight: FontWeight.bold,
+        fontSize: screen.isTablet ? 16 : 13
+    );
+    final cellStyle = TextStyle(
+        fontSize: screen.isTablet ? 15 : 14
+    );
+
+    return DataTable(
+      columnSpacing: screen.isTablet ? 32 : 16,
+      horizontalMargin: screen.isTablet ? 24 : 12,
+      dataRowMinHeight: screen.isTablet ? 55 : 48,
+      dataRowMaxHeight: screen.isTablet ? 60 : 52,
+      columns: sessionName.headers
+          .map((h) => DataColumn(label: Text(h, style: headerStyle)))
+          .toList(),
+      rows: results.map((res) {
+        return DataRow(
+          cells: [
+            DataCell(Text(res.displayPosition, style: cellStyle.copyWith(fontWeight: FontWeight.bold))),
+            DataCell(Text(res.driver.surname, style: cellStyle)),
+            DataCell(Text(res.driver.nationality.substring(0, 3).toUpperCase(), style: cellStyle)),
+            DataCell(Text(res.constructor.name, style: cellStyle)),
+            ...res.extraColumns.map((e) => DataCell(Text(e, style: cellStyle))),
+          ],
+        );
+      }).toList(),
     );
   }
 
@@ -90,7 +117,7 @@ class ResultsList extends ConsumerWidget {
           borderRadius: BorderRadius.circular(8),
         ),
         child: Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          mainAxisAlignment: MainAxisAlignment.spaceAround,
           children: [
             const Text(
               "Giro Veloce:",

@@ -24,6 +24,7 @@ class StandingsList extends ConsumerWidget {
             return Container(
               color: Colors.black,
               width: double.infinity,
+              // height: double.infinity,
               child: SingleChildScrollView(
                 child: Column(
                   children: [
@@ -39,11 +40,17 @@ class StandingsList extends ConsumerWidget {
                       ),
                     ),
 
-                    SingleChildScrollView(
-                      child: DataTable(
-                        horizontalMargin: sizeScreen.isSmallPhone ? 10 : 20,
-                        columns: _buildColumns(sizeScreen.isSmallPhone),
-                        rows: _buildRows(standings, sizeScreen.isSmallPhone),
+                    Padding(
+                      padding: EdgeInsets.symmetric(
+                        horizontal: sizeScreen.isTablet ? 32.0 : 8.0,
+                      ),
+                      child: SizedBox(
+                        width: double.infinity,
+                        child: DataTable(
+                          horizontalMargin: sizeScreen.isSmallPhone ? 10 : 20,
+                          columns: _buildColumns(sizeScreen.isSmallPhone),
+                          rows: _buildRows(standings, sizeScreen.isSmallPhone),
+                        ),
                       ),
                     ),
                   ],
