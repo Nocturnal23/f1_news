@@ -137,4 +137,34 @@ class AuthController {
       'createdAt': FieldValue.serverTimestamp(),
     });
   }
+
+  //Funzione per aggiornare la password.
+  Future<void> changePassword(currentPassword, newPassword) async {
+    try {
+      AuthCredential credential = EmailAuthProvider.credential(
+        email: currentUser!.email!,
+        password: currentPassword,
+      );
+
+      await currentUser?.reauthenticateWithCredential(credential);
+
+      await currentUser?.updatePassword(newPassword);
+    } on FirebaseAuthException catch (e) {
+      print('Failed update password: ${e.code}');
+      print(e.message);
+      rethrow;
+    }
+  }
+
+  bool isGoogleUser() {
+    final user = _firebaseAuth.currentUser;
+    if (user == null) return false;
+
+    for (final providerProfile in user.providerData) {
+      if (providerProfile.providerId == 'google.com') {
+        return true;
+      }
+    }
+    return false;
+  }
 }
