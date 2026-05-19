@@ -48,6 +48,7 @@ class CardCustom extends ConsumerWidget {
             Padding(
               padding: const EdgeInsets.all(16.0),
               child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   Expanded(
                     child: InkWell(
@@ -86,28 +87,26 @@ class CardCustom extends ConsumerWidget {
                     ),
                   ),
 
-                  Flexible(
-                    child: InkWell(
-                      child: Image.asset(
-                        "lib/assets/circuits/${item.circuitName}.webp",
-                        fit: BoxFit.contain,
-                        height: screen.isSmallPhone ? 80 : 120,
-                      ),
-                      onTap: () async {
-                        final repository = ref.read(f1RepositoryProvider);
-                        final details = await repository.fetchRaceDetails(item.circuitId);
-
-                        if (context.mounted) {
-                          showDialog(
-                            context: context,
-                            builder: (context) => CardInfo(
-                              img: "lib/assets/circuits/${item.circuitName}.webp",
-                              details: details,
-                            ),
-                          );
-                        }
-                      },
+                  InkWell(
+                    child: Image.asset(
+                      "lib/assets/circuits/${item.circuitName}.webp",
+                      fit: BoxFit.contain,
+                      height: screen.isSmallPhone ? 80 : 120,
                     ),
+                    onTap: () async {
+                      final repository = ref.read(f1RepositoryProvider);
+                      final details = await repository.fetchRaceDetails(item.circuitId);
+
+                      if (context.mounted) {
+                        showDialog(
+                          context: context,
+                          builder: (context) => CardInfo(
+                            img: "lib/assets/circuits/${item.circuitName}.webp",
+                            details: details,
+                          ),
+                        );
+                      }
+                    },
                   )
                 ],
               ),
