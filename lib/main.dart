@@ -1,7 +1,6 @@
 import 'package:f1_news/screens/appbar/profile.dart';
 import 'package:f1_news/screens/auth.dart';
-import 'package:f1_news/screens/drawer/constructors.dart';
-import 'package:f1_news/screens/drawer/drivers.dart';
+import 'package:f1_news/screens/drawer/competitors_list.dart';
 import 'package:f1_news/screens/drawer/races.dart';
 import 'package:f1_news/screens/drawer/standings.dart';
 import 'package:f1_news/screens/homepage.dart';
@@ -57,8 +56,8 @@ class MyApp extends ConsumerWidget {
         routes: {
           Routes.homepage: (context) => const Homepage(),
           Routes.auth: (context) => const Auth(),
-          Routes.drivers: (context) => const Drivers(),
-          Routes.teams: (context) => const Constructors(),
+          Routes.drivers: (context) => const CompetitorsList(type: "drivers"),
+          Routes.teams: (context) => const CompetitorsList(type: "constructors"),
           Routes.standings: (context) => const Standings(),
           Routes.races: (context) => Races(),
           Routes.profile: (context) => const Profile(),
