@@ -167,4 +167,26 @@ class AuthController {
     }
     return false;
   }
+
+  // Funzione per eliminare definitivamente l'account
+  Future<void> deleteAccount(String currentPassword) async {
+    final user = _firebaseAuth.currentUser;
+    try {
+      AuthCredential credential;
+
+        if (user?.email == null) throw Exception("Email non trovata");
+        credential = EmailAuthProvider.credential(
+          email: user!.email!,
+          password: currentPassword,
+        );
+
+      await user.reauthenticateWithCredential(credential);
+      await _firestore.collection('users').doc(user.uid).delete();
+      await user.delete();
+
+    } on FirebaseAuthException catch (e) {
+      print('Failed to delete account: ${e.code}');
+      rethrow;
+    }
+  }
 }
