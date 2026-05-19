@@ -173,16 +173,26 @@ class AuthController {
     final user = _firebaseAuth.currentUser;
     try {
       AuthCredential credential;
-
-        if (user?.email == null) throw Exception("Email non trovata");
+      if (!isGoogleUser()) {
         credential = EmailAuthProvider.credential(
           email: user!.email!,
-          password: currentPassword,
+          password: currentPassword!,
         );
+      } else {
+        final googleUser = await _googleAuth.authenticate();
+        final googleAuth = googleUser.authentication;
 
-      await user.reauthenticateWithCredential(credential);
-      await _firestore.collection('users').doc(user.uid).delete();
-      await user.delete();
+        credential = GoogleAuthProvider.credential(
+          idToken: googleAuth.idToken,
+        );
+      }
+      await user?.reauthenticateWithCredential(credential);
+      await _firestore
+          .collection('users')
+          .doc(user?.uid)
+          .delete();
+
+      await user?.delete();
 
     } on FirebaseAuthException catch (e) {
       print('Failed to delete account: ${e.code}');
