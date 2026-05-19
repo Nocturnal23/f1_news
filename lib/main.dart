@@ -18,9 +18,9 @@ void main() async {
     options: DefaultFirebaseOptions.currentPlatform,
   );
 
-  await SystemChrome.setPreferredOrientations([
-    DeviceOrientation.portraitUp,
-  ]);
+  // await SystemChrome.setPreferredOrientations([
+  //   DeviceOrientation.portraitUp,
+  // ]);
 
   runApp(
     const ProviderScope( //Questo serve per permettere al provider di funzionar.e
@@ -36,6 +36,23 @@ class MyApp extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef sRef) {
     final Size size = MediaQuery.of(context).size;
+    final isTablet = size.width >= 600 || size.height >= 600;
+
+    if (!isTablet) {
+      // Se è uno smartphone bloccato rigidamente in verticale
+      SystemChrome.setPreferredOrientations([
+        DeviceOrientation.portraitUp,
+      ]);
+    } else {
+      // Se è un tablet, sblocca tutti gli orientamenti.
+      SystemChrome.setPreferredOrientations([
+        DeviceOrientation.portraitUp,
+        DeviceOrientation.portraitDown,
+        DeviceOrientation.landscapeLeft,
+        DeviceOrientation.landscapeRight,
+      ]);
+    }
+
 
     return ProviderScope(
       overrides: [
