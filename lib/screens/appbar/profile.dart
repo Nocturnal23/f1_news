@@ -2,6 +2,7 @@ import 'package:f1_news/core/models/user.dart';
 import 'package:f1_news/core/navigation/routes.dart';
 import 'package:f1_news/core/providers/provider.dart';
 import 'package:f1_news/widgets/dialogs/change_password.dart';
+import 'package:f1_news/widgets/dialogs/deleting_user.dart';
 import 'package:f1_news/widgets/navigation/app_bar_custom.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -231,7 +232,10 @@ class Profile extends ConsumerWidget {
                   color: Colors.red,
                 ),
                 onTap: () {
-                  //GESTIONE ELIMINA ACCOUNT.
+                  showDialog(
+                    context: context,
+                    builder: (context) => const DeletingUser(),
+                  );
                 },
               ),
             ],
