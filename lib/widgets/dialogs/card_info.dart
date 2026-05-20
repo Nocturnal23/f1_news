@@ -1,4 +1,4 @@
-import 'package:f1_news/core/models/race_details.dart';
+import 'package:f1_news/core/models/championship/race_details.dart';
 import 'package:f1_news/core/providers/screenProvider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';

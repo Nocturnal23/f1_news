@@ -1,12 +1,12 @@
-import 'package:f1_news/core/models/race.dart';
+import 'package:f1_news/core/models/championship/race.dart';
 import 'package:f1_news/core/models/sessions/qualifying_result.dart';
 import 'package:f1_news/core/models/sessions/race_result.dart';
 
-import '../models/driver_standing.dart';
-import '../models/driver.dart';
-import '../models/constructor.dart';
-import '../models/constructor_standing.dart';
-import '../models/race_details.dart';
+import '../models/championship/driver_standing.dart';
+import '../models/championship/driver.dart';
+import '../models/championship/constructor.dart';
+import '../models/championship/constructor_standing.dart';
+import '../models/championship/race_details.dart';
 import '../models/sessions/sprint_quali_result.dart';
 import '../services/jolpica_service.dart';
 
