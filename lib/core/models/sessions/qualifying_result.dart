@@ -1,7 +1,7 @@
 import 'package:f1_news/core/models/sessions/base_result.dart';
 
-import '../constructor.dart';
-import '../driver.dart';
+import '../championship/constructor.dart';
+import '../championship/driver.dart';
 
 class QualifyingResultModel extends BaseResultModel {
   final String q1;
