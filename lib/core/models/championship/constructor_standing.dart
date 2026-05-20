@@ -1,4 +1,4 @@
-import 'package:f1_news/core/models/constructor.dart';
+import 'package:f1_news/core/models/championship/constructor.dart';
 
 class ConstructorModelStanding {
   final ConstructorModel constructor;
