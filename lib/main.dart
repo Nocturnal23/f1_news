@@ -1,9 +1,11 @@
 import 'package:f1_news/screens/appbar/profile.dart';
 import 'package:f1_news/screens/auth.dart';
 import 'package:f1_news/screens/drawer/competitors_list.dart';
+import 'package:f1_news/screens/drawer/news_list.dart';
 import 'package:f1_news/screens/drawer/races.dart';
 import 'package:f1_news/screens/drawer/standings.dart';
 import 'package:f1_news/screens/homepage.dart';
+import 'package:f1_news/widgets/article_page.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/services.dart';
@@ -80,8 +82,7 @@ class MyApp extends ConsumerWidget {
           Routes.profile: (context) => const Profile(),
           // Routes.settings: (context) => const Settings(),
           // Routes.favorite: (context) => const Favorite(),
-          // Routes.news: (context) => const News(),
-
+          Routes.news: (context) => const NewsList(),
         },
       ),
     );

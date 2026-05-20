@@ -81,12 +81,7 @@ class DrawerApp extends ConsumerWidget {
 
               final String? currentRoute = ModalRoute.of(context)?.settings.name;
               if (currentRoute != Routes.news) {
-                showDialog(
-                  context: context,
-                  builder: (context) => InfoDialogAlert(
-                    messaggio: 'Funzionalità in arrivo',
-                  ),
-                );
+                Navigator.pushReplacementNamed(context, Routes.news);
               }
             },
           ),
