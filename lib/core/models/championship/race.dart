@@ -1,4 +1,4 @@
-import '../utils/session_type.dart';
+import '../../utils/session_type.dart';
 
 class RaceModel {
   final String round;
