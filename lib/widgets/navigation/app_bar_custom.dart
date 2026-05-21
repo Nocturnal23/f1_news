@@ -7,7 +7,7 @@ import '../../core/providers/provider.dart';
 import '../../core/navigation/routes.dart';
 import '../dialogs/info_dialog_alert.dart';
 
-enum MenuOptions { impostazioniAccount, impostazioniApp, preferiti, logout }
+enum MenuOptions { impostazioniAccount, impostazioniApp, logout }
 
 class AppBarCustom extends ConsumerWidget implements PreferredSizeWidget {
   final String title;
@@ -66,9 +66,6 @@ class AppBarCustom extends ConsumerWidget implements PreferredSizeWidget {
                 case MenuOptions.impostazioniApp:
                   _showAlert(context);
                   break;
-                case MenuOptions.preferiti:
-                  _showAlert(context);
-                  break;
                 case MenuOptions.logout:
                   _signOut();
                   break;
@@ -88,13 +85,6 @@ class AppBarCustom extends ConsumerWidget implements PreferredSizeWidget {
                     child: ListTile(
                       leading: Icon(Icons.settings),
                       title: Text('Impostazioni'),
-                    ),
-                  ),
-                  const PopupMenuItem<MenuOptions>(
-                    value: MenuOptions.preferiti,
-                    child: ListTile(
-                      leading: Icon(Icons.favorite),
-                      title: Text('Preferiti'),
                     ),
                   ),
                   const PopupMenuItem<MenuOptions>(
