@@ -71,22 +71,22 @@ final calendarProvider = FutureProvider<List<RaceModel>>((ref) async {
   return await repo.fetchCalendar();
 });
 
-// Questo serve nella homepage per caricare il prossimo evento.
-final nextRaceProvider = Provider<RaceModel?>((ref) {
+// Questo serve nella homepage per caricare il prossimo evento o quello in corso.
+final nextRaceProvider = Provider<AsyncValue<RaceModel?>>((ref) {
   final calendarAsync = ref.watch(calendarProvider);
 
-  return calendarAsync.when(
-    data: (races) {
-      final now = DateTime.now();
-      try {
-        return races.firstWhere((race) => DateTime.parse(race.date).isAfter(now));
-      } catch (e) {
-        return null;
-      }
-    },
-    loading: () => null,
-    error: (_, __) => null,
-  );
+  return calendarAsync.whenData((races) {
+    final now = DateTime.now();
+    try {
+      return races.firstWhere((race) {
+        // Usa il nuovo getter! Ora è preciso al secondo.
+        final raceExpiration = race.raceStartDateTime.add(const Duration(hours: 24));
+        return raceExpiration.isAfter(now);
+      });
+    } catch (e) {
+      return null;
+    }
+  });
 });
 
 // Questo provider carica i piloti.
