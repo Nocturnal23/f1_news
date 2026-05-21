@@ -59,6 +59,24 @@ class RaceModel {
     return "$fp1Day - $raceDay";
   }
 
+  // Getter per l'inizio della gara
+  DateTime get raceStartDateTime {
+    try {
+      return DateTime.parse("${date}T$time").toLocal();
+    } catch (e) {
+      return DateTime.parse(date).toLocal();
+    }
+  }
+
+  // Getter per l'inizio delle FP1
+  DateTime get fp1StartDateTime {
+    try {
+      return DateTime.parse("${fp1Date}T$fp1Time").toLocal();
+    } catch (e) {
+      return DateTime.parse(fp1Date).toLocal();
+    }
+  }
+
   factory RaceModel.fromJson(Map<String, dynamic> json) {
     final circuit = json['Circuit'] ?? {};
     final location = circuit['Location'] ?? {};
