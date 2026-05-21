@@ -22,7 +22,7 @@ class StandingsList extends ConsumerWidget {
         error: (err, stack) => Center(child: Text("Errore: $err", style: const TextStyle(color: Colors.white))),
         data: (standings) {
             return Container(
-              color: Colors.black,
+              // color: Colors.black,
               width: double.infinity,
               // height: double.infinity,
               child: SingleChildScrollView(
@@ -31,11 +31,11 @@ class StandingsList extends ConsumerWidget {
                     Padding(
                       padding: const EdgeInsets.all(10),
                       child: Text(
-                        "Classifica ${DateTime.now().year}",
+                        type == "drivers" ? 'Classifica Piloti' : 'Classifica Costruttori',
                         style: TextStyle(
                           fontSize: sizeScreen.isSmallPhone ? 20 : 24,
                           fontWeight: FontWeight.bold,
-                          color: Colors.white,
+                          // color: Colors.white,
                         ),
                       ),
                     ),
@@ -64,7 +64,7 @@ class StandingsList extends ConsumerWidget {
   List<DataColumn> _buildColumns(bool isSmall) {
     final style = TextStyle(
       fontWeight: FontWeight.bold,
-      color: Colors.white,
+      // color: Colors.white,
       fontSize: isSmall ? 13 : 15,
     );
 
@@ -80,7 +80,7 @@ class StandingsList extends ConsumerWidget {
     return List<DataRow>.generate(data.length, (index) {
       final item = data[index];
       final textStyle = TextStyle(
-        color: Colors.white,
+        // color: Colors.white,
         fontSize: isSmall ? 12 : 14,
       );
 
