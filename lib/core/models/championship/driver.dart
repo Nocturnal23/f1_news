@@ -8,6 +8,7 @@ class DriverModel {
   final String surname;
   final String nationality;
   final String code;
+  final String dateOfBirth;
 
   DriverModel({
     required this.id,
@@ -15,6 +16,7 @@ class DriverModel {
     required this.surname,
     required this.nationality,
     required this.code,
+    required this.dateOfBirth,
   });
 
   factory DriverModel.fromJson(Map<String, dynamic> json) {
@@ -24,6 +26,7 @@ class DriverModel {
       surname: json['familyName'] ?? 'N/A',
       nationality: json['nationality'] ?? 'N/A',
       code: json['code'] ?? 'N/A',
+      dateOfBirth: json['dateOfBirth'] ?? 'N/A'
     );
   }
 }

@@ -6,6 +6,7 @@ class DriverModelStanding {
   final String teamName;
   final String position;
   final String points;
+  final String wins;
 
   DriverModelStanding({
     required this.driver,
@@ -13,6 +14,7 @@ class DriverModelStanding {
     required this.teamName,
     required this.position,
     required this.points,
+    required this.wins,
   });
 
   factory DriverModelStanding.fromJson(Map<String, dynamic> json) {
@@ -34,6 +36,7 @@ class DriverModelStanding {
 
       position: json['position'] ?? '0',
       points: json['points'] ?? '0',
+      wins: json['wins'] ?? '0',
     );
   }
 }
