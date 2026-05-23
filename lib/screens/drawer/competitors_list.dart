@@ -99,9 +99,17 @@ class CompetitorsList extends ConsumerWidget {
         ? "${itemData.driver.name} ${itemData.driver.surname}"
         : itemData.name;
 
-    final String subtitle = type == "drivers"
-        ? "${itemData.teamName}"
-        : itemData.nationality;
+    String subtitle = type == "drivers" ? itemData.teamName : "";
+
+    if (type == "constructors") {
+      final teamDrivers = ref.watch(driversProvider).value
+          ?.where((d) => d.teamId == itemData.id) // Filtro per team.
+          .map((d) => d.driver.surname)           // Recupero dei cognomi dei piloti.
+          .take(2)
+          .join(" - ");
+
+      subtitle = (teamDrivers?.isNotEmpty == true) ? teamDrivers! : "Scuderia F1";
+    }
 
     final String teamId = type == "drivers" ? itemData.teamId : itemData.id;
     final Color teamColor = TeamsCols.getBackground(teamId);
