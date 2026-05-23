@@ -15,13 +15,41 @@ class Profile extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final user = ref.watch(currentUserProvider).value;
+    /*
+    listener necessario per rilevare i cambi di stato. Poichè a differenza delle
+    altre pagina questa viene creata e disegnata solo se l'utente è loggato.
+    Per evitare bug allora bisogna catturare il momento in cui l'utente slogga
+    o elimina l'account per distruggere questa pagina e passare alla home.
+    */
+    ref.listen(currentUserProvider, (previous, next) {
+      if (next is AsyncData && next.value == null) {
+        Navigator.of(context).pushNamedAndRemoveUntil(Routes.homepage, (route) => false);
+      }
+    });
+
+    final userState = ref.watch(currentUserProvider);
     final screen = ref.watch(screenProvider);
 
-    return Scaffold(
-      appBar: AppBarCustom(title: "Profilo"),
+    return userState.when(
+      loading: () => const Scaffold(
+        body: Center(child: CircularProgressIndicator()),
+      ),
+      error: (error, stackTrace) => Scaffold(
+        appBar: AppBarCustom(title: "Profilo"),
+        body: Center(child: Text("Errore: $error")),
+      ),
+      data: (user) {
+        if (user == null) {
+          return const Scaffold(
+            body: Center(child: CircularProgressIndicator()),
+          );
+        }
 
-      body: _buildBody(user, screen, context, ref),
+        return Scaffold(
+          appBar: AppBarCustom(title: "Profilo"),
+          body: _buildBody(user, screen, context, ref),
+        );
+      },
     );
   }
 
