@@ -1,7 +1,9 @@
+import 'package:f1_news/core/models/championship/driver_details.dart';
 import 'package:f1_news/core/models/championship/race.dart';
 import 'package:f1_news/core/models/sessions/qualifying_result.dart';
 import 'package:f1_news/core/models/sessions/race_result.dart';
 
+import '../models/championship/constructor_details.dart';
 import '../models/championship/driver_standing.dart';
 import '../models/championship/driver.dart';
 import '../models/championship/constructor.dart';
@@ -16,6 +18,8 @@ class F1Repository {
   F1Repository(this.apiService);
 
   Map<String, dynamic>? _cachedExtraData;
+  Map<String, dynamic>? _cachedDriversExtraData;
+  Map<String, dynamic>? _cachedConstructorsExtraData;
 
   //Repo per tutti i piloti che hanno preso parte ad almeno una sessione ufficiela.
   Future<List<DriverModel>> fetchDrivers() async {
@@ -207,12 +211,7 @@ class F1Repository {
   }
 
   //Repo generico che va poi a differenziare SQ, SR e race.
-  Future<List<T>> _fetchSession<T>({
-    required String round,
-    required Future<Map<String, dynamic>> Function(String round) apiCall,
-    required List<T> Function(List<dynamic> json) mapper,
-    required List<dynamic> Function(Map<String, dynamic> race) extractResults,
-  }) async {
+  Future<List<T>> _fetchSession<T>({required String round, required Future<Map<String, dynamic>> Function(String round) apiCall, required List<T> Function(List<dynamic> json) mapper, required List<dynamic> Function(Map<String, dynamic> race) extractResults,}) async {
     try {
       final data = await apiCall(round);
 
@@ -273,5 +272,33 @@ class F1Repository {
           jsonList.map((j) => RaceResultModel.fromJson(j)).toList(),
       extractResults: (race) => race['Results'] ?? [],
     );
+  }
+
+  Future<dynamic> fetchCompetitorExtra(String type, String id) async {
+    try {
+      //Caching piloti.
+      if (type == "drivers") {
+        _cachedDriversExtraData ??= await apiService.getExtraCompetitorInfo("drivers");
+
+        final data = _cachedDriversExtraData![id];
+
+        if (data != null) {
+          return DriverDetails.fromJson(data);
+        }
+        //caching costruttori.
+      }
+      else {
+        _cachedConstructorsExtraData ??= await apiService.getExtraCompetitorInfo("constructors");
+
+        final data = _cachedConstructorsExtraData![id];
+
+        if (data != null) {
+          return ConstructorDetails.fromJson(data);
+        }
+      }
+    } catch (e) {
+      print("Errore nel recupero dati extra competitor: $e");
+      rethrow;
+    }
   }
 }
