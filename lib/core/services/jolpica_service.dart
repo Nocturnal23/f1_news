@@ -101,6 +101,7 @@ class ApiService {
     }
   }
 
+  //Extra info sui circuiti.
   Future<Map<String, dynamic>> getExtraInfo() async {
     final response = await http.get(Uri.parse(
         'https://gist.githubusercontent.com/Nocturnal23/421160de818f6c42d40a57b0edfbb4a5/raw/f1_news_circuits_extra_data.json'));
@@ -154,6 +155,23 @@ class ApiService {
     } else {
       throw Exception('Errore nel caricamento delle qualifiche: ${response
           .statusCode}');
+    }
+  }
+
+  //Extra info su piloti o team.
+  Future<Map<String, dynamic>> getExtraCompetitorInfo(type) async {
+    late http.Response response;
+    if (type == "drivers") {
+      response = await http.get(Uri.parse('https://gist.githubusercontent.com/Nocturnal23/3b01177e7915a872ef45c04c3abcdf0e/raw/f1_news_drivers_extra_data.json'));
+    } else {
+      response = await http.get(Uri.parse('https://gist.githubusercontent.com/Nocturnal23/aa533cb0334d4e9eccc3b9f61cdf874f/raw/f1_news_constructors_extra_data.json'));
+    }
+
+    if (response.statusCode == 200) {
+      print("Contenuto risposta dati extra: ${response.body}");
+      return jsonDecode(response.body);
+    } else {
+      throw Exception('Errore nel caricamento del json personalizzato: ${response.statusCode}');
     }
   }
 }
