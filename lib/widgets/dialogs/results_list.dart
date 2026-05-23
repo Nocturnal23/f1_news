@@ -31,11 +31,16 @@ class ResultsList extends ConsumerWidget {
           children: [
             Text(
               sessionName.displayName,
-              style: TextStyle(fontSize: screen.isTablet ? 24 : 18, fontWeight: FontWeight.bold),
+              style: TextStyle(
+                fontSize: screen.isTablet ? 24 : 18,
+                fontWeight: FontWeight.bold,
+              ),
             ),
             const Divider(),
             Flexible(
-              child: SingleChildScrollView(child: _buildStanding(results, screen)),
+              child: SingleChildScrollView(
+                child: _buildStanding(results, screen),
+              ),
             ),
             TextButton(
               onPressed: () => Navigator.pop(context),
@@ -52,36 +57,83 @@ class ResultsList extends ConsumerWidget {
   Widget _buildStanding(List<BaseResultModel> results, ScreenProvider screen) {
     final Widget tableWidget = _buildTable(results, screen);
 
+    if (results.isEmpty) {
+      return _waitingResults(screen);
+    }
+
     return Column(
       crossAxisAlignment: CrossAxisAlignment.stretch,
       children: [
         screen.isTablet
             ? Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 16.0),
-          child: SizedBox(
-            width: double.infinity,
-            child: tableWidget,
-          ),
-        )
+                padding: const EdgeInsets.symmetric(horizontal: 16.0),
+                child: SizedBox(width: double.infinity, child: tableWidget),
+              )
             : SingleChildScrollView(
-          scrollDirection: Axis.horizontal,
-          child: tableWidget,
-        ),
+                scrollDirection: Axis.horizontal,
+                child: tableWidget,
+              ),
 
         if (sessionName.hasFastestLap && results.isNotEmpty)
-          _buildFastestLap(results.cast<RaceResultModel>())
+          _buildFastestLap(results.cast<RaceResultModel>()),
       ],
+    );
+  }
+
+  Widget _waitingResults(ScreenProvider screen) {
+    return Center(
+      child: Card(
+        elevation: 2,
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(16),
+        ),
+        child: Padding(
+          padding: const EdgeInsets.symmetric(
+            horizontal: 24,
+            vertical: 32,
+          ),
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              Icon(
+                Icons.schedule,
+                size: screen.isTablet ? 56 : 42,
+                color: Colors.orange,
+              ),
+
+              const SizedBox(height: 16),
+
+              Text(
+                "Risultati non ancora disponibili",
+                textAlign: TextAlign.center,
+                style: TextStyle(
+                  fontSize: screen.isTablet ? 22 : 18,
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
+
+              const SizedBox(height: 8),
+
+              Text(
+                "I risultati della sessione verranno pubblicati appena disponibili.",
+                textAlign: TextAlign.center,
+                style: TextStyle(
+                  fontSize: screen.isTablet ? 16 : 14,
+                ),
+              ),
+            ],
+          ),
+        ),
+      ),
     );
   }
 
   Widget _buildTable(List<BaseResultModel> results, ScreenProvider screen) {
     final headerStyle = TextStyle(
-        fontWeight: FontWeight.bold,
-        fontSize: screen.isTablet ? 16 : 13
+      fontWeight: FontWeight.bold,
+      fontSize: screen.isTablet ? 16 : 13,
     );
-    final cellStyle = TextStyle(
-        fontSize: screen.isTablet ? 15 : 14
-    );
+    final cellStyle = TextStyle(fontSize: screen.isTablet ? 15 : 14);
 
     return DataTable(
       columnSpacing: screen.isTablet ? 32 : 16,
@@ -94,9 +146,19 @@ class ResultsList extends ConsumerWidget {
       rows: results.map((res) {
         return DataRow(
           cells: [
-            DataCell(Text(res.displayPosition, style: cellStyle.copyWith(fontWeight: FontWeight.bold))),
+            DataCell(
+              Text(
+                res.displayPosition,
+                style: cellStyle.copyWith(fontWeight: FontWeight.bold),
+              ),
+            ),
             DataCell(Text(res.driver.surname, style: cellStyle)),
-            DataCell(Text(res.driver.nationality.substring(0, 3).toUpperCase(), style: cellStyle)),
+            DataCell(
+              Text(
+                res.driver.nationality.substring(0, 3).toUpperCase(),
+                style: cellStyle,
+              ),
+            ),
             DataCell(Text(res.constructor.name, style: cellStyle)),
             ...res.extraColumns.map((e) => DataCell(Text(e, style: cellStyle))),
           ],
