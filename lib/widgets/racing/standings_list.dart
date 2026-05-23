@@ -3,6 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../core/providers/provider.dart';
 import '../../core/providers/screenProvider.dart';
+import '../common/error_retry.dart';
 
 class StandingsList extends ConsumerWidget {
   final String type; //Assume i valori "drivers" o "constructors" per capire cosa mostrare.
@@ -19,7 +20,10 @@ class StandingsList extends ConsumerWidget {
 
     return standingsAsync.when(
         loading: () => const Center(child: CircularProgressIndicator(color: Colors.red)),
-        error: (err, stack) => Center(child: Text("Errore: $err", style: const TextStyle(color: Colors.white))),
+        error: (err, stack) => ErrorRetry(
+          errorMessage: err.toString(),
+          onRetry: () => sRef.refresh(type == "drivers" ? driversStandingsProvider : teamsStandingsProvider),
+        ),
         data: (standings) {
             return Container(
               // color: Colors.black,

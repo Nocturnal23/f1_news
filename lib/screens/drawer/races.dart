@@ -4,6 +4,7 @@ import 'package:f1_news/widgets/navigation/drawer_app.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
+import '../../widgets/common/error_retry.dart';
 import '../../widgets/racing/card_custom.dart';
 import '../../widgets/navigation/app_bar_custom.dart';
 
@@ -21,7 +22,10 @@ class Races extends ConsumerWidget {
 
       body: calendar.when(
           loading: () => const Center(child: CircularProgressIndicator(color: Colors.red)),
-          error: (err, stack) => Center(child: Text("Errore: $err")),
+          error: (err, stack) => ErrorRetry(
+            errorMessage: err.toString(),
+            onRetry: () => ref.refresh(calendarProvider),
+          ),
           data: (races) {
             _precacheImages(context, races);
             return _buildCalendar(races);

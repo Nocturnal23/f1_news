@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 
 import '../../core/models/article.dart';
 import '../../core/services/rss_service.dart';
+import '../../widgets/common/error_retry.dart';
 import '../../widgets/racing/news_card.dart';
 
 class NewsList extends StatefulWidget {
@@ -20,7 +21,13 @@ class _NewsListState extends State<NewsList> {
   @override
   void initState() {
     super.initState();
-    _futureArticles = _rssService.fetchAllNews();
+    _fetchData();
+  }
+
+  void _fetchData() {
+    setState(() {
+      _futureArticles = _rssService.fetchAllNews();
+    });
   }
 
   @override
@@ -37,7 +44,10 @@ class _NewsListState extends State<NewsList> {
             return const Center(child: CircularProgressIndicator());
           }
           if (snapshot.hasError) {
-            return Center(child: Text('Errore: ${snapshot.error}'));
+            return ErrorRetry(
+              errorMessage: snapshot.error.toString(),
+              onRetry: _fetchData,
+            );
           }
           if (!snapshot.hasData || snapshot.data!.isEmpty) {
             return const Center(child: Text('Nessuna notizia trovata.'));
