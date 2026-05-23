@@ -6,6 +6,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 
 import '../../core/providers/provider.dart';
 import '../../core/providers/screenProvider.dart';
+import '../../widgets/common/error_retry.dart';
 import '../../widgets/navigation/app_bar_custom.dart';
 import '../../widgets/navigation/drawer_app.dart';
 
@@ -35,8 +36,10 @@ class CompetitorsList extends ConsumerWidget {
       body: dataState.when(
         loading: () =>
             const Center(child: CircularProgressIndicator(color: Colors.red)),
-        error: (err, stack) =>
-            Center(child: Text("Errore nel caricamento: $err")),
+        error: (err, stack) => ErrorRetry(
+          errorMessage: err.toString(),
+          onRetry: () => ref.refresh(type == "drivers" ? driversProvider : constructorsProvider),
+        ),
         data: (listData) {
           if (listData.isEmpty) {
             return const Center(child: Text("Nessun dato disponibile"));

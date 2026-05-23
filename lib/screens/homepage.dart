@@ -6,6 +6,7 @@ import 'package:flutter/material.dart';
 
 import '../controllers/auth_controller.dart';
 import '../core/providers/provider.dart';
+import '../widgets/common/error_retry.dart';
 import '../widgets/navigation/app_bar_custom.dart';
 
 class Homepage extends ConsumerStatefulWidget {
@@ -15,12 +16,10 @@ class Homepage extends ConsumerStatefulWidget {
   ConsumerState<Homepage> createState() => _HomepageState();
 }
 
-class _HomepageState extends State<Homepage> {
 class _HomepageState extends ConsumerState<Homepage> {
 
   @override
   Widget build(BuildContext context) {
-    return const Placeholder();
     final authState = ref.watch(authStateProvider);
 
     return authState.when(
@@ -64,12 +63,14 @@ class _HomepageState extends ConsumerState<Homepage> {
           ],
         ),
       ),
-      error: (error, stack) => const Padding(
-        padding: EdgeInsets.all(16.0),
-        child: Text(
-          "Impossibile caricare i dati della gara.",
-          style: TextStyle(color: Colors.red),
-        ),
+      error: (err, stack) => ErrorRetry(
+        errorMessage: err.toString(),
+        onRetry: () {
+          ref.invalidate(calendarProvider);
+          ref.invalidate(nextRaceProvider);
+          ref.read(calendarProvider);
+          ref.read(nextRaceProvider);
+        }
       ),
       data: (nextRace) {
         if (nextRace == null) {

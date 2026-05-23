@@ -2,9 +2,11 @@ import 'package:f1_news/core/models/sessions/race_result.dart';
 import 'package:f1_news/core/utils/session_type.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:riverpod/src/framework.dart';
 
 import '../../core/models/sessions/base_result.dart';
 import '../../core/providers/screenProvider.dart';
+import '../common/error_retry.dart';
 
 class ResultsList extends ConsumerWidget {
   final SessionType sessionName; //Identifica la sessione (Sprint Quali, Sprint, Gara..)
@@ -18,12 +20,16 @@ class ResultsList extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final result = sessionName.getResults(ref, round);
+    final provider = sessionName.getResultsProvider(round);
+    final result = ref.watch(provider);
     final screen = ref.watch(screenProvider);
 
     return result.when(
       loading: () => const Center(child: CircularProgressIndicator(color: Colors.red)),
-      error: (err, stack) => Center(child: Text("Errore: $err")),
+      error: (err, stack) => ErrorRetry(
+        errorMessage: err.toString(),
+        onRetry: () => ref.invalidate(provider),
+      ),
       data: (results) => Padding(
         padding: const EdgeInsets.all(16.0),
         child: Column(
