@@ -1,7 +1,6 @@
 import 'package:f1_news/core/providers/provider.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-
-import '../models/sessions/base_result.dart';
+import 'package:flutter_riverpod/misc.dart';
 
 enum SessionType {
   sprintQualifying,
@@ -45,22 +44,14 @@ extension SessionTypeExtension on SessionType {
     return this == SessionType.race || this == SessionType.sprintRace;
   }
 
-  AsyncValue getResults(WidgetRef ref, String round) {
+  ProviderBase<AsyncValue> getResultsProvider(String round) {
     switch (this) {
-      case SessionType.sprintQualifying:
-        return ref.watch(sprintGridProvider(round));
+      case SessionType.sprintQualifying: return sprintGridProvider(round);
+      case SessionType.qualifying: return qualiResultsProvider(round);
+      case SessionType.sprintRace: return sprintResultsProvider(round);
+      case SessionType.race: return raceResultsProvider(round);
 
-      case SessionType.qualifying:
-        return ref.watch(qualiResultsProvider(round));
-
-      case SessionType.sprintRace:
-        return ref.watch(sprintResultsProvider(round));
-
-      case SessionType.race:
-        return ref.watch(raceResultsProvider(round));
-
-      default:
-        return const AsyncValue.data([]);
+      default: return Provider((_) => const AsyncValue.data([]));
     }
   }
 }
