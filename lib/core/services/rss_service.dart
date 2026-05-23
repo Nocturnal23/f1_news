@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:http/http.dart' as http;
 import 'package:rss_dart/dart_rss.dart';
 
@@ -10,19 +12,21 @@ class RssService {
 
     for (var url in RssList.feedUrls.values) {
       try {
-        final response = await http.get(Uri.parse(url));
+        final response = await http.get(Uri.parse(url)).timeout(const Duration(seconds: 10),
+            onTimeout: () {
+              throw TimeoutException('Il server ha impiegato troppo tempo per rispondere. Riprova.');
+            });
 
         if (response.statusCode == 200) {
           final feed = RssFeed.parse(response.body);
-
           for (var item in feed.items ?? []) {
             allArticles.add(Article.fromRssItem(item));
           }
         } else {
-          print('Errore del server: ${response.statusCode} per $url');
+          throw Exception('Server error: ${response.statusCode}');
         }
       } catch (e) {
-        print('Errore durante il fetch di $url: $e');
+        throw Exception('Errore durante il fetch di $url: $e');
       }
     }
 

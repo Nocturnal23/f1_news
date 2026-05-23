@@ -1,5 +1,6 @@
 import 'dart:convert';
 import 'package:http/http.dart' as http;
+import 'dart:async';
 
 class ApiService {
   static const String baseUrl = 'https://api.jolpi.ca/ergast/f1';
@@ -8,7 +9,11 @@ class ApiService {
   Future<Map<String, dynamic>> getDriversStandings() async {
     final response = await http.get(Uri.parse('$baseUrl/${DateTime
         .now()
-        .year}/driverStandings.json'));
+        .year}/driverStandings.json')).timeout(
+        const Duration(seconds: 10),
+        onTimeout: () {
+          throw TimeoutException('Il server ha impiegato troppo tempo per rispondere. Riprova.');
+        });
 
     if (response.statusCode == 200) {
       return jsonDecode(response.body);
@@ -22,7 +27,11 @@ class ApiService {
   Future<Map<String, dynamic>> getDrivers() async {
     final response = await http.get(Uri.parse('$baseUrl/${DateTime
         .now()
-        .year}/drivers.json?limit=100'));
+        .year}/drivers.json?limit=100')).timeout(
+        const Duration(seconds: 10),
+        onTimeout: () {
+          throw TimeoutException('Il server ha impiegato troppo tempo per rispondere. Riprova.');
+        });
 
     if (response.statusCode == 200) {
       return jsonDecode(response.body);
@@ -36,7 +45,11 @@ class ApiService {
   Future<Map<String, dynamic>> getTeams() async {
     final response = await http.get(Uri.parse('$baseUrl/${DateTime
         .now()
-        .year}/constructors.json'));
+        .year}/constructors.json')).timeout(
+        const Duration(seconds: 10),
+        onTimeout: () {
+          throw TimeoutException('Il server ha impiegato troppo tempo per rispondere. Riprova.');
+        });
 
     if (response.statusCode == 200) {
       return jsonDecode(response.body);
@@ -50,7 +63,11 @@ class ApiService {
   Future<Map<String, dynamic>> getTeamsStandings() async {
     final response = await http.get(Uri.parse('$baseUrl/${DateTime
         .now()
-        .year}/constructorStandings.json'));
+        .year}/constructorStandings.json')).timeout(
+        const Duration(seconds: 10),
+        onTimeout: () {
+          throw TimeoutException('Il server ha impiegato troppo tempo per rispondere. Riprova.');
+        });
 
     if (response.statusCode == 200) {
       return jsonDecode(response.body);
@@ -64,7 +81,11 @@ class ApiService {
   Future<Map<String, dynamic>> getRaces() async {
     final response = await http.get(Uri.parse('$baseUrl/${DateTime
         .now()
-        .year}/races.json'));
+        .year}/races.json')).timeout(
+        const Duration(seconds: 10),
+        onTimeout: () {
+          throw TimeoutException('Il server ha impiegato troppo tempo per rispondere. Riprova.');
+        });
 
     if (response.statusCode == 200) {
       return jsonDecode(response.body);
@@ -77,9 +98,13 @@ class ApiService {
   //E' parte del recupero del ultimo vincitore.
   Future<Map<String, dynamic>> getWinnersMetadata(String circuit_id) async {
     final response = await http.get(
-        Uri.parse('$baseUrl/circuits/$circuit_id/results/1.json?limit=1'));
+        Uri.parse('$baseUrl/circuits/$circuit_id/results/1.json?limit=1')).timeout(
+        const Duration(seconds: 10),
+        onTimeout: () {
+          throw TimeoutException('Il server ha impiegato troppo tempo per rispondere. Riprova.');
+        });
+
     if (response.statusCode == 200) {
-      print("Contenuto risposta metadata: ${response.body}");
       return jsonDecode(response.body);
     } else {
       throw Exception('Errore caricamento metadati');
@@ -87,13 +112,15 @@ class ApiService {
   }
 
   //Endpoint per recuperare il vincitore dell'ultima edizione disputata di un GP.
-  Future<Map<String, dynamic>> getLastWinner(String circuit_id,
-      int offset) async {
+  Future<Map<String, dynamic>> getLastWinner(String circuit_id, int offset) async {
     final response = await http.get(Uri.parse(
-        '$baseUrl/circuits/$circuit_id/results/1.json?limit=1&offset=$offset'));
+        '$baseUrl/circuits/$circuit_id/results/1.json?limit=1&offset=$offset')).timeout(
+        const Duration(seconds: 10),
+        onTimeout: () {
+          throw TimeoutException('Il server ha impiegato troppo tempo per rispondere. Riprova.');
+        });
 
     if (response.statusCode == 200) {
-      print("Contenuto risposta ultimo vincitore: ${response.body}");
       return jsonDecode(response.body);
     } else {
       throw Exception(
@@ -104,10 +131,13 @@ class ApiService {
   //Extra info sui circuiti.
   Future<Map<String, dynamic>> getExtraInfo() async {
     final response = await http.get(Uri.parse(
-        'https://gist.githubusercontent.com/Nocturnal23/421160de818f6c42d40a57b0edfbb4a5/raw/f1_news_circuits_extra_data.json'));
+        'https://gist.githubusercontent.com/Nocturnal23/421160de818f6c42d40a57b0edfbb4a5/raw/f1_news_circuits_extra_data.json')).timeout(
+        const Duration(seconds: 10),
+        onTimeout: () {
+          throw TimeoutException('Il server ha impiegato troppo tempo per rispondere. Riprova.');
+        });
 
     if (response.statusCode == 200) {
-      print("Contenuto risposta dati extra: ${response.body}");
       return jsonDecode(response.body);
     } else {
       throw Exception(
@@ -120,7 +150,11 @@ class ApiService {
   Future<Map<String, dynamic>> getSprintResult(String round) async {
     final response = await http.get(Uri.parse('$baseUrl/${DateTime
         .now()
-        .year}/${round}/sprint.json'));
+        .year}/${round}/sprint.json')).timeout(
+        const Duration(seconds: 10),
+        onTimeout: () {
+          throw TimeoutException('Il server ha impiegato troppo tempo per rispondere. Riprova.');
+        });
 
     if (response.statusCode == 200) {
       return jsonDecode(response.body);
@@ -134,7 +168,11 @@ class ApiService {
   Future<Map<String, dynamic>> getQualiResult(String round) async {
     final response = await http.get(Uri.parse('$baseUrl/${DateTime
         .now()
-        .year}/${round}/qualifying.json'));
+        .year}/${round}/qualifying.json')).timeout(
+        const Duration(seconds: 10),
+        onTimeout: () {
+          throw TimeoutException('Il server ha impiegato troppo tempo per rispondere. Riprova.');
+        });
 
     if (response.statusCode == 200) {
       return jsonDecode(response.body);
@@ -148,7 +186,11 @@ class ApiService {
   Future<Map<String, dynamic>> getRaceResult(String round) async {
     final response = await http.get(Uri.parse('$baseUrl/${DateTime
         .now()
-        .year}/${round}/results.json'));
+        .year}/${round}/results.json')).timeout(
+        const Duration(seconds: 10),
+        onTimeout: () {
+          throw TimeoutException('Il server ha impiegato troppo tempo per rispondere. Riprova.');
+        });
 
     if (response.statusCode == 200) {
       return jsonDecode(response.body);
@@ -162,9 +204,17 @@ class ApiService {
   Future<Map<String, dynamic>> getExtraCompetitorInfo(type) async {
     late http.Response response;
     if (type == "drivers") {
-      response = await http.get(Uri.parse('https://gist.githubusercontent.com/Nocturnal23/3b01177e7915a872ef45c04c3abcdf0e/raw/f1_news_drivers_extra_data.json'));
+      response = await http.get(Uri.parse('https://gist.githubusercontent.com/Nocturnal23/3b01177e7915a872ef45c04c3abcdf0e/raw/f1_news_drivers_extra_data.json')).timeout(
+          const Duration(seconds: 10),
+          onTimeout: () {
+            throw TimeoutException('Il server ha impiegato troppo tempo per rispondere. Riprova.');
+          });
     } else {
-      response = await http.get(Uri.parse('https://gist.githubusercontent.com/Nocturnal23/aa533cb0334d4e9eccc3b9f61cdf874f/raw/f1_news_constructors_extra_data.json'));
+      response = await http.get(Uri.parse('https://gist.githubusercontent.com/Nocturnal23/aa533cb0334d4e9eccc3b9f61cdf874f/raw/f1_news_constructors_extra_data.json')).timeout(
+          const Duration(seconds: 10),
+          onTimeout: () {
+            throw TimeoutException('Il server ha impiegato troppo tempo per rispondere. Riprova.');
+          });
     }
 
     if (response.statusCode == 200) {
