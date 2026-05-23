@@ -64,15 +64,10 @@ class ResultsList extends ConsumerWidget {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.stretch,
       children: [
-        screen.isTablet
-            ? Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 16.0),
-                child: SizedBox(width: double.infinity, child: tableWidget),
-              )
-            : SingleChildScrollView(
-                scrollDirection: Axis.horizontal,
-                child: tableWidget,
-              ),
+        SingleChildScrollView(
+            scrollDirection: Axis.horizontal,
+            child: tableWidget,
+          ),
 
         if (sessionName.hasFastestLap && results.isNotEmpty)
           _buildFastestLap(results.cast<RaceResultModel>()),

@@ -50,7 +50,7 @@ class CompetitorsList extends ConsumerWidget {
                 crossAxisCount: screen.width > 1000 ? 3 : 2,
                 crossAxisSpacing: 16,
                 mainAxisSpacing: 16,
-                childAspectRatio: 2.8,
+                childAspectRatio: 2.5,
               ),
               itemCount: listData.length,
               itemBuilder: (context, index) {
