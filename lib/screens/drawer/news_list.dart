@@ -1,3 +1,4 @@
+import 'package:f1_news/core/repository/rss_repository.dart';
 import 'package:f1_news/widgets/navigation/app_bar_custom.dart';
 import 'package:f1_news/widgets/navigation/drawer_app.dart';
 import 'package:flutter/material.dart';
@@ -15,7 +16,7 @@ class NewsList extends StatefulWidget {
 }
 
 class _NewsListState extends State<NewsList> {
-  final RssService _rssService = RssService();
+  final RssRepository _repository = RssRepository();
   late Future<List<Article>> _futureArticles;
 
   int _currentPage = 1;
@@ -36,7 +37,7 @@ class _NewsListState extends State<NewsList> {
 
   void _fetchData() {
     setState(() {
-      _futureArticles = _rssService.fetchAllNews();
+      _futureArticles = _repository.fetchAllNews();
     });
   }
 
