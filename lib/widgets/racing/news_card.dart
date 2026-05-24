@@ -29,7 +29,7 @@ class NewsCard extends StatelessWidget {
           children: [
             imageUrl.isNotEmpty
                 ? Image.network(imageUrl)
-                : SizedBox.shrink(),
+                : Image.asset("lib/assets/logos/f1.webp"),
 
             Padding(
               padding: EdgeInsets.all(8.0),
