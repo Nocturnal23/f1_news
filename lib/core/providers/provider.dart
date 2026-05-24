@@ -57,7 +57,7 @@ final currentUserProvider = StreamProvider<UserModel?>((ref) {
     },
     // Qualora ci siano errori restituisce null.
     loading: () => Stream.value(null),
-    error: (_, __) => Stream.value(null),
+    error: (_, _) => Stream.value(null),
   );
 });
 

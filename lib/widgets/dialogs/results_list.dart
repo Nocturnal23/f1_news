@@ -2,10 +2,9 @@ import 'package:f1_news/core/models/sessions/race_result.dart';
 import 'package:f1_news/core/utils/session_type.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:riverpod/src/framework.dart';
 
 import '../../core/models/sessions/base_result.dart';
-import '../../core/providers/screenProvider.dart';
+import '../../core/providers/screen_provider.dart';
 import '../common/error_retry.dart';
 
 class ResultsList extends ConsumerWidget {

@@ -16,7 +16,7 @@ class FavoritesController extends Notifier<Set<String>> {
         return {};
       },
       loading: () => {},
-      error: (_, __) => {},
+      error: (_, _) => {},
     );
   }
 

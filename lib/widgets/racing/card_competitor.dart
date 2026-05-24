@@ -4,7 +4,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../core/models/championship/constructor.dart';
 import '../../core/models/championship/driver_standing.dart';
-import '../../core/providers/screenProvider.dart';
+import '../../core/providers/screen_provider.dart';
 import '../../core/utils/country_helper.dart';
 
 class CardCompetitor extends ConsumerWidget {

@@ -5,13 +5,13 @@ import 'package:f1_news/core/theme/teams_cols.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 
 import '../../core/providers/provider.dart';
-import '../../core/providers/screenProvider.dart';
+import '../../core/providers/screen_provider.dart';
 import '../../widgets/common/error_retry.dart';
 import '../../widgets/navigation/app_bar_custom.dart';
 import '../../widgets/navigation/drawer_app.dart';
 
 class CompetitorsList extends ConsumerWidget {
-  final String type; // Prende "drivers" o "constructors"
+  final String type;
 
   const CompetitorsList({super.key, required this.type});
 

@@ -1,4 +1,3 @@
-import 'package:f1_news/widgets/dialogs/info_dialog_alert.dart';
 import 'package:flutter/material.dart';
 
 import '../article_page.dart';

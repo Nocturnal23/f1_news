@@ -9,7 +9,7 @@ import '../../widgets/racing/card_custom.dart';
 import '../../widgets/navigation/app_bar_custom.dart';
 
 class Races extends ConsumerWidget {
-  Races({super.key});
+  const Races({super.key});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {

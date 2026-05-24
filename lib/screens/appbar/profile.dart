@@ -7,7 +7,7 @@ import 'package:f1_news/widgets/navigation/app_bar_custom.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-import '../../core/providers/screenProvider.dart';
+import '../../core/providers/screen_provider.dart';
 import '../../widgets/dialogs/manage_favorite.dart';
 
 class Profile extends ConsumerWidget {

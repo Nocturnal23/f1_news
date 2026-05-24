@@ -1,5 +1,5 @@
 import 'package:f1_news/core/providers/provider.dart';
-import 'package:f1_news/core/providers/screenProvider.dart';
+import 'package:f1_news/core/providers/screen_provider.dart';
 import 'package:f1_news/widgets/dialogs/info_dialog_alert.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';

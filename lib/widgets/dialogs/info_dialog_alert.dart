@@ -5,7 +5,7 @@ class InfoDialogAlert extends StatelessWidget {
   final String messaggio;
   final VoidCallback? onPressed;
 
-  InfoDialogAlert({
+  const InfoDialogAlert({
     super.key,
     this.titolo,
     required this.messaggio,
