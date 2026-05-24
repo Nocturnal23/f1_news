@@ -1,5 +1,5 @@
 import 'package:f1_news/core/providers/provider.dart';
-import 'package:f1_news/core/providers/screenProvider.dart';
+import 'package:f1_news/core/providers/screen_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 

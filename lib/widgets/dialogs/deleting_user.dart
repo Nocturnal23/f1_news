@@ -5,7 +5,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:form_builder_validators/form_builder_validators.dart';
 
 import '../../core/providers/provider.dart';
-import '../../core/providers/screenProvider.dart';
+import '../../core/providers/screen_provider.dart';
 import 'info_dialog_alert.dart';
 
 class DeletingUser extends ConsumerStatefulWidget {

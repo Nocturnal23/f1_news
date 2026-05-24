@@ -1,5 +1,5 @@
 import 'package:f1_news/core/models/championship/race_details.dart';
-import 'package:f1_news/core/providers/screenProvider.dart';
+import 'package:f1_news/core/providers/screen_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
@@ -7,7 +7,7 @@ class CardInfo extends ConsumerWidget {
   final String img;
   final RaceDetailsModel details;
 
-  CardInfo({super.key, required this.img, required this.details});
+  const CardInfo({super.key, required this.img, required this.details});
 
   @override
   Widget build(BuildContext context, WidgetRef sRef) {
@@ -36,8 +36,8 @@ class CardInfo extends ConsumerWidget {
                       childAspectRatio: sizeScreen.isSmallPhone ? 1.5 : 1.8,
 
                       children: [
-                        _buildData("Prima edizione", "${details.firstEdition}", sizeScreen.isSmallPhone),
-                        _buildData("Ultimo vincitore", "${details.lastWinner}", sizeScreen.isSmallPhone),
+                        _buildData("Prima edizione", details.firstEdition, sizeScreen.isSmallPhone),
+                        _buildData("Ultimo vincitore", details.lastWinner, sizeScreen.isSmallPhone),
                       ],
                     ),
 
@@ -56,7 +56,7 @@ class CardInfo extends ConsumerWidget {
                             children: [
                               _buildData("Lunghezza", "${details.trackLength} km", sizeScreen.isSmallPhone),
 
-                              _buildData("Giro veloce", "${details.lapRecord}", sizeScreen.isSmallPhone),
+                              _buildData("Giro veloce", details.lapRecord, sizeScreen.isSmallPhone),
 
                               _buildData("Numero di giri", "${details.lapsNumber}", sizeScreen.isSmallPhone),
 

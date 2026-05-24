@@ -5,13 +5,12 @@ import 'package:f1_news/screens/drawer/news_list.dart';
 import 'package:f1_news/screens/drawer/races.dart';
 import 'package:f1_news/screens/drawer/standings.dart';
 import 'package:f1_news/screens/homepage.dart';
-import 'package:f1_news/widgets/article_page.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'core/navigation/routes.dart';
-import 'core/providers/screenProvider.dart';
+import 'core/providers/screen_provider.dart';
 import 'firebase_options.dart';
 
 void main() async {

@@ -1,4 +1,4 @@
-import 'package:f1_news/core/providers/screenProvider.dart';
+import 'package:f1_news/core/providers/screen_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
@@ -13,7 +13,7 @@ class AppBarCustom extends ConsumerWidget implements PreferredSizeWidget {
   final String title;
   final PreferredSizeWidget? bottom;
 
-  AppBarCustom({
+  const AppBarCustom({
     super.key,
     required this.title,
     this.bottom,

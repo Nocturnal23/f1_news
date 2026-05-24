@@ -2,12 +2,12 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../core/providers/provider.dart';
-import '../../core/providers/screenProvider.dart';
+import '../../core/providers/screen_provider.dart';
 import '../common/error_retry.dart';
 
 class StandingsList extends ConsumerWidget {
   final String type; //Assume i valori "drivers" o "constructors" per capire cosa mostrare.
-  StandingsList({super.key, required this.type});
+  const StandingsList({super.key, required this.type});
 
   @override
   Widget build(BuildContext context, WidgetRef sRef) {
@@ -25,7 +25,7 @@ class StandingsList extends ConsumerWidget {
           onRetry: () => sRef.refresh(type == "drivers" ? driversStandingsProvider : teamsStandingsProvider),
         ),
         data: (standings) {
-            return Container(
+            return SizedBox(
               // color: Colors.black,
               width: double.infinity,
               // height: double.infinity,

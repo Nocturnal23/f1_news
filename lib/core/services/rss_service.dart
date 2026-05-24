@@ -19,7 +19,7 @@ class RssService {
 
         if (response.statusCode == 200) {
           final feed = RssFeed.parse(response.body);
-          for (var item in feed.items ?? []) {
+          for (var item in feed.items) {
             allArticles.add(Article.fromRssItem(item));
           }
         } else {

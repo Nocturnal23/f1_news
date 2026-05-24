@@ -3,7 +3,7 @@ import 'package:f1_news/widgets/dialogs/card_info.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-import '../../core/providers/screenProvider.dart';
+import '../../core/providers/screen_provider.dart';
 import '../../core/utils/country_helper.dart';
 import '../../core/providers/provider.dart';
 import '../dialogs/event_info.dart';
