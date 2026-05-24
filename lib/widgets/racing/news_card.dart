@@ -5,7 +5,7 @@ import '../article_page.dart';
 class NewsCard extends StatelessWidget {
   final String title;
   final String description;
-  final String pubDate;
+  final DateTime? pubDate;
   final String link;
   final String imageUrl;
 
@@ -51,7 +51,7 @@ class NewsCard extends StatelessWidget {
                   ),
                   SizedBox(height: 8),
                   Text(
-                    pubDate,
+                    pubDate.toString(),
                     style: TextStyle(
                       color: Colors.grey,
                     ),
