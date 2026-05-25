@@ -1,4 +1,5 @@
 import 'package:f1_news/core/navigation/routes.dart';
+import 'package:f1_news/core/providers/provider.dart';
 import 'package:f1_news/core/providers/screen_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -11,6 +12,8 @@ class DrawerApp extends ConsumerWidget {
   @override
   Widget build(BuildContext context,WidgetRef ref) {
     final screen = ref.watch(screenProvider);
+    final authState = ref.watch(currentUserProvider);
+    final user = authState.isLoading ? null : authState.value?.displayName;
 
     return Drawer(
       width: screen.width * 0.75,
@@ -26,7 +29,7 @@ class DrawerApp extends ConsumerWidget {
                 Padding(
                   padding: EdgeInsets.all(10),
                   child: Text(
-                    'F1 News',
+                    user ?? 'Benvenuto',
                     style: TextStyle(
                       fontSize: screen.isSmallPhone ? 20 : 24,
                       fontWeight: FontWeight.bold
