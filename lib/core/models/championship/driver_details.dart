@@ -1,41 +1,41 @@
 class DriverDetails {
+  final String name;
+  final String birthDate;
   final String debut;
-  final String bestResult;
-  final int gpDisputed;
-  final int gpStart;
-  final int gpWin;
-  final int podium;
-  final double totalPoints;
-  final int polePosition;
-  final int fastestLap;
-  final int wdc;
   final List<String> teams;
+  final int gpDisputed;
+  final int podium;
+  final int gpWin;
+  final String bestResult;
+  final int polePosition;
+  final double totalPoints;
+  final int wdc;
 
   DriverDetails({
+    required this.name,
+    required this.birthDate,
     required this.debut,
-    required this.bestResult,
+    required this.teams,
     required this.gpDisputed,
-    required this.gpStart,
-    required this.gpWin,
     required this.podium,
-    required this.totalPoints,
+    required this.gpWin,
+    required this.bestResult,
     required this.polePosition,
-    required this.fastestLap,
+    required this.totalPoints,
     required this.wdc,
-    required this.teams
   });
 
   factory DriverDetails.fromJson(Map<String, dynamic> json){
     return DriverDetails(
+      name: json['nome'] ?? 'F1_Driver',
+      birthDate: json['dataDiNascita'] ?? 'Date',
       debut: json['debut'] ?? 'TBC',
-      bestResult: json['bestResult'] ?? 'TBC',
       gpDisputed: json['gpDisputed'] ?? 0,
-      gpStart: json['gpStart'] ?? 0,
-      gpWin: json['gpWin'] ?? 0,
       podium: json['podium'] ?? 0,
-      totalPoints: (json['totalPoints'] ?? 0).toDouble(),
+      gpWin: json['gpWin'] ?? 0,
+      bestResult: json['bestResult'] ?? 'TBC',
       polePosition: json['polePosition'] ?? 0,
-      fastestLap: json['fastestLap'] ?? 0,
+      totalPoints: (json['totalPoints'] ?? 0).toDouble(),
       wdc: json['wdc'] ?? 0,
       /*
       IMPORTANTE PERCHE' DART E' SCEMO!
