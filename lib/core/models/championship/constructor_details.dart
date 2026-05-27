@@ -9,6 +9,7 @@ class ConstructorDetails {
   final String powerUnit;
   final int gpDisputed;
   final int gpWin;
+  final String bestResult;
   final double totalPoints;
   final int wdcConstructor;
   final int wdcDriver;
@@ -25,6 +26,7 @@ class ConstructorDetails {
     required this.powerUnit,
     required this.gpDisputed,
     required this.gpWin,
+    required this.bestResult,
     required this.totalPoints,
     required this.wdcConstructor,
     required this.wdcDriver,
@@ -43,6 +45,7 @@ class ConstructorDetails {
       powerUnit: json['powerUnit'] ?? 'N/A',
       gpDisputed: json['gpDisputed'] ?? 0,
       gpWin: json['gpWin'] ?? 0,
+      bestResult: json['bestResult'] ?? 'TBC',
       totalPoints: (json['totalPoints'] ?? 0).toDouble(),
       wdcConstructor: json['wdcConstructor'] ?? 0,
       wdcDriver: json['wdcDriver'] ?? 0,
