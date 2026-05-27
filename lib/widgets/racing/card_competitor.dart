@@ -26,12 +26,10 @@ class CardCompetitor extends ConsumerWidget {
     final screen = ref.watch(screenProvider);
     String id = '';
     String nationality = '';
-    String birthdate = '';
     if (type == "drivers") {
       final driverStanding = item as DriverModelStanding;
       id = driverStanding.driver.id;
       nationality = driverStanding.driver.nationality;
-      birthdate = driverStanding.driver.dateOfBirth;
     } else {
       final constructorItem = item as ConstructorModel;
       id = constructorItem.id;
@@ -100,17 +98,7 @@ class CardCompetitor extends ConsumerWidget {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text(
-                      "Dettagli ${type == 'drivers' ? 'Pilota' : 'Costruttore'}",
-                      style: const TextStyle(
-                        fontSize: 12,
-                        color: Colors.white70,
-                        fontWeight: FontWeight.bold,
-                        letterSpacing: 1.2,
-                      ),
-                    ),
-                    const SizedBox(height: 4),
-                    Text(
-                      name,
+                      extraData?.name,
                       style: const TextStyle(
                         fontSize: 24,
                         fontWeight: FontWeight.bold,
@@ -118,71 +106,152 @@ class CardCompetitor extends ConsumerWidget {
                       ),
                     ),
                     const SizedBox(height: 12),
-                    Wrap(
-                      spacing: 16.0,
-                      runSpacing: 4.0,
-                      children: [
-                        _buildInfoChip(
-                          icon: Icons.location_on_outlined,
-                          text: type == 'drivers'
-                              ? "Nato il: $birthdate"
-                              : "${extraData?.base}, ${extraData?.country}",
-                        ),
-                        _buildInfoChip(
-                          icon: Icons.calendar_today_outlined,
-                          text: "Debutto: ${extraData?.debut}",
-                        ),
-                      ],
-                    ),
-                    const SizedBox(height: 4),
-                    Wrap(
-                      spacing: 16.0,
-                      runSpacing: 4.0,
-                      children: [
-                        _buildInfoChip(
-                          icon: Icons.flag_outlined,
-                          text: "GP: ${extraData?.gpDisputed ?? 0}",
-                        ),
-                        _buildInfoChip(
-                          icon: Icons.emoji_events_outlined,
-                          text: "Vittorie: ${extraData?.gpWin ?? 0}",
-                        ),
-                        if (type == 'drivers' && (extraData?.wdc ?? 0) > 0)
-                          _buildInfoChip(
-                            icon: Icons.star_border,
-                            text: "WDC: ${extraData?.wdc}",
-                            iconColor: Colors.amber,
-                          ),
-                        if (type == 'constructors')
-                          _buildInfoChip(
-                            icon: Icons.star_border,
-                            text: "Titoli: ${extraData?.wdcConstructor ?? 0} (C) / ${extraData?.wdcDriver ?? 0} (P)",
-                            iconColor: Colors.amber,
-                          ),
-                      ],
-                    ),
-                    const SizedBox(height: 4),
-                    if (type == 'constructors') ...[
-                      const SizedBox(height: 8),
-                      Wrap(
-                        spacing: 16.0,
-                        runSpacing: 4.0,
+
+                    //Controller pagine scorrevoli.
+                    DefaultTabController(
+                      length: type == 'drivers' ? 3 : 4,
+                      child: Column(
+                        mainAxisSize: MainAxisSize.min,
+                        crossAxisAlignment: CrossAxisAlignment.stretch,
                         children: [
-                          _buildInfoChip(
-                            icon: Icons.person_outline,
-                            text: "TP: ${extraData?.teamChief ?? 'N/A'}",
+                          SizedBox(
+                            height: 100,
+                            child: TabBarView(
+                              physics: const BouncingScrollPhysics(),
+                              children: [
+
+                                //Prima pagina. Anagrafica.
+                                Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    Wrap(
+                                      spacing: 16.0,
+                                      runSpacing: 4.0,
+                                      children: [
+                                        _buildInfoChip(
+                                          icon: Icons.location_on_outlined,
+                                          text: type == "drivers"
+                                              ? "Nato il ${extraData?.birthDate}"
+                                              : "${extraData?.base}, ${extraData?.country}",
+                                        ),
+                                        _buildInfoChip(
+                                          icon: Icons.calendar_today_outlined,
+                                          text: "Debutto: ${extraData?.debut}",
+                                        ),
+                                      ],
+                                    ),
+                                  ],
+                                ),
+
+                                //Seconda pagina. Statistiche.
+                                Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    Wrap(
+                                      spacing: 16.0,
+                                      runSpacing: 4.0,
+                                      children: [
+                                        _buildInfoChip(
+                                          icon: Icons.flag_outlined,
+                                          text: "GP Totali: ${extraData?.gpDisputed}",
+                                        ),
+                                        _buildInfoChip(
+                                          icon: Icons.emoji_events_outlined,
+                                          text: extraData?.gpWin > 0
+                                              ? "GP Vinti: ${extraData?.gpWin}"
+                                              : "Miglior risultato: ${extraData?.bestResult}",
+                                        ),
+                                      ],
+                                    ),
+                                    Visibility(
+                                      visible: _hasTitles(),
+                                      maintainSize: true,
+                                      maintainAnimation: true,
+                                      maintainState: true,
+                                      child: _buildInfoChip(
+                                        icon: Icons.star_border,
+                                        text: type == 'drivers'
+                                            ? "Titoli: ${extraData?.wdc}"
+                                            : "Titoli: ${extraData?.wdcConstructor ?? 0} (C) / ${extraData?.wdcDriver ?? 0} (P)",
+                                      ),
+                                    ),
+                                  ],
+                                ),
+
+                                //Pagiga 3) Storico team piloti o organico costruttori.
+                                Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    if (type == "drivers") ...[
+                                      _buildInfoChip(
+                                        icon: Icons.history,
+                                        text: "Storico team: ${extraData?.teams.join(', ')}",
+                                      ),
+                                    ] else ...[
+                                      Wrap(
+                                        spacing: 16.0,
+                                        runSpacing: 4.0,
+                                        children: [
+                                          _buildInfoChip(
+                                            icon: Icons.person_outline,
+                                            text: "TP: ${extraData?.teamChief?.join(', ') ?? 'N/A'}",
+                                          ),
+                                          _buildInfoChip(
+                                            icon: Icons.engineering_outlined,
+                                            text: "TD: ${extraData?.technicalChief?.join(', ') ?? 'N/A'}",
+                                          ),
+                                          Visibility(
+                                            visible: extraData?.reserveDriver.isNotEmpty,
+                                            maintainSize: true,
+                                            maintainAnimation: true,
+                                            maintainState: true,
+                                            child: _buildInfoChip(
+                                              icon: Icons.person,
+                                              text: "Riserve: ${extraData?.reserveDriver?.join(', ') ?? 'N/A'}",
+                                            ),
+                                          ),
+                                        ],
+                                      ),
+                                    ],
+                                  ],
+                                ),
+
+                                //Pagina 4) Dettagli vettura.
+                                if (type == 'constructors')
+                                  Column(
+                                    crossAxisAlignment: CrossAxisAlignment.start,
+                                    children: [
+                                      Wrap(
+                                        spacing: 16.0,
+                                        runSpacing: 4.0,
+                                        children: [
+                                          _buildInfoChip(
+                                            icon: Icons.directions_car_outlined,
+                                            text: "Telaio: ${extraData?.chassis ?? 'N/A'}",
+                                          ),
+                                          _buildInfoChip(
+                                            icon: Icons.settings_suggest_outlined,
+                                            text: "PU: ${extraData?.powerUnit ?? 'N/A'}",
+                                          ),
+                                        ],
+                                      ),
+                                    ],
+                                  ),
+                              ],
+                            ),
                           ),
-                          _buildInfoChip(
-                            icon: Icons.engineering_outlined,
-                            text: "TD: ${extraData?.technicalChief?.join(', ') ?? 'N/A'}", // .join() formats the list nicely!
-                          ),
-                          _buildInfoChip(
-                            icon: Icons.directions_car_outlined,
-                            text: "Telaio: ${extraData?.chassis ?? 'N/A'}",
+
+                          const SizedBox(height: 8),
+                          const Center(
+                            child: TabPageSelector(
+                              color: Colors.white24,
+                              selectedColor: Colors.white,
+                              indicatorSize: 8,
+                            ),
                           ),
                         ],
                       ),
-                    ],
+                    ),
                   ],
                 ),
               ),
@@ -193,21 +262,34 @@ class CardCompetitor extends ConsumerWidget {
     );
   }
 
-  Widget _buildInfoChip({required IconData icon, required String text, Color iconColor = Colors.white70}) {
-    return Row(
-      mainAxisSize: MainAxisSize.min,
-      crossAxisAlignment: CrossAxisAlignment.center,
-      children: [
-        Icon(icon, size: 14, color: iconColor),
-        const SizedBox(width: 4),
-        Text(
-          text,
-          style: const TextStyle(
-            color: Colors.white70,
-            fontSize: 13,
+  Widget _buildInfoChip({
+    required IconData icon,
+    required String text,
+    Color iconColor = Colors.white70,
+  }) {
+    return Text.rich(
+      TextSpan(
+        children: [
+          WidgetSpan(
+            alignment: PlaceholderAlignment.middle,
+            child: Icon(icon, size: 14, color: iconColor),
           ),
-        ),
-      ],
+          const WidgetSpan(child: SizedBox(width: 4)),
+          TextSpan(
+            text: text,
+            style: const TextStyle(color: Colors.white70, fontSize: 13, height: 1.3),
+          ),
+        ],
+      ),
     );
+  }
+
+  bool _hasTitles() {
+    if (type == 'drivers' && (extraData?.wdc ?? 0) > 0) return true;
+    if (type == 'constructors' &&
+        ((extraData?.wdcDriver ?? 0) > 0 ||
+            (extraData?.wdcConstructor ?? 0) > 0))
+      return true;
+    return false;
   }
 }
