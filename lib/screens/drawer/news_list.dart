@@ -3,8 +3,7 @@ import 'package:f1_news/widgets/navigation/app_bar_custom.dart';
 import 'package:f1_news/widgets/navigation/drawer_app.dart';
 import 'package:flutter/material.dart';
 
-import '../../core/models/article.dart';
-import '../../core/services/rss_service.dart';
+import '../../controllers/news_filter_controller.dart';
 import '../../widgets/common/error_retry.dart';
 import '../../widgets/racing/news_card.dart';
 
@@ -17,11 +16,10 @@ class NewsList extends StatefulWidget {
 
 class _NewsListState extends State<NewsList> {
   final RssRepository _repository = RssRepository();
-  late Future<List<Article>> _futureArticles;
-
-  int _currentPage = 1;
-  final int _itemsPage = 10;
+  final NewsFilterController _controller = NewsFilterController();
   final ScrollController _scrollController = ScrollController();
+  bool _isLoading = true;
+  String? _errorMessage;
 
   @override
   void initState() {
@@ -32,64 +30,74 @@ class _NewsListState extends State<NewsList> {
   @override
   void dispose() {
     _scrollController.dispose();
+    _controller.dispose();
     super.dispose();
   }
 
-  void _fetchData() {
+  Future<void> _fetchData() async {
     setState(() {
-      _futureArticles = _repository.fetchAllNews();
+      _isLoading = true;
+      _errorMessage = null;
     });
+
+    try {
+      final articles = await _repository.fetchAllNews();
+      _controller.setArticles(articles);
+
+      setState(() {
+        _isLoading = false;
+      });
+    } catch (e) {
+      setState(() {
+        _errorMessage = e.toString();
+        _isLoading = false;
+      });
+    }
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBarCustom(title: "Ultime notizie"),
-
-      drawer: DrawerApp(),
-
-      body: _buildList(_futureArticles),
+      appBar: const AppBarCustom(title: "Ultime notizie"),
+      drawer: const DrawerApp(),
+      body: _buildBody(),
     );
   }
 
-  Widget? _buildList(Future<List<Article>> futureArticles) {
-    return FutureBuilder<List<Article>>(
-        future: _futureArticles,
-        builder: (context, snapshot) {
-          if (snapshot.connectionState == ConnectionState.waiting) {
-            return const Center(child: CircularProgressIndicator());
-          }
-          if (snapshot.hasError) {
-            return ErrorRetry(
-              errorMessage: snapshot.error.toString(),
-              onRetry: _fetchData,
-            );
-          }
-          if (!snapshot.hasData || snapshot.data!.isEmpty) {
-            return const Center(child: Text('Nessuna notizia trovata.'));
-          }
+  Widget _buildBody() {
+    if (_isLoading) {
+      return const Center(child: CircularProgressIndicator());
+    }
+    if (_errorMessage != null) {
+      return ErrorRetry(
+        errorMessage: _errorMessage!,
+        onRetry: _fetchData,
+      );
+    }
 
-          final articles = snapshot.data!; //Tutti gli articoli.
-          final totalPages = (articles.length / _itemsPage).ceil(); //Il numero di pagine basato sul numero di articoli suddivisi.
-          final startIndex = (_currentPage - 1) * _itemsPage; //Gli indici per capire quando è il momento di fermare la lista in quella pagina.
-          int endIndex = startIndex + _itemsPage;
-          //Controllo per evitare che l'indice vada oltre il numero di articoli.
-          if (endIndex > articles.length) {
-            endIndex = articles.length;
-          }
-          final pageArticles = articles.sublist(startIndex, endIndex); //Estrazione delle notizie per questa pagina.
+    //Questo reagisce ai notyfi.
+    return ListenableBuilder(
+      listenable: _controller,
+      builder: (context, child) {
 
-          return Column(
-            children: [
-              ?_buildNewsList(pageArticles),
-              ?_buildNavigation(totalPages),
-            ],
-          );
+        if (!_controller.hasArticles) {
+          return const Center(child: Text('Nessuna notizia trovata.'));
         }
+
+        return Column(
+          children: [
+
+            _buildNewsList(),
+            _buildNavigation(),
+          ],
+        );
+      },
     );
   }
 
-  Widget? _buildNewsList(List<Article> pageArticles) {
+  Widget _buildNewsList() {
+    final pageArticles = _controller.currentPageArticles;
+
     return Expanded(
       child: ListView.builder(
         itemCount: pageArticles.length,
@@ -108,50 +116,46 @@ class _NewsListState extends State<NewsList> {
     );
   }
 
-  Widget? _buildNavigation(int totalPages) {
+  Widget _buildNavigation() {
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 12.0),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
           ElevatedButton(
-            onPressed: _currentPage > 1
+            onPressed: _controller.currentPage > 1
                 ? () {
-              setState(() {
-                _currentPage--;
-              });
-              _scrollController.animateTo(
-                0.0,
-                duration: const Duration(milliseconds: 300),
-                curve: Curves.easeOut,
-              );
+              _controller.previousPage();
+              _scrollToTop();
             }
                 : null,
             child: const Text('Indietro'),
           ),
 
           Text(
-            'Pagina $_currentPage di $totalPages',
+            'Pagina ${_controller.currentPage} di ${_controller.totalPages}',
             style: const TextStyle(fontWeight: FontWeight.bold),
           ),
 
           ElevatedButton(
-            onPressed: _currentPage < totalPages
+            onPressed: _controller.currentPage < _controller.totalPages
                 ? () {
-              setState(() {
-                _currentPage++;
-              });
-              _scrollController.animateTo(
-                0.0,
-                duration: const Duration(milliseconds: 300),
-                curve: Curves.easeOut,
-              );
+              _controller.nextPage();
+              _scrollToTop();
             }
                 : null,
             child: const Text('Avanti'),
           ),
         ],
       ),
+    );
+  }
+
+  void _scrollToTop() {
+    _scrollController.animateTo(
+      0.0,
+      duration: const Duration(milliseconds: 300),
+      curve: Curves.easeOut,
     );
   }
 }
