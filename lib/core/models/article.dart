@@ -19,7 +19,7 @@ class Article {
   factory Article.fromRssItem(RssItem item) {
     return Article(
       title: item.title ?? 'Senza Titolo',
-      description: item.description ?? 'Nessuna descrizione disponibile',
+      description: _cleanHtml(item.description),
       pubDate: _normalizzeDate(item.pubDate),
       link: item.link?.toString() ?? '',
       imageUrl: item.enclosure?.url ?? '',
@@ -41,5 +41,25 @@ class Article {
       print("Impossibile normalizzare la data: $date - Errore: $e");
       return null;
     }
+  }
+
+  static String _cleanHtml(String? rawString) {
+    if (rawString == null || rawString.isEmpty) {
+      return '';
+    }
+
+    final RegExp htmlTagsExp = RegExp(r'<[^>]*>', multiLine: true, caseSensitive: false);
+    String cleanString = rawString.replaceAll(htmlTagsExp, ' ');
+
+    cleanString = cleanString.replaceAll('&nbsp;', ' ');
+    cleanString = cleanString.replaceAll('&quot;', '"');
+    cleanString = cleanString.replaceAll('&apos;', "'");
+    cleanString = cleanString.replaceAll('&amp;', '&');
+    cleanString = cleanString.replaceAll('&lt;', '<');
+    cleanString = cleanString.replaceAll('&gt;', '>');
+
+    cleanString = cleanString.replaceAll(RegExp(r'\s+'), ' ').trim();
+
+    return cleanString;
   }
 }
