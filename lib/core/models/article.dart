@@ -3,6 +3,7 @@ import 'package:rss_dart/dart_rss.dart';
 
 class Article {
   final String title;
+  final String publisher;
   final String description;
   final DateTime? pubDate;
   final String link;
@@ -10,15 +11,17 @@ class Article {
 
   Article({
     required this.title,
+    required this.publisher,
     required this.description,
     this.pubDate,
     required this.link,
     this.imageUrl = '',
   });
 
-  factory Article.fromRssItem(RssItem item) {
+  factory Article.fromRssItem(RssItem item, String pub) {
     return Article(
       title: item.title ?? 'Senza Titolo',
+      publisher: pub,
       description: _cleanHtml(item.description),
       pubDate: _normalizzeDate(item.pubDate),
       link: item.link?.toString() ?? '',

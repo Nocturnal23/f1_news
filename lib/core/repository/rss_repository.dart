@@ -10,13 +10,16 @@ class RssRepository {
   Future<List<Article>> fetchAllNews() async {
     List<Article> allArticles = [];
 
-    for (var url in RssList.feedUrls.values) {
+    for (var entry in RssList.feedUrls.entries) {
+      final key = entry.key;
+      final url = entry.value;
+
       try {
         final rawXml = await _apiClient.fetchRawXml(url);
         final feed = RssFeed.parse(rawXml);
 
         for (var item in feed.items) {
-          allArticles.add(Article.fromRssItem(item));
+          allArticles.add(Article.fromRssItem(item, key));
         }
       } catch (e) {
         print('Errore durante il fetch o parsing di $url: $e');
