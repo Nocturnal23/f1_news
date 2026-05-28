@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 
 import '../../controllers/news_filter_controller.dart';
 import '../../widgets/common/error_retry.dart';
+import '../../widgets/common/filter_bar.dart';
 import '../../widgets/racing/news_card.dart';
 
 class NewsList extends StatefulWidget {
@@ -79,16 +80,58 @@ class _NewsListState extends State<NewsList> {
     return ListenableBuilder(
       listenable: _controller,
       builder: (context, child) {
-
-        if (!_controller.hasArticles) {
-          return const Center(child: Text('Nessuna notizia trovata.'));
-        }
-
         return Column(
           children: [
+            FilterBar(filterController: _controller),
 
-            _buildNewsList(),
-            _buildNavigation(),
+            if (!_controller.hasArticles)
+              Expanded(
+                child: Center(
+                  child: Card(
+                    elevation: 2,
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(20),
+                    ),
+                    child: Padding(
+                      padding: const EdgeInsets.symmetric(
+                        horizontal: 32,
+                        vertical: 24,
+                      ),
+                      child: Column(
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          Icon(
+                            Icons.newspaper_rounded,
+                            size: 56,
+                            color: Colors.grey.shade600,
+                          ),
+
+                          const SizedBox(height: 16),
+
+                          Text(
+                            'Nessuna notizia trovata',
+                            style: Theme.of(context).textTheme.titleMedium,
+                          ),
+
+                          const SizedBox(height: 8),
+
+                          Text(
+                            'Prova a modificare i filtri selezionati.',
+                            textAlign: TextAlign.center,
+                            style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                              color: Colors.grey.shade600,
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ),
+                ),
+              )
+            else ...[
+              _buildNewsList(),
+              _buildNavigation(),
+            ],
           ],
         );
       },
