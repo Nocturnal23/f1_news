@@ -1,4 +1,8 @@
 class RssList {
+  static const Map<String, String> test = {
+    'test': 'http://10.0.2.2:8000/test_rss.xml'
+  };
+
   static const Map<String, String> feedUrls = {
     'motorsport': 'https://it.motorsport.com/rss/f1/news/',
     'automoto': 'https://www.automoto.it/rss/formula1.xml',
@@ -9,7 +13,7 @@ class RssList {
   };
 
   static const Map<String, String> feedUrlsEN = {
-    'therace' : 'https ://www.the-race.com/category/formula-1/rss/',
+    'therace' : 'https://www.the-race.com/category/formula-1/rss/',
     'motorsport_global': 'https://www.motorsport.com/rss/f1/news/',
     'espn' : 'https://www.espn.com/espn/rss/f1/news',
     'bbc' : 'https://feeds.bbci.co.uk/sport/formula1/rss.xml'
