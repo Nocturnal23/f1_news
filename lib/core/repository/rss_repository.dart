@@ -7,10 +7,22 @@ import '../models/article.dart';
 class RssRepository {
   final RssService _apiClient = RssService();
 
-  Future<List<Article>> fetchAllNews() async {
+  static List<Article>? _cachedArticles;
+  static DateTime? _lastFetchTime;
+  final Duration _cacheDuration = const Duration(minutes: 30);
+
+  Future<List<Article>> fetchAllNews({bool forceRefresh = false}) async {
+    final now = DateTime.now();
+    final isCacheValid = _lastFetchTime != null &&
+        now.difference(_lastFetchTime!) < _cacheDuration;
+
+    if (!forceRefresh && _cachedArticles != null && isCacheValid) {
+      return _cachedArticles!;
+    }
+
     List<Article> allArticles = [];
 
-    for (var entry in RssList.feedUrls.entries) {
+    for (var entry in RssList.test.entries) {
       final key = entry.key;
       final url = entry.value;
 
@@ -32,6 +44,9 @@ class RssRepository {
       if (b.pubDate == null) return -1;
       return b.pubDate!.compareTo(a.pubDate!);
     });
+
+    _cachedArticles = allArticles;
+    _lastFetchTime = now;
 
     return allArticles;
   }
