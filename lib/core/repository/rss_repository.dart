@@ -22,7 +22,7 @@ class RssRepository {
 
     List<Article> allArticles = [];
 
-    for (var entry in RssList.test.entries) {
+    for (var entry in RssList.feedUrls.entries) {
       final key = entry.key;
       final url = entry.value;
 
