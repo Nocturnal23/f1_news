@@ -1,18 +1,23 @@
+import 'package:f1_news/core/providers/provider.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../controllers/news_filter_controller.dart';
+import '../../core/models/championship/driver_standing.dart';
 
-class FilterBar extends StatefulWidget {
+class FilterBar extends ConsumerStatefulWidget {
   final NewsFilterController filterController;
 
   const FilterBar({super.key, required this.filterController});
 
   @override
-  State<FilterBar> createState() => _FilterBarState();
+  ConsumerState<FilterBar> createState() => _FilterBarState();
 }
 
-class _FilterBarState extends State<FilterBar> {
+class _FilterBarState extends ConsumerState<FilterBar> {
   final TextEditingController _searchController = TextEditingController();
+  String? _selectedDriver;
+  String? _selectedTeam;
 
   @override
   void dispose() {
@@ -22,32 +27,117 @@ class _FilterBarState extends State<FilterBar> {
 
   @override
   Widget build(BuildContext context) {
+    final drivers = ref.watch(driversProvider).value ?? [];
+    final teams = ref.watch(constructorsProvider).value ?? [];
+
     return Container(
-      padding: EdgeInsets.symmetric(horizontal: 16),
+      padding: EdgeInsets.all(16),
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(8),
         color: Colors.grey[300],
       ),
-      child: Row(
+      child: Column(
+        mainAxisSize: MainAxisSize.min,
         children: [
-          Expanded(
-            child: TextField(
-              controller: _searchController,
-              decoration: InputDecoration(
-                hintText: 'Cerca una notizia...',
-                prefixIcon: const Icon(Icons.search),
-                suffixIcon: IconButton(
-                  icon: const Icon(Icons.clear),
-                  onPressed: () {
-                    _searchController.clear();
-                    widget.filterController.updateSearchQuery('');
+          // Barra di ricerca.
+          TextField(
+            controller: _searchController,
+            decoration: InputDecoration(
+              hintText: 'Cerca una notizia...',
+              prefixIcon: const Icon(Icons.search),
+              suffixIcon: IconButton(
+                icon: const Icon(Icons.clear),
+                onPressed: () {
+                  _searchController.clear();
+                  widget.filterController.updateSearchQuery('');
+                },
+              ),
+              border: OutlineInputBorder(
+                borderRadius: BorderRadius.circular(8),
+              ),
+              filled: true,
+              fillColor: Colors.white,
+            ),
+            onChanged: (value) {
+              widget.filterController.updateSearchQuery(value);
+            },
+          ),
+
+          const SizedBox(height: 12),
+
+          //Dropdown
+          Row(
+            children: [
+              //Piloti.
+              Expanded(
+                child: DropdownButtonFormField<String?>(
+                  initialValue: _selectedDriver,
+                  isExpanded: true,
+                  items: [
+                    const DropdownMenuItem<String?>(
+                      value: null,
+                      child: Text('Tutti'),
+                    ),
+                    for (final d in drivers)
+                      DropdownMenuItem<String?>(
+                        value: d.driver.surname,
+                        child: Text(d.driver.surname),
+                      ),
+                  ],
+                  onChanged: (value) {
+                    setState(() {
+                      _selectedDriver = value;
+                    });
+                    widget.filterController.updateDriver(value);
                   },
+                  decoration: const InputDecoration(
+                    labelText: 'Pilota',
+                    border: OutlineInputBorder(),
+                    filled: true,
+                    fillColor: Colors.white,
+                    contentPadding: EdgeInsets.symmetric(
+                      horizontal: 10,
+                      vertical: 12
+                    ),
+                  ),
                 ),
               ),
-                onChanged: (value) {
-                  widget.filterController.updateSearchQuery(value);
-                }
-            ),
+
+              //Costruttori.
+              Expanded(
+                child: DropdownButtonFormField<String?>(
+                  initialValue: _selectedTeam,
+                  isExpanded: true,
+                  items: [
+                    const DropdownMenuItem<String?>(
+                      value: null,
+                      child: Text('Tutti'),
+                    ),
+                    for (final t in teams)
+                      DropdownMenuItem<String?>(
+                        value: t.name,
+                        child: Text(t.name),
+                      ),
+                  ],
+                  onChanged: (value) {
+                    setState(() {
+                      _selectedTeam = value;
+                    });
+                    widget.filterController.updateConstructor(value);
+                  },
+                  decoration: const InputDecoration(
+                    labelText: 'Team',
+                    border: OutlineInputBorder(),
+                    filled: true,
+                    fillColor: Colors.white,
+                    contentPadding: EdgeInsets.symmetric(
+                        horizontal: 10,
+                        vertical: 12
+                    ),
+                  ),
+                ),
+              ),
+            ],
           ),
         ],
       ),
