@@ -55,8 +55,7 @@ class NewsFilterController extends ChangeNotifier {
     }
 
     if (_selectedConstructor != null && _selectedConstructor!.isNotEmpty) {
-      final constructorLower = _selectedConstructor!.toLowerCase();
-      result = result.where((a) => _containsKeyword(a, constructorLower)).toList();
+      result = result.where((a) => _matchTeamName(a, _selectedConstructor!)).toList();
     }
 
     if (_searchQuery.isNotEmpty) {
@@ -108,5 +107,29 @@ class NewsFilterController extends ChangeNotifier {
       _currentPage--;
       notifyListeners();
     }
+  }
+
+  bool _matchTeamName(Article article, String officialConstructorName) {
+    final stopWords = [
+      'f1', 'team', 'scuderia', 'racing', 'motorsport',
+      'bwt', 'aramco', 'hp', 'mastercard', 'petronas', 'oracle', 'visa', 'cash', 'app'
+    ];
+
+    final rawWords = officialConstructorName.toLowerCase().split(RegExp(r'\s+'));
+
+    final meaningfulWords = rawWords.where((word) => !stopWords.contains(word)).toList();
+
+    if (meaningfulWords.isEmpty) return false;
+
+    final titleLower = article.title.toLowerCase();
+    final descLower = article.description.toLowerCase();
+
+    for (final word in meaningfulWords) {
+      if (titleLower.contains(word) || descLower.contains(word)) {
+        return true;
+      }
+    }
+
+    return false;
   }
 }
