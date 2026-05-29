@@ -2,6 +2,7 @@ import 'package:f1_news/core/repository/rss_repository.dart';
 import 'package:f1_news/widgets/navigation/app_bar_custom.dart';
 import 'package:f1_news/widgets/navigation/drawer_app.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../controllers/news_filter_controller.dart';
 import '../../widgets/common/error_retry.dart';
@@ -35,14 +36,18 @@ class _NewsListState extends State<NewsList> {
     super.dispose();
   }
 
-  Future<void> _fetchData() async {
-    setState(() {
-      _isLoading = true;
-      _errorMessage = null;
-    });
+  Future<void> _fetchData({bool forceRefresh = false}) async {
+    if (!forceRefresh) {
+      setState(() {
+        _isLoading = true;
+        _errorMessage = null;
+      });
+    }
 
     try {
-      final articles = await _repository.fetchAllNews();
+      final articles = await _repository.fetchAllNews(
+        forceRefresh: forceRefresh,
+      );
       _controller.setArticles(articles);
 
       setState(() {
@@ -70,10 +75,7 @@ class _NewsListState extends State<NewsList> {
       return const Center(child: CircularProgressIndicator());
     }
     if (_errorMessage != null) {
-      return ErrorRetry(
-        errorMessage: _errorMessage!,
-        onRetry: _fetchData,
-      );
+      return ErrorRetry(errorMessage: _errorMessage!, onRetry: _fetchData);
     }
 
     //Questo reagisce ai notyfi.
@@ -86,45 +88,56 @@ class _NewsListState extends State<NewsList> {
 
             if (!_controller.hasArticles)
               Expanded(
-                child: Center(
-                  child: Card(
-                    elevation: 2,
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(20),
-                    ),
-                    child: Padding(
-                      padding: const EdgeInsets.symmetric(
-                        horizontal: 32,
-                        vertical: 24,
-                      ),
-                      child: Column(
-                        mainAxisSize: MainAxisSize.min,
-                        children: [
-                          Icon(
-                            Icons.newspaper_rounded,
-                            size: 56,
-                            color: Colors.grey.shade600,
+                child: RefreshIndicator(
+                  onRefresh: () async {
+                    await _fetchData(forceRefresh: true);
+                  },
+                  child: ListView(
+                    physics: const AlwaysScrollableScrollPhysics(),
+                    children: [
+                      Center(
+                        child: Card(
+                          elevation: 2,
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(20),
                           ),
+                          child: Padding(
+                            padding: const EdgeInsets.symmetric(
+                              horizontal: 32,
+                              vertical: 24,
+                            ),
+                            child: Column(
+                              mainAxisSize: MainAxisSize.min,
+                              children: [
+                                Icon(
+                                  Icons.newspaper_rounded,
+                                  size: 56,
+                                  color: Colors.grey.shade600,
+                                ),
 
-                          const SizedBox(height: 16),
+                                const SizedBox(height: 16),
 
-                          Text(
-                            'Nessuna notizia trovata',
-                            style: Theme.of(context).textTheme.titleMedium,
-                          ),
+                                Text(
+                                  'Nessuna notizia trovata',
+                                  style: Theme.of(
+                                    context,
+                                  ).textTheme.titleMedium,
+                                ),
 
-                          const SizedBox(height: 8),
+                                const SizedBox(height: 8),
 
-                          Text(
-                            'Prova a modificare i filtri selezionati.',
-                            textAlign: TextAlign.center,
-                            style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                              color: Colors.grey.shade600,
+                                Text(
+                                  'Prova a modificare i filtri selezionati.',
+                                  textAlign: TextAlign.center,
+                                  style: Theme.of(context).textTheme.bodyMedium
+                                      ?.copyWith(color: Colors.grey.shade600),
+                                ),
+                              ],
                             ),
                           ),
-                        ],
+                        ),
                       ),
-                    ),
+                    ],
                   ),
                 ),
               )
@@ -142,19 +155,25 @@ class _NewsListState extends State<NewsList> {
     final pageArticles = _controller.currentPageArticles;
 
     return Expanded(
-      child: ListView.builder(
-        itemCount: pageArticles.length,
-        controller: _scrollController,
-        itemBuilder: (context, index) {
-          final article = pageArticles[index];
-          return NewsCard(
-            title: article.title,
-            description: article.description,
-            pubDate: article.pubDate,
-            link: article.link,
-            imageUrl: article.imageUrl,
-          );
+      child: RefreshIndicator(
+        onRefresh: () async {
+          await _fetchData(forceRefresh: true);
         },
+        child: ListView.builder(
+          physics: const AlwaysScrollableScrollPhysics(),
+          itemCount: pageArticles.length,
+          controller: _scrollController,
+          itemBuilder: (context, index) {
+            final article = pageArticles[index];
+            return NewsCard(
+              title: article.title,
+              description: article.description,
+              pubDate: article.pubDate,
+              link: article.link,
+              imageUrl: article.imageUrl,
+            );
+          },
+        ),
       ),
     );
   }
@@ -168,9 +187,9 @@ class _NewsListState extends State<NewsList> {
           ElevatedButton(
             onPressed: _controller.currentPage > 1
                 ? () {
-              _controller.previousPage();
-              _scrollToTop();
-            }
+                    _controller.previousPage();
+                    _scrollToTop();
+                  }
                 : null,
             child: const Text('Indietro'),
           ),
@@ -183,9 +202,9 @@ class _NewsListState extends State<NewsList> {
           ElevatedButton(
             onPressed: _controller.currentPage < _controller.totalPages
                 ? () {
-              _controller.nextPage();
-              _scrollToTop();
-            }
+                    _controller.nextPage();
+                    _scrollToTop();
+                  }
                 : null,
             child: const Text('Avanti'),
           ),
