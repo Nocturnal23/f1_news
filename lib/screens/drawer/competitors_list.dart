@@ -119,12 +119,15 @@ class CompetitorsList extends ConsumerWidget {
     final isFav = favoriteIds.contains(id);
 
     return InkWell(
-      onTap: () async {
-        final repository = ref.read(f1RepositoryProvider);
-        final extraData = await repository.fetchCompetitorExtra(type, id);
+      onTap: () {
         showDialog(
           context: context,
-          builder: (context) => CardCompetitor(type: type, item: itemData, name: title, extraData: extraData),
+          builder: (context) => CardCompetitor(
+            type: type,
+            item: itemData,
+            name: title,
+            repository: ref.read(f1RepositoryProvider),
+          ),
         );
       },
 
