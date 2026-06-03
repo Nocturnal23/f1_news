@@ -94,15 +94,13 @@ class CardCustom extends ConsumerWidget {
                       height: screen.isSmallPhone ? 80 : 120,
                     ),
                     onTap: () async {
-                      final repository = ref.read(f1RepositoryProvider);
-                      final details = await repository.fetchRaceDetails(item.circuitId);
-
                       if (context.mounted) {
                         showDialog(
                           context: context,
                           builder: (context) => CardInfo(
                             img: "lib/assets/circuits/${item.circuitName}.webp",
-                            details: details,
+                            circuitId: item.circuitId,
+                            repository: ref.read(f1RepositoryProvider),
                           ),
                         );
                       }
