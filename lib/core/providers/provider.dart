@@ -30,6 +30,9 @@ final f1RepositoryProvider = Provider((ref) => F1Repository(ref.watch(apiService
 final rssServiceProvider = Provider((ref) => RssService());
 final rssRepositoryProvider = Provider((ref) => RssRepository(ref.watch(rssServiceProvider)));
 
+// Provider per il filtro delle news
+final newsFilterProvider = ChangeNotifierProvider((ref) => NewsFilterController());
+
 /*
 StreamProvider che ascolta i cambiamenti di stato di Firebase Auth.
 Ritorna un oggetto 'User' se loggato, 'null' altrimenti.
@@ -162,5 +165,24 @@ final newsProvider = FutureProvider<List<Article>>((ref) async {
   return await repo.fetchAllNews();
 });
 
-// Provider per il filtro delle news
-final newsFilterProvider = ChangeNotifierProvider((ref) => NewsFilterController());
+// Provider per la gestione del carosello e delle news.
+final featuredNewsProvider = Provider<AsyncValue<List<Article>>>((ref) {
+  final newsAsync = ref.watch(newsProvider);
+  final authState = ref.watch(authStateProvider);
+  final favorites = ref.watch(favoritesProvider);
+
+  return newsAsync.whenData((articles) {
+    if (authState.value != null && favorites.isNotEmpty) {
+      final filtered = articles.where((article) {
+        return favorites.any((favId) {
+          return NewsFilterController.matchTeamName(article, favId) ||
+              NewsFilterController.containsKeyword(article, favId);
+        });
+      }).toList();
+
+      if (filtered.isNotEmpty) return filtered;
+    }
+
+    return articles.take(5).toList();
+  });
+});
