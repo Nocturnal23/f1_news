@@ -5,11 +5,13 @@ import '../common/rss_list.dart';
 import '../models/article.dart';
 
 class RssRepository {
-  final RssService _apiClient = RssService();
+  final RssService _apiClient;
 
   static List<Article>? _cachedArticles;
   static DateTime? _lastFetchTime;
   final Duration _cacheDuration = const Duration(minutes: 30);
+
+  RssRepository(this._apiClient);
 
   Future<List<Article>> fetchAllNews({bool forceRefresh = false}) async {
     final now = DateTime.now();

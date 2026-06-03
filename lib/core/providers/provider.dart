@@ -2,7 +2,10 @@ import 'package:f1_news/controllers/favorites_controller.dart';
 import 'package:f1_news/core/models/sessions/qualifying_result.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:flutter_riverpod/legacy.dart';
 import '../../controllers/auth_controller.dart';
+import '../../controllers/news_filter_controller.dart';
+import '../models/article.dart';
 import '../models/championship/constructor.dart';
 import '../models/championship/driver_standing.dart';
 import '../models/championship/race.dart';
@@ -10,7 +13,9 @@ import '../models/sessions/race_result.dart';
 import '../models/sessions/sprint_quali_result.dart';
 import '../models/user.dart';
 import '../repository/jolpica_repository.dart';
+import '../repository/rss_repository.dart';
 import '../services/jolpica_service.dart';
+import '../services/rss_service.dart';
 import '../services/user_service.dart';
 
 /*
@@ -21,6 +26,9 @@ final userServiceProvider = Provider((ref) => UserService());
 
 final apiServiceProvider = Provider((ref) => ApiService()); //Provider Jolpica API
 final f1RepositoryProvider = Provider((ref) => F1Repository(ref.watch(apiServiceProvider))); //Provider REpository.
+
+final rssServiceProvider = Provider((ref) => RssService());
+final rssRepositoryProvider = Provider((ref) => RssRepository(ref.watch(rssServiceProvider)));
 
 /*
 StreamProvider che ascolta i cambiamenti di stato di Firebase Auth.
@@ -147,3 +155,12 @@ final teamsStandingsProvider = FutureProvider<List<dynamic>>((ref) async {
 final favoritesProvider = NotifierProvider<FavoritesController, Set<String>>(() {
   return FavoritesController();
 });
+
+// Provider per i dati delle News,
+final newsProvider = FutureProvider<List<Article>>((ref) async {
+  final repo = ref.watch(rssRepositoryProvider);
+  return await repo.fetchAllNews();
+});
+
+// Provider per il filtro delle news
+final newsFilterProvider = ChangeNotifierProvider((ref) => NewsFilterController());
