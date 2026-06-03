@@ -1,5 +1,4 @@
 import 'package:flutter/foundation.dart';
-
 import '../core/models/article.dart';
 
 class NewsFilterController extends ChangeNotifier {
@@ -42,6 +41,35 @@ class NewsFilterController extends ChangeNotifier {
     _applyFilters();
   }
 
+  static bool containsKeyword(Article article, String keyword) {
+    if (keyword.isEmpty) return true;
+    final queryLower = keyword.toLowerCase();
+    final titleMatch = article.title.toLowerCase().contains(queryLower);
+    final descMatch = article.description.toLowerCase().contains(queryLower);
+    return titleMatch || descMatch;
+  }
+
+  static bool matchTeamName(Article article, String officialConstructorName) {
+    final stopWords = [
+      'f1', 'team', 'scuderia', 'racing', 'motorsport',
+      'bwt', 'aramco', 'hp', 'mastercard', 'petronas', 'oracle', 'visa', 'cash', 'app'
+    ];
+
+    final rawWords = officialConstructorName.toLowerCase().split(RegExp(r'[\s_]+'));
+
+    final meaningfulWords = rawWords.where((word) => !stopWords.contains(word)).toList();
+
+    if (meaningfulWords.isEmpty) return false;
+
+    for (final word in meaningfulWords) {
+      if (containsKeyword(article, word)) {
+        return true;
+      }
+    }
+
+    return false;
+  }
+
   void _applyFilters() {
     List<Article> result = List.from(_allArticles);
 
@@ -50,30 +78,21 @@ class NewsFilterController extends ChangeNotifier {
     }
 
     if (_selectedDriver != null && _selectedDriver!.isNotEmpty) {
-      final pilotLower = _selectedDriver!.toLowerCase();
-      result = result.where((a) => _containsKeyword(a, pilotLower)).toList();
+      result = result.where((a) => containsKeyword(a, _selectedDriver!)).toList();
     }
 
     if (_selectedConstructor != null && _selectedConstructor!.isNotEmpty) {
-      result = result.where((a) => _matchTeamName(a, _selectedConstructor!)).toList();
+      result = result.where((a) => matchTeamName(a, _selectedConstructor!)).toList();
     }
 
     if (_searchQuery.isNotEmpty) {
-      final queryLower = _searchQuery.toLowerCase();
-      result = result.where((a) => _containsKeyword(a, queryLower)).toList();
+      result = result.where((a) => containsKeyword(a, _searchQuery)).toList();
     }
 
     _filteredArticles = result;
     _currentPage = 1;
 
     notifyListeners();
-  }
-
-  bool _containsKeyword(Article article, String keyword) {
-    final titleMatch = article.title.toLowerCase().contains(keyword);
-    final descMatch = article.description.toLowerCase().contains(keyword);
-    //NOTA: RAGIONARE SE AGGIUNGERE CATEGORY.
-    return titleMatch || descMatch;
   }
 
   List<Article> get currentPageArticles {
@@ -107,29 +126,5 @@ class NewsFilterController extends ChangeNotifier {
       _currentPage--;
       notifyListeners();
     }
-  }
-
-  bool _matchTeamName(Article article, String officialConstructorName) {
-    final stopWords = [
-      'f1', 'team', 'scuderia', 'racing', 'motorsport',
-      'bwt', 'aramco', 'hp', 'mastercard', 'petronas', 'oracle', 'visa', 'cash', 'app'
-    ];
-
-    final rawWords = officialConstructorName.toLowerCase().split(RegExp(r'\s+'));
-
-    final meaningfulWords = rawWords.where((word) => !stopWords.contains(word)).toList();
-
-    if (meaningfulWords.isEmpty) return false;
-
-    final titleLower = article.title.toLowerCase();
-    final descLower = article.description.toLowerCase();
-
-    for (final word in meaningfulWords) {
-      if (titleLower.contains(word) || descLower.contains(word)) {
-        return true;
-      }
-    }
-
-    return false;
   }
 }
