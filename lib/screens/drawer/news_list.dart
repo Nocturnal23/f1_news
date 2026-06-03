@@ -5,92 +5,75 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../controllers/news_filter_controller.dart';
+import '../../core/providers/provider.dart';
 import '../../widgets/common/error_retry.dart';
 import '../../widgets/common/filter_bar.dart';
 import '../../widgets/racing/news_card.dart';
 
-class NewsList extends StatefulWidget {
+class NewsList extends ConsumerStatefulWidget {
   const NewsList({super.key});
 
   @override
-  State<NewsList> createState() => _NewsListState();
+  ConsumerState<NewsList> createState() => _NewsListState();
 }
 
-class _NewsListState extends State<NewsList> {
-  final RssRepository _repository = RssRepository();
-  final NewsFilterController _controller = NewsFilterController();
+class _NewsListState extends ConsumerState<NewsList> {
   final ScrollController _scrollController = ScrollController();
   bool _isLoading = true;
   String? _errorMessage;
 
   @override
-  void initState() {
-    super.initState();
-    _fetchData();
-  }
-
-  @override
   void dispose() {
     _scrollController.dispose();
-    _controller.dispose();
     super.dispose();
-  }
-
-  Future<void> _fetchData({bool forceRefresh = false}) async {
-    if (!forceRefresh) {
-      setState(() {
-        _isLoading = true;
-        _errorMessage = null;
-      });
-    }
-
-    try {
-      final articles = await _repository.fetchAllNews(
-        forceRefresh: forceRefresh,
-      );
-      _controller.setArticles(articles);
-
-      setState(() {
-        _isLoading = false;
-      });
-    } catch (e) {
-      setState(() {
-        _errorMessage = e.toString();
-        _isLoading = false;
-      });
-    }
   }
 
   @override
   Widget build(BuildContext context) {
+    final newsAsync = ref.watch(newsProvider);
+    final filterController = ref.watch(newsFilterProvider);
+
+    ref.listen(newsProvider, (previous, next) {
+      next.whenData((articles) {
+        filterController.setArticles(articles);
+      });
+    });
+
     return Scaffold(
       appBar: const AppBarCustom(title: "Ultime notizie"),
       drawer: const DrawerApp(),
-      body: _buildBody(),
+      body: newsAsync.when(
+        loading: () => const Center(child: CircularProgressIndicator()),
+        error: (err, stack) => ErrorRetry(
+          errorMessage: err.toString(),
+          onRetry: () => ref.invalidate(newsProvider),
+        ),
+        data: (articles) {
+          if (!filterController.hasArticles && articles.isNotEmpty) {
+            WidgetsBinding.instance.addPostFrameCallback((_) {
+              filterController.setArticles(articles);
+            });
+          }
+          return _buildBody(filterController);
+        },
+      ),
     );
   }
 
-  Widget _buildBody() {
-    if (_isLoading) {
-      return const Center(child: CircularProgressIndicator());
-    }
-    if (_errorMessage != null) {
-      return ErrorRetry(errorMessage: _errorMessage!, onRetry: _fetchData);
-    }
-
-    //Questo reagisce ai notyfi.
+  Widget _buildBody(NewsFilterController filterController) {
     return ListenableBuilder(
-      listenable: _controller,
+      listenable: filterController,
       builder: (context, child) {
         return Column(
           children: [
-            FilterBar(filterController: _controller),
+            FilterBar(filterController: filterController),
 
-            if (!_controller.hasArticles)
+            if (!filterController.hasArticles)
               Expanded(
                 child: RefreshIndicator(
                   onRefresh: () async {
-                    await _fetchData(forceRefresh: true);
+                    ref.invalidate(newsProvider);
+                    await ref.read(newsProvider.future);
                   },
                   child: ListView(
                     physics: const AlwaysScrollableScrollPhysics(),
@@ -142,8 +125,8 @@ class _NewsListState extends State<NewsList> {
                 ),
               )
             else ...[
-              _buildNewsList(),
-              _buildNavigation(),
+              _buildNewsList(filterController),
+              _buildNavigation(filterController),
             ],
           ],
         );
@@ -151,13 +134,14 @@ class _NewsListState extends State<NewsList> {
     );
   }
 
-  Widget _buildNewsList() {
-    final pageArticles = _controller.currentPageArticles;
+  Widget _buildNewsList(NewsFilterController filterController) {
+    final pageArticles = filterController.currentPageArticles;
 
     return Expanded(
       child: RefreshIndicator(
         onRefresh: () async {
-          await _fetchData(forceRefresh: true);
+          ref.invalidate(newsProvider);
+          await ref.read(newsProvider.future);
         },
         child: ListView.builder(
           physics: const AlwaysScrollableScrollPhysics(),
@@ -178,16 +162,16 @@ class _NewsListState extends State<NewsList> {
     );
   }
 
-  Widget _buildNavigation() {
+  Widget _buildNavigation(NewsFilterController filterController) {
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 12.0),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
           ElevatedButton(
-            onPressed: _controller.currentPage > 1
+            onPressed: filterController.currentPage > 1
                 ? () {
-                    _controller.previousPage();
+                    filterController.previousPage();
                     _scrollToTop();
                   }
                 : null,
@@ -195,14 +179,15 @@ class _NewsListState extends State<NewsList> {
           ),
 
           Text(
-            'Pagina ${_controller.currentPage} di ${_controller.totalPages}',
+            'Pagina ${filterController.currentPage} di ${filterController.totalPages}',
             style: const TextStyle(fontWeight: FontWeight.bold),
           ),
 
           ElevatedButton(
-            onPressed: _controller.currentPage < _controller.totalPages
+            onPressed:
+                filterController.currentPage < filterController.totalPages
                 ? () {
-                    _controller.nextPage();
+                    filterController.nextPage();
                     _scrollToTop();
                   }
                 : null,
