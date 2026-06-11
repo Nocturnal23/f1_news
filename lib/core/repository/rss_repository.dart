@@ -10,11 +10,13 @@ class RssRepository {
   static List<Article>? _cachedArticles;
   static DateTime? _lastFetchTime;
   final Duration _cacheDuration = const Duration(minutes: 30);
+  String? _cachedLanguageCode;
 
   RssRepository(this._apiClient);
 
-  Future<List<Article>> fetchAllNews({bool forceRefresh = false}) async {
+  Future<List<Article>> fetchAllNews({required String languageCode, bool forceRefresh = false}) async {
     final now = DateTime.now();
+
     final isCacheValid = _lastFetchTime != null &&
         now.difference(_lastFetchTime!) < _cacheDuration;
 
@@ -24,7 +26,9 @@ class RssRepository {
 
     List<Article> allArticles = [];
 
-    for (var entry in RssList.feedUrls.entries) {
+    final targetFeeds = languageCode == 'en' ? RssList.feedUrlsEN : RssList.feedUrls;
+
+    for (var entry in targetFeeds.entries) {
       final key = entry.key;
       final url = entry.value;
 
