@@ -1,5 +1,6 @@
 import 'package:f1_news/controllers/favorites_controller.dart';
 import 'package:f1_news/core/models/sessions/qualifying_result.dart';
+import 'package:f1_news/core/providers/language_provider.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_riverpod/legacy.dart';
@@ -162,7 +163,15 @@ final favoritesProvider = NotifierProvider<FavoritesController, Set<String>>(() 
 // Provider per i dati delle News,
 final newsProvider = FutureProvider<List<Article>>((ref) async {
   final repo = ref.watch(rssRepositoryProvider);
-  return await repo.fetchAllNews();
+  /*
+  1) Il provider delle notizie deve restare in ascolto in caso di
+  cambiamenti nella lungua. OK.
+
+  2) Deve poi passare il cambiamento al repository. OK.
+   */
+  final locale = ref.watch(localeProvider);
+  // return await repo.fetchAllNews();
+  return await repo.fetchAllNews(languageCode: locale.languageCode);
 });
 
 // Provider per la gestione del carosello e delle news.
