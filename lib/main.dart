@@ -10,18 +10,16 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'core/navigation/routes.dart';
+import 'core/providers/language_provider.dart';
 import 'core/providers/screen_provider.dart';
 import 'firebase_options.dart';
+import 'package:f1_news/l10n/app_localizations.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
   );
-
-  // await SystemChrome.setPreferredOrientations([
-  //   DeviceOrientation.portraitUp,
-  // ]);
 
   runApp(
     const ProviderScope( //Questo serve per permettere al provider di funzionar.e
@@ -38,6 +36,7 @@ class MyApp extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef sRef) {
     final Size size = MediaQuery.of(context).size;
     final isTablet = size.width >= 600 || size.height >= 600;
+    final currentLocale = sRef.watch(localeProvider);
 
     if (!isTablet) {
       // Se è uno smartphone bloccato rigidamente in verticale
@@ -69,6 +68,10 @@ class MyApp extends ConsumerWidget {
       ],
 
       child: MaterialApp(
+        locale: currentLocale,
+        localizationsDelegates: AppLocalizations.localizationsDelegates,
+        supportedLocales: AppLocalizations.supportedLocales,
+
         home: Homepage(),
 
         routes: {
