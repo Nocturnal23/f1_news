@@ -1,4 +1,5 @@
 import 'package:f1_news/widgets/authentication/register_form.dart';
+import 'package:f1_news/widgets/navigation/app_bar_custom.dart';
 import 'package:flutter/material.dart';
 
 import '../widgets/authentication/login_form.dart';
@@ -11,9 +12,8 @@ class Auth extends StatelessWidget {
     return DefaultTabController(
       length: 2,
       child: Scaffold(
-        appBar: AppBar(
-          backgroundColor: Colors.red.shade500,
-          title: const Text('Benvenuto in F1 News'),
+        appBar: AppBarCustom(
+          title: 'Benvenuto in F1 News',
           bottom: TabBar(
             dividerColor: Colors.black,
             labelColor: Colors.white,
@@ -24,6 +24,7 @@ class Auth extends StatelessWidget {
               Tab(text: 'REGISTRATI'),
             ],
           ),
+          showAuthButton: false,
         ),
         body: const TabBarView(
           children: [
