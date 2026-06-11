@@ -18,7 +18,8 @@ class RssRepository {
     final now = DateTime.now();
 
     final isCacheValid = _lastFetchTime != null &&
-        now.difference(_lastFetchTime!) < _cacheDuration;
+        now.difference(_lastFetchTime!) < _cacheDuration &&
+        _cachedLanguageCode == languageCode;
 
     if (!forceRefresh && _cachedArticles != null && isCacheValid) {
       return _cachedArticles!;
@@ -53,6 +54,7 @@ class RssRepository {
 
     _cachedArticles = allArticles;
     _lastFetchTime = now;
+    _cachedLanguageCode = languageCode;
 
     return allArticles;
   }
