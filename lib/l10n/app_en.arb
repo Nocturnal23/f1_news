@@ -1,0 +1,15 @@
+{
+  "@@locale": "en",
+
+  "@emailLabel": {
+    "description": "==============================\n   SEZIONE: SCHERMATA DI LOGIN \n=============================="
+  },
+  "emailLabel": "Email",
+  "passwordLabel": "Password",
+  "emptyFieldError": "This field cannot be empty",
+  "emailFieldError": "This field requires a valid email address",
+  "loginButton": "Sign In",
+  "orText": "or",
+  "loginWithGoogleButton": "Sign In with Google",
+  "forgotPasswordButton": "Forgot password?"
+}
