@@ -1,8 +1,10 @@
+import 'package:country_flags/country_flags.dart';
 import 'package:f1_news/core/providers/screen_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../controllers/auth_controller.dart';
+import '../../core/providers/language_provider.dart';
 import '../../core/providers/provider.dart';
 import '../../core/navigation/routes.dart';
 import '../dialogs/info_dialog_alert.dart';
@@ -24,6 +26,7 @@ class AppBarCustom extends ConsumerWidget implements PreferredSizeWidget {
     final authState = ref.watch(authStateProvider);
     final user = authState.value;
     final screen = ref.watch(screenProvider);
+    final currentLocale = ref.watch(localeProvider);
 
     return AppBar(
       backgroundColor: Colors.red,
@@ -35,6 +38,19 @@ class AppBarCustom extends ConsumerWidget implements PreferredSizeWidget {
       bottom: bottom,
 
       actions: [
+        IconButton(
+          onPressed: () {
+            ref.read(localeProvider.notifier).toggleLocale();
+          },
+          icon: SizedBox(
+            width: screen.isSmallPhone ? 20 : 30,
+            height: screen.isSmallPhone ? 15 : 20,
+            child: CountryFlag.fromCountryCode(
+              currentLocale.languageCode == 'it' ? 'IT' : 'GB',
+            ),
+          ),
+        ),
+
         if(user == null)
           Padding(
             padding: const EdgeInsets.symmetric(vertical: 8.0, horizontal: 3.0),
