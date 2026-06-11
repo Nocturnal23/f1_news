@@ -5,7 +5,9 @@ import 'package:flutter_form_builder/flutter_form_builder.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:form_builder_validators/form_builder_validators.dart';
 import '../../controllers/auth_controller.dart';
+import '../../core/providers/language_provider.dart';
 import '../../core/providers/provider.dart';
+import 'package:f1_news/l10n/app_localizations.dart';
 
 class LoginForm extends ConsumerStatefulWidget {
   const LoginForm({super.key});
@@ -25,6 +27,18 @@ class _LoginFormState extends ConsumerState<LoginForm> {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
+
+    ref.listen(localeProvider, (previous, next) {
+      if (previous != next) {
+        WidgetsBinding.instance.addPostFrameCallback((_) {
+          if (_formKey.currentState != null && _formKey.currentState!.errors.isNotEmpty) {
+            _formKey.currentState!.validate();
+          }
+        });
+      }
+    });
+
     return SingleChildScrollView(
       child: Padding(
         padding: EdgeInsets.all(16.0),
@@ -36,13 +50,17 @@ class _LoginFormState extends ConsumerState<LoginForm> {
               FormBuilderTextField(
                 name: 'email',
                 textInputAction: TextInputAction.next,
-                decoration: const InputDecoration(
+                decoration: InputDecoration(
                   icon: Icon(Icons.mail),
-                  labelText: 'Email',
+                  labelText: l10n.emailLabel,
                 ),
                 validator: FormBuilderValidators.compose([
-                  FormBuilderValidators.required(),
-                  FormBuilderValidators.email(),
+                  FormBuilderValidators.required(
+                    errorText: l10n.emptyFieldError
+                  ),
+                  FormBuilderValidators.email(
+                    errorText: l10n.emailFieldError
+                  ),
                 ]),
               ),
 
@@ -61,31 +79,33 @@ class _LoginFormState extends ConsumerState<LoginForm> {
                       });
                     },
                   ),
-                  labelText: 'Password',
+                  labelText: l10n.passwordLabel,
                 ),
                 validator: FormBuilderValidators.compose([
-                  FormBuilderValidators.required(),
+                  FormBuilderValidators.required(
+                      errorText: l10n.emptyFieldError
+                  ),
                 ]),
               ),
 
               Column(
                 children: [
-                  ElevatedButton(onPressed: _signIn, child: const Text("Accedi")),
+                  ElevatedButton(onPressed: _signIn, child: Text(l10n.loginButton)),
 
-                  const Padding(
+                  Padding(
                     padding: EdgeInsets.symmetric(horizontal: 12),
-                    child: Text("oppure", style: TextStyle(color: Colors.grey)),
+                    child: Text(l10n.orText, style: TextStyle(color: Colors.grey)),
                   ),
 
                   ElevatedButton(
                     onPressed: _signInWithGoogle,
-                    child: const Text("Accedi con Google"),
+                    child: Text(l10n.loginWithGoogleButton),
                   ),
 
                   TextButton(
                     onPressed: _restorePassword,
-                    child: const Text(
-                      'Password dimenticata?',
+                    child: Text(
+                      l10n.forgotPasswordButton,
                       style: TextStyle(
                         color: Colors.blue,
                         decoration: TextDecoration.underline,
