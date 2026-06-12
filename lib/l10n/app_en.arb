@@ -1,27 +1,46 @@
 {
   "@@locale": "en",
 
-  "@emailLabel": {
+  "@loginButton": {
     "description": "==============================\n   SEZIONE: SCHERMATA DI LOGIN \n=============================="
   },
-  "emailLabel": "Email",
-  "passwordLabel": "Password",
-  "emptyFieldError": "This field cannot be empty",
-  "emailFieldError": "This field requires a valid email address",
   "loginButton": "Sign In",
-  "orText": "or",
   "loginWithGoogleButton": "Sign In with Google",
   "forgotPasswordButton": "Forgot password?",
-
   "titleAccessDenied": "Access Denied",
   "messageAccessDenied": "You must first confirm your email address by clicking the link we sent you",
   "messageAccessError": "Email or password incorrect. Try again",
-
   "snackBarRestorePassword": "First enter your email in the appropriate field",
   "titleRestorePassword": "Reset password",
   "messageRestorePassword": "If your email address is registered, you will shortly receive a link to reset your password",
   "messageRestoreError": "Error during recovery. Please try again",
   "messageInvalidEmail": "The email format is invalid",
+
+  "@registerButton": {
+    "description": "==============================\n   SEZIONE: SCHERMATA DI REGISTRAZIONE \n=============================="
+  },
+  "usernameLabel": "Username",
+  "helperText": "Please enter at least 6 characters, including:",
+  "detailsHelperText": "• 1 lowercase character;\n• 1 uppercase character;\n• 1 number;\n• 1 special character.",
+  "validatorHasLowercaseChars": "At least one lowercase character",
+  "validatorHasUppercaseChars": "At least one uppercase character",
+  "validatorHasNumericChars": "At least one number",
+  "validatorHasSpecialChars": "At least one special character",
+  "validatorMinLength": "Minimum 6 characters",
+  "registerButton": "Register",
+  "registerWithGoogleButton": "Register with Google",
+  "titleRegistrationComplete": "Registration Complete",
+  "messageRegistrationComplete": "Registration Complete! You will receive an email to verify your account.",
+  "messageAlreadyInUse": "The email address you entered is already in use by another user.",
+
+  "@emailLabel": {
+    "description": "==============================\n   SEZIONE: GRUPPO AUTENTICAZIONE \n=============================="
+  },
+  "emailLabel": "Email",
+  "passwordLabel": "Password",
+  "emptyFieldError": "This field cannot be empty",
+  "emailFieldError": "This field requires a valid email address",
+  "orText": "or",
 
   "@genericError": {
     "description": "==============================\n   ERRORE GENERICO \n=============================="

@@ -1,27 +1,47 @@
 {
   "@@locale": "it",
 
-  "@emailLabel": {
+  "@loginButton": {
     "description": "==============================\n   SEZIONE: SCHERMATA DI LOGIN \n=============================="
   },
-  "emailLabel": "Email",
-  "passwordLabel": "Password",
-  "emptyFieldError": "Questo campo non può essere vuoto",
-  "emailFieldError": "Questo campo richiede un formato email valido",
   "loginButton": "Accedi",
-  "orText": "oppure",
   "loginWithGoogleButton": "Accedi con Google",
   "forgotPasswordButton": "Password dimenticata?",
-
   "titleAccessDenied": "Accesso Negato",
   "messageAccessDenied": "Devi prima confermare il tuo indirizzo email cliccando sul link che ti abbiamo inviato",
   "messageAccessError": "Email o password errate. Riprova",
-
   "snackBarRestorePassword": "Inserisci prima l'email nel campo apposito",
   "titleRestorePassword": "Reset password",
   "messageRestorePassword": "Se l'email è registrata, riceverai a breve un link per reimpostare la password",
   "messageRestoreError": "Errore durante il recupero. Riprova",
   "messageInvalidEmail": "Il formato dell'email non è valido",
+
+  "@registerButton": {
+    "description": "==============================\n   SEZIONE: SCHERMATA DI REGISTRAZIONE \n=============================="
+  },
+  "usernameLabel": "Username",
+  "helperText": "Inserisci almeno 6 caratteri di cui:",
+  "detailsHelperText": "• 1 minuscola;\n• 1 maiuscola;\n• 1 numero;\n• 1 carattere speciale.",
+  "validatorHasLowercaseChars": "Almeno un carattere minuscolo",
+  "validatorHasUppercaseChars": "Almeno un carattere maiuscolo",
+  "validatorHasNumericChars": "Almeno un numero",
+  "validatorHasSpecialChars": "Almeno un carattere speciale",
+  "validatorMinLength": "Minimo 6 caratteri",
+  "registerButton": "Registrati",
+  "registerWithGoogleButton": "Registrati con Google",
+  "titleRegistrationComplete": "Registrazione completata",
+  "messageRegistrationComplete": "Registrazione completata! Riceverai una mail per verificare il tuo account.",
+  "messageAlreadyInUse": "La mail inserita è già in uso da un altro utente.",
+
+
+  "@emailLabel": {
+    "description": "==============================\n   SEZIONE: GRUPPO AUTENTICAZIONE \n=============================="
+  },
+  "emailLabel": "Email",
+  "passwordLabel": "Password",
+  "emptyFieldError": "Questo campo non può essere vuoto",
+  "emailFieldError": "Questo campo richiede un formato email valido",
+  "orText": "oppure",
 
   "@genericError": {
     "description": "==============================\n   ERRORE GENERICO \n=============================="
