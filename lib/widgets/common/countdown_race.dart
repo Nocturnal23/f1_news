@@ -2,6 +2,8 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 
+import '../../l10n/app_localizations.dart';
+
 class CountdownRace extends StatefulWidget {
   final DateTime fp1Start;
   final DateTime raceStart;
@@ -19,6 +21,7 @@ class CountdownRace extends StatefulWidget {
 class _CountdownRaceState extends State<CountdownRace> {
   late DateTime _currentTime;
   Timer? _timer;
+  AppLocalizations get l10n => AppLocalizations.of(context)!;
 
   @override
   void initState() {
@@ -47,17 +50,17 @@ class _CountdownRaceState extends State<CountdownRace> {
       return Row(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
-          _buildTimePart(diff.inDays.toString(), "Giorni"),
-          _buildTimePart((diff.inHours % 24).toString(), "Ore"),
-          _buildTimePart((diff.inMinutes % 60).toString(), "Min"),
-          _buildTimePart((diff.inSeconds % 60).toString(), "Sec"),
+          _buildTimePart(diff.inDays.toString(), l10n.days),
+          _buildTimePart((diff.inHours % 24).toString(), l10n.hours),
+          _buildTimePart((diff.inMinutes % 60).toString(), l10n.minutes),
+          _buildTimePart((diff.inSeconds % 60).toString(), l10n.seconds),
         ],
       );
     }
 
     if (_currentTime.isBefore(widget.raceStart)) {
-      return const Text(
-          "Evento in corso!",
+      return Text(
+          l10n.eventProgress,
           style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold)
       );
     }
