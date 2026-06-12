@@ -1,3 +1,5 @@
+import 'dart:math';
+
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_form_builder/flutter_form_builder.dart';
@@ -82,7 +84,9 @@ class _DeletingUser extends ConsumerState<DeletingUser> {
                         ),
                         const SizedBox(width: 8),
                         ElevatedButton(
-                          onPressed: _submit,
+                          onPressed: () {
+                            _submit(l10n);
+                          },
                           style: ElevatedButton.styleFrom(backgroundColor: Colors.red, foregroundColor: Colors.white),
                           child: Text(l10n.deletingUserButton),
                         ),
@@ -96,15 +100,15 @@ class _DeletingUser extends ConsumerState<DeletingUser> {
     );
   }
 
-  Future<void> _submit() async {
+  Future<void> _submit(AppLocalizations l10n) async {
     final authController = ref.read(authControllerProvider);
     var password = "";
 
     if (!authController.isGoogleUser()) {
       if (!_formKey.currentState!.saveAndValidate()) {
         ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(
-            content: Text("Devi inserire la password!"),
+          SnackBar(
+            content: Text(l10n.snackbarWarning),
             backgroundColor: Colors.red,
           ),
         );
@@ -117,14 +121,14 @@ class _DeletingUser extends ConsumerState<DeletingUser> {
       await authController.deleteAccount(password);
       if (mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(content: Text("Account eliminato con successo."), backgroundColor: Colors.green),
+          SnackBar(content: Text(l10n.deletedSuccessfully), backgroundColor: Colors.green),
         );
       }
     } on FirebaseAuthException catch (e) {
-      String message = "Problemi durante l'eliminazione dell'account. Riprova.";
+      String message = l10n.deletionProblemMessage;
 
       if (e.code == 'invalid-credential') {
-        message = "La password inserita non è corretta.";
+        message = l10n.wrongPassword;
       }
 
       if (mounted) {
