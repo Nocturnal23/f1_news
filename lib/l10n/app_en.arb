@@ -62,8 +62,26 @@
   "seconds": "Sec",
   "eventProgress": "Event in progress!",
 
+  "@eventInfoResult": {
+    "description": "==============================\n   SEZIONE: INFORMAZIONI EVENTO \n=============================="
+  },
+  "eventInfoResult": "Results",
+  "eventInfoEnded": "Concluded",
+  "freePractice": "Free Pratice",
+  "sprintQualifying": "Sprint Qualifying",
+  "sprintRace": "Sprint Race",
+  "qualifying": "Qualifying",
+  "race": "Race",
+  "driver": "Driver",
+  "nationality": "Nat",
+  "time": "Time",
+  "waitForResults": "Results not yet available",
+  "waitForResultsLabel": "The results of the session will be published as soon as they are available.",
+  "recordLap": "Fastest lap: ",
+
   "@genericError": {
     "description": "==============================\n   ERRORE GENERICO \n=============================="
   },
-  "genericError": "Unknown error. Retry"
+  "genericError": "Unknown error. Retry",
+  "windowClose": "Close"
 }

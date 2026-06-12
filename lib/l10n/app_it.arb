@@ -63,8 +63,26 @@
   "seconds": "Sec",
   "eventProgress": "Evento in corso!",
 
+  "@eventInfoResult": {
+    "description": "==============================\n   SEZIONE: INFORMAZIONI EVENTO \n=============================="
+  },
+  "eventInfoResult": "Risultati",
+  "eventInfoEnded": "Concluso",
+  "freePractice": "Prova Libera",
+  "sprintQualifying": "Qualifica Sprint",
+  "sprintRace": "Gara Sprint",
+  "qualifying": "Qualifica",
+  "race": "Gara",
+  "driver": "Pilota",
+  "nationality": "Naz",
+  "time": "Time",
+  "waitForResults": "Risultati non ancora disponibili",
+  "waitForResultsLabel": "I risultati della sessione verranno pubblicati appena disponibili.",
+  "recordLap": "Giro veloce: ",
+
   "@genericError": {
     "description": "==============================\n   ERRORE GENERICO \n=============================="
   },
-  "genericError": "Errore generico. Riprova"
+  "genericError": "Errore generico. Riprova",
+  "windowClose": "Chiudi"
 }
