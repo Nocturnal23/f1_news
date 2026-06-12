@@ -33,9 +33,12 @@
   "messageRegistrationComplete": "Registration Complete! You will receive an email to verify your account.",
   "messageAlreadyInUse": "The email address you entered is already in use by another user.",
 
-  "@emailLabel": {
+  "@titleAuthLabel": {
     "description": "==============================\n   SEZIONE: GRUPPO AUTENTICAZIONE \n=============================="
   },
+  "titleAuthLabel": "Welcome to F1 News",
+  "loginTab": "Login",
+  "registerTab": "Register",
   "emailLabel": "Email",
   "passwordLabel": "Password",
   "emptyFieldError": "This field cannot be empty",
