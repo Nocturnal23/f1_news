@@ -9,6 +9,7 @@ import '../controllers/auth_controller.dart';
 import '../core/models/article.dart';
 import '../core/navigation/routes.dart';
 import '../core/providers/provider.dart';
+import '../l10n/app_localizations.dart';
 import '../widgets/article_page.dart';
 import '../widgets/common/error_retry.dart';
 import '../widgets/navigation/app_bar_custom.dart';
@@ -21,6 +22,7 @@ class Homepage extends ConsumerStatefulWidget {
 }
 
 class _HomepageState extends ConsumerState<Homepage> {
+  AppLocalizations get l10n => AppLocalizations.of(context)!;
 
   @override
   Widget build(BuildContext context) {
@@ -28,11 +30,11 @@ class _HomepageState extends ConsumerState<Homepage> {
 
     return authState.when(
       loading: () => const Scaffold(body: Center(child: CircularProgressIndicator())),
-      error: (error, stack) => const Scaffold(body: Center(child: Text("Errore auth"))),
+      error: (error, stack) => Scaffold(body: Center(child: Text(l10n.genericError))),
       data: (user) {
         return Scaffold(
           appBar: AppBarCustom(
-            title: "F1 News",
+            title: l10n.titleHomepageLabel,
           ),
 
           drawer: const DrawerApp(),
@@ -44,8 +46,8 @@ class _HomepageState extends ConsumerState<Homepage> {
                   padding: const EdgeInsets.all(16.0),
                   child: Text(
                     authState.value != null
-                      ? "PER TE"
-                      : "Ultime notizie",
+                      ? l10n.userLoggedNews
+                      : l10n.userGenericNews,
                     style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
                     textAlign: TextAlign.center,
                   ),
@@ -69,14 +71,14 @@ class _HomepageState extends ConsumerState<Homepage> {
   Widget _buildNextRace() {
     final nextRaceAsync = ref.watch(nextRaceProvider);
     return nextRaceAsync.when(
-      loading: () => const Padding(
+      loading: () => Padding(
         padding: EdgeInsets.all(32.0),
         child: Column(
           mainAxisSize: MainAxisSize.min,
           children: [
             CircularProgressIndicator(color: Colors.red),
             SizedBox(height: 16),
-            Text("Caricamento evento...", style: TextStyle(color: Colors.grey)),
+            Text(l10n.loadingEvent, style: TextStyle(color: Colors.grey)),
           ],
         ),
       ),
@@ -99,13 +101,13 @@ class _HomepageState extends ConsumerState<Homepage> {
               borderRadius: BorderRadius.circular(16),
               border: Border.all(color: Colors.grey.shade300),
             ),
-            child: const Column(
+            child: Column(
               mainAxisSize: MainAxisSize.min,
               children: [
                 Icon(Icons.sports_score, size: 48, color: Colors.grey),
                 SizedBox(height: 16),
                 Text(
-                  "Nessuna gara in programma",
+                  l10n.noRaceUpcoming,
                   style: TextStyle(
                       fontSize: 18,
                       fontWeight: FontWeight.bold,
@@ -114,7 +116,7 @@ class _HomepageState extends ConsumerState<Homepage> {
                 ),
                 SizedBox(height: 8),
                 Text(
-                  "Torna a controllare più tardi per i prossimi eventi.",
+                  l10n.checkLaterEvents,
                   textAlign: TextAlign.center,
                   style: TextStyle(color: Colors.grey),
                 ),
@@ -127,7 +129,7 @@ class _HomepageState extends ConsumerState<Homepage> {
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              const Text("EVENTO IN CALENDARIO", style: TextStyle(fontWeight: FontWeight.bold)),
+              Text(l10n.listedEvent, style: TextStyle(fontWeight: FontWeight.bold)),
               const SizedBox(height: 10),
               CardCustom(item: nextRace),
               const SizedBox(height: 10),
@@ -231,13 +233,13 @@ class _HomepageState extends ConsumerState<Homepage> {
         onTap: () {
           Navigator.pushNamed(context, Routes.news);
         },
-        child: const Center(
+        child: Center(
           child: Column(
             mainAxisSize: MainAxisSize.min,
             children: [
               Icon(Icons.arrow_forward_ios, color: Colors.white, size: 40),
               SizedBox(height: 10),
-              Text("Vedi tutte le news", style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold)),
+              Text(l10n.moreNews, style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold)),
             ],
           ),
         ),
