@@ -4,8 +4,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter_form_builder/flutter_form_builder.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:form_builder_validators/form_builder_validators.dart';
+import '../../core/providers/language_provider.dart';
 import '../../core/providers/provider.dart';
 import '../dialogs/info_dialog_alert.dart';
+import 'package:f1_news/l10n/app_localizations.dart';
 
 class RegisterForm extends ConsumerStatefulWidget {
   const RegisterForm({super.key});
@@ -15,12 +17,11 @@ class RegisterForm extends ConsumerStatefulWidget {
 }
 
 class _RegisterFormState extends ConsumerState<RegisterForm> {
-  final _formKey =
-      GlobalKey<
-        FormBuilderState
-      >(); // Questa chiave serve per verificare la validità del form.
+  final _formKey = GlobalKey<FormBuilderState>(); // Questa chiave serve per verificare la validità del form.
   bool obscuredPassword = true;
-  // final AuthController _authController = AuthController();
+
+  AppLocalizations get l10n => AppLocalizations.of(context)!;
+  AuthController get _auth => ref.read(authControllerProvider);
 
   @override
   void dispose() {
@@ -29,6 +30,16 @@ class _RegisterFormState extends ConsumerState<RegisterForm> {
 
   @override
   Widget build(BuildContext context) {
+    ref.listen(localeProvider, (previous, next) {
+      if (previous != next) {
+        WidgetsBinding.instance.addPostFrameCallback((_) {
+          if (_formKey.currentState != null && _formKey.currentState!.errors.isNotEmpty) {
+            _formKey.currentState!.validate();
+          }
+        });
+      }
+    });
+
     return SingleChildScrollView(
       child: Padding(
         padding: EdgeInsets.all(16.0),
@@ -41,25 +52,31 @@ class _RegisterFormState extends ConsumerState<RegisterForm> {
                 name: 'displayName',
                 textInputAction: TextInputAction.next,
                 //Con invio passo al campo successivo.
-                decoration: const InputDecoration(
+                decoration: InputDecoration(
                   icon: Icon(Icons.person),
-                  labelText: 'Username',
+                  labelText: l10n.usernameLabel,
                 ),
                 validator: FormBuilderValidators.compose([
-                  FormBuilderValidators.required(),
+                  FormBuilderValidators.required(
+                      errorText: l10n.emptyFieldError
+                  ),
                 ]),
               ),
 
               FormBuilderTextField(
                 name: 'email',
                 textInputAction: TextInputAction.next,
-                decoration: const InputDecoration(
+                decoration: InputDecoration(
                   icon: Icon(Icons.mail),
-                  labelText: 'Email',
+                  labelText: l10n.emailLabel,
                 ),
                 validator: FormBuilderValidators.compose([
-                  FormBuilderValidators.required(),
-                  FormBuilderValidators.email(),
+                  FormBuilderValidators.required(
+                      errorText: l10n.emptyFieldError
+                  ),
+                  FormBuilderValidators.email(
+                      errorText: l10n.emailFieldError
+                  ),
                 ]),
               ),
 
@@ -67,7 +84,7 @@ class _RegisterFormState extends ConsumerState<RegisterForm> {
                 name: 'password',
                 obscureText: obscuredPassword,
                 decoration: InputDecoration(
-                  icon: const Icon(Icons.password),
+                  icon: Icon(Icons.password),
                   suffixIcon: IconButton(
                     icon: Icon(
                       obscuredPassword ? Icons.visibility : Icons.visibility_off,
@@ -78,49 +95,52 @@ class _RegisterFormState extends ConsumerState<RegisterForm> {
                       });
                     },
                   ),
-                  labelText: 'Password',
+                  labelText: l10n.passwordLabel,
                   helperText:
-                      'Inserisci almeno 6 caratteri di cui:\n'
-                      '• 1 minuscola;\n'
-                      '• 1 maiuscola;\n'
-                      '• 1 numero;\n'
-                      '• 1 carattere speciale.',
+                      '${l10n.helperText}\n'
+                      '${l10n.detailsHelperText}',
+                      // '• 1 minuscola;\n'
+                      // '• 1 maiuscola;\n'
+                      // '• 1 numero;\n'
+                      // '• 1 carattere speciale.',
                   helperMaxLines: 6,
                   errorMaxLines: 6,
                 ),
                 validator: FormBuilderValidators.aggregate([
-                  FormBuilderValidators.required(),
+                  FormBuilderValidators.required(
+                      errorText: l10n.emptyFieldError
+                  ),
                   FormBuilderValidators.hasLowercaseChars(
-                    errorText: 'Almeno un carattere minuscolo',
+                    errorText: l10n.validatorHasLowercaseChars,
                   ),
                   FormBuilderValidators.hasUppercaseChars(
-                    errorText: 'Almeno un carattere maiuscolo',
+                    errorText: l10n.validatorHasUppercaseChars,
                   ),
                   FormBuilderValidators.hasNumericChars(
-                    errorText: 'Almeno un numero',
+                    errorText: l10n.validatorHasNumericChars,
                   ),
                   FormBuilderValidators.hasSpecialChars(
-                    errorText: 'Almeno un carattere speciale',
+                    errorText: l10n.validatorHasSpecialChars,
                   ),
                   FormBuilderValidators.minLength(
                     6,
-                    errorText: 'Minimo 6 caratteri',
+                    errorText: l10n.validatorMinLength,
                   ),
                 ]),
               ),
 
               Column(
                 children: [
-                  ElevatedButton(onPressed: _signUp, child: const Text("Registrati")),
+                  ElevatedButton(onPressed: _signUp, child: Text(l10n.registerButton)),
 
-                  const Padding(
+                  Padding(
                     padding: EdgeInsets.symmetric(horizontal: 12),
-                    child: Text("oppure", style: TextStyle(color: Colors.grey)),
+                    child: Text(l10n.orText, style: TextStyle(color: Colors.grey)),
                   ),
 
                   ElevatedButton(
                     onPressed: _signInWithGoogle,
-                    child: const Text("Registrati con Google"),
+                    child: Text(l10n.registerWithGoogleButton),
                   ),
                 ],
               )
@@ -130,8 +150,6 @@ class _RegisterFormState extends ConsumerState<RegisterForm> {
       ),
     );
   }
-
-  AuthController get _auth => ref.read(authControllerProvider);
 
   Future<void> _signUp() async {
     if (_formKey.currentState!.saveAndValidate()) {
@@ -148,8 +166,8 @@ class _RegisterFormState extends ConsumerState<RegisterForm> {
 
         if (mounted) {
           _showAlert(
-            titolo: "Registrazione completata",
-            messaggio: "Registrazione completata! Riceverai una mail dove verificare il tuo account.",
+            titolo: l10n.titleRegistrationComplete,
+            messaggio: l10n.messageRegistrationComplete,
             onConfirm: () {
               Navigator.of(context).pushReplacementNamed('/home');
             },
@@ -160,10 +178,10 @@ class _RegisterFormState extends ConsumerState<RegisterForm> {
         if (!mounted) {
           return;
         }
-        String error = "Errore generico. Riprova";
+        String error = l10n.genericError;
 
         if (e.code == 'email-already-in-use') {
-          error = "La mail inserita è già in uso da un altro utente.";
+          error = l10n.messageAlreadyInUse;
         }
 
         _showAlert(messaggio: error);
