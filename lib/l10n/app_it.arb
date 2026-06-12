@@ -34,9 +34,12 @@
   "messageAlreadyInUse": "La mail inserita è già in uso da un altro utente.",
 
 
-  "@emailLabel": {
+  "@titleAuthLabel": {
     "description": "==============================\n   SEZIONE: GRUPPO AUTENTICAZIONE \n=============================="
   },
+  "titleAuthLabel": "Benvenuto in F1 News",
+  "loginTab": "Accedi",
+  "registerTab": "Registrati",
   "emailLabel": "Email",
   "passwordLabel": "Password",
   "emptyFieldError": "Questo campo non può essere vuoto",
