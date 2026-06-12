@@ -79,9 +79,32 @@
   "waitForResultsLabel": "The results of the session will be published as soon as they are available.",
   "recordLap": "Fastest lap: ",
 
+  "@changePasswordLabel": {
+    "description": "==============================\n   SEZIONE: CAMBIO PASSWORD \n=============================="
+  },
+  "changePassword": "Change password",
+  "currentPasswordLabel": "Current password",
+  "newPasswordLabel": "New password",
+  "confirmNewPasswordLabel": "Confirm new password",
+  "requiredField": "Required field",
+  "passwordNotMatch": "The passwords do not match",
+  "updateButton": "Update",
+
+  "@deletingUserLabel": {
+    "description": "==============================\n   SEZIONE: ELIMINA UTENTE \n=============================="
+  },
+  "deletingUserLabel": "DANGER!",
+  "warningLabel": "Warning: This action is irreversible. All your profile data, favorites, and settings will be permanently deleted.",
+  "labelPassword": "Enter your password to confirm",
+  "passwordRequired": "Password is required to confirm",
+  "deletingUserButton": "Permanently delete",
+
   "@genericError": {
     "description": "==============================\n   ERRORE GENERICO \n=============================="
   },
   "genericError": "Unknown error. Retry",
-  "windowClose": "Close"
+  "windowClose": "Close",
+  "cancelButton": "Cancel",
+  "okButton": "OK",
+  "warningTitle": "Warning"
 }
