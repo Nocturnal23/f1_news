@@ -20,6 +20,8 @@ class _LoginFormState extends ConsumerState<LoginForm> {
   final _formKey = GlobalKey<FormBuilderState>();
   bool obscuredPassword = true;
 
+  AppLocalizations get l10n => AppLocalizations.of(context)!;
+
   @override
   void dispose() {
     super.dispose();
@@ -27,8 +29,6 @@ class _LoginFormState extends ConsumerState<LoginForm> {
 
   @override
   Widget build(BuildContext context) {
-    final l10n = AppLocalizations.of(context)!;
-
     ref.listen(localeProvider, (previous, next) {
       if (previous != next) {
         WidgetsBinding.instance.addPostFrameCallback((_) {
@@ -144,16 +144,16 @@ class _LoginFormState extends ConsumerState<LoginForm> {
         return;
       }
 
-      String error = "Errore generico. Riprova";
+      String error = l10n.genericError;
 
       if (e.toString().contains('email-not-verified')) {
         _showAlert(
-          titolo: "Accesso Negato",
-          messaggio: "Devi prima confermare il tuo indirizzo email cliccando sul link che ti abbiamo inviato.",
+          titolo: l10n.titleAccessDenied,
+          messaggio: l10n.messageAccessDenied,
         );
         return;
       } else if (e is FirebaseAuthException && e.code == 'invalid-credential') {
-        error = "Email o password errate. Riprova.";
+        error = l10n.messageAccessError;
       }
 
       _showAlert(messaggio: error);
@@ -189,8 +189,8 @@ class _LoginFormState extends ConsumerState<LoginForm> {
 
       if (email == null || email.isEmpty) {
         ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(
-            content: Text("Inserisci prima l'email nel campo apposito"),
+          SnackBar(
+            content: Text(l10n.snackBarRestorePassword),
           ),
         );
         return;
@@ -201,16 +201,15 @@ class _LoginFormState extends ConsumerState<LoginForm> {
 
         if (context.mounted) {
           _showAlert(
-            titolo: "Reset password",
-            messaggio:
-                "Se l'email è registrata, riceverai a breve un link per reimpostare la password.",
+            titolo: l10n.titleRestorePassword,
+            messaggio: l10n.messageRestorePassword
           );
         }
       } on FirebaseAuthException catch (e) {
-        String error = "Errore durante il recupero. Riprova.";
+        String error = l10n.messageRestoreError;
 
         if (e.code == 'invalid-email') {
-          error = "Il formato dell'email non è valido.";
+          error = l10n.messageInvalidEmail;
         }
 
         if (context.mounted) {
