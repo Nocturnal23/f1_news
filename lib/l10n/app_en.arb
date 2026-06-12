@@ -11,5 +11,20 @@
   "loginButton": "Sign In",
   "orText": "or",
   "loginWithGoogleButton": "Sign In with Google",
-  "forgotPasswordButton": "Forgot password?"
+  "forgotPasswordButton": "Forgot password?",
+
+  "titleAccessDenied": "Access Denied",
+  "messageAccessDenied": "You must first confirm your email address by clicking the link we sent you",
+  "messageAccessError": "Email or password incorrect. Try again",
+
+  "snackBarRestorePassword": "First enter your email in the appropriate field",
+  "titleRestorePassword": "Reset password",
+  "messageRestorePassword": "If your email address is registered, you will shortly receive a link to reset your password",
+  "messageRestoreError": "Error during recovery. Please try again",
+  "messageInvalidEmail": "The email format is invalid",
+
+  "@genericError": {
+    "description": "==============================\n   ERRORE GENERICO \n=============================="
+  },
+  "genericError": "Unknown error. Retry"
 }
