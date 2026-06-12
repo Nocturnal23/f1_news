@@ -80,9 +80,32 @@
   "waitForResultsLabel": "I risultati della sessione verranno pubblicati appena disponibili.",
   "recordLap": "Giro veloce: ",
 
+  "@changePasswordLabel": {
+    "description": "==============================\n   SEZIONE: CAMBIO PASSWORD \n=============================="
+  },
+  "changePassword": "Modifica Password",
+  "currentPasswordLabel": "Password Attuale",
+  "newPasswordLabel": "Nuova Password",
+  "confirmNewPasswordLabel": "Conferma nuova password",
+  "requiredField": "Campo obbligatorio",
+  "passwordNotMatch": "Le password non corrispondono",
+  "updateButton": "Aggiorna",
+
+  "@deletingUserLabel": {
+    "description": "==============================\n   SEZIONE: ELIMINA UTENTE \n=============================="
+  },
+  "deletingUserLabel": "PERICOLO!",
+  "warningLabel": "Attenzione: Questa azione è irreversibile. Tutti i tuoi dati di profilo, i preferiti e le impostazioni verranno cancellati definitivamente.",
+  "labelPassword": "Inserisci la tua password per confermare",
+  "passwordRequired": "La password è obbligatoria per confermare",
+  "deletingUserButton": "Elimina definitvamente",
+
   "@genericError": {
     "description": "==============================\n   ERRORE GENERICO \n=============================="
   },
   "genericError": "Errore generico. Riprova",
-  "windowClose": "Chiudi"
+  "windowClose": "Chiudi",
+  "cancelButton": "Annulla",
+  "okButton": "OK",
+  "warningTitle": "Attenzione"
 }
