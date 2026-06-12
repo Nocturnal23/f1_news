@@ -6,6 +6,7 @@ import 'package:intl/intl.dart';
 import '../../core/models/championship/race.dart';
 import '../../core/providers/screen_provider.dart';
 import '../../core/utils/session_type.dart';
+import '../../l10n/app_localizations.dart';
 
 class EventInfo extends ConsumerWidget {
   final RaceModel raceModel;
@@ -16,6 +17,7 @@ class EventInfo extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final screen = ref.watch(screenProvider);
     final todayDate = DateTime.now();
+    final l10n = AppLocalizations.of(context)!;
 
     return Dialog(
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
@@ -49,7 +51,7 @@ class EventInfo extends ConsumerWidget {
                   final SessionType type = session['type'];
                   final String sessionName = type == SessionType.unknown
                       ? session['defaultName']
-                      : type.displayName;
+                      : type.getDisplayName(l10n);
 
                   final sessionDateTime = DateTime.parse(
                     "${session['date']}T${session['time']}",
@@ -80,14 +82,14 @@ class EventInfo extends ConsumerWidget {
                                       raceModel.round,
                                       type,
                                     ),
-                                    child: const Text(
-                                      "Risultati",
+                                    child: Text(
+                                      l10n.eventInfoResult,
                                       style: TextStyle(color: Colors.blue),
                                     ),
                                   ),
                                 ],
                               )
-                            : Text(isPast ? "Concluso" : displayDate),
+                            : Text(isPast ? l10n.eventInfoEnded : displayDate),
                       ),
                     ],
                   );
@@ -96,7 +98,7 @@ class EventInfo extends ConsumerWidget {
               const SizedBox(height: 16),
               TextButton(
                 onPressed: () => Navigator.pop(context),
-                child: const Text("Chiudi"),
+                child: Text(l10n.windowClose),
               ),
             ],
           ),

@@ -5,6 +5,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../core/models/sessions/base_result.dart';
 import '../../core/providers/screen_provider.dart';
+import '../../l10n/app_localizations.dart';
 import '../common/error_retry.dart';
 
 class ResultsList extends ConsumerWidget {
@@ -22,6 +23,7 @@ class ResultsList extends ConsumerWidget {
     final provider = sessionName.getResultsProvider(round);
     final result = ref.watch(provider);
     final screen = ref.watch(screenProvider);
+    final l10n = AppLocalizations.of(context)!;
 
     return result.when(
       loading: () => const Center(child: CircularProgressIndicator(color: Colors.red)),
@@ -35,7 +37,7 @@ class ResultsList extends ConsumerWidget {
           mainAxisSize: MainAxisSize.min,
           children: [
             Text(
-              sessionName.displayName,
+              sessionName.getDisplayName(l10n),
               style: TextStyle(
                 fontSize: screen.isTablet ? 24 : 18,
                 fontWeight: FontWeight.bold,
@@ -44,12 +46,12 @@ class ResultsList extends ConsumerWidget {
             const Divider(),
             Flexible(
               child: SingleChildScrollView(
-                child: _buildStanding(results, screen),
+                child: _buildStanding(results, screen, l10n),
               ),
             ),
             TextButton(
               onPressed: () => Navigator.pop(context),
-              child: const Text("Chiudi"),
+              child: Text(l10n.windowClose),
             ),
           ],
         ),
@@ -59,11 +61,11 @@ class ResultsList extends ConsumerWidget {
 
   //Se è qualifica: grid, nome, nazion, team, (se è qualifica normale mostrare Q1, Q2, Q3)
   //Se è gara/sprint: pos, nome, nazion, team, punti, tempo. In fondo alla lista mostra giro veloce.
-  Widget _buildStanding(List<BaseResultModel> results, ScreenProvider screen) {
-    final Widget tableWidget = _buildTable(results, screen);
+  Widget _buildStanding(List<BaseResultModel> results, ScreenProvider screen, AppLocalizations l10n) {
+    final Widget tableWidget = _buildTable(results, screen, l10n);
 
     if (results.isEmpty) {
-      return _waitingResults(screen);
+      return _waitingResults(screen, l10n);
     }
 
     return Column(
@@ -75,12 +77,12 @@ class ResultsList extends ConsumerWidget {
           ),
 
         if (sessionName.hasFastestLap && results.isNotEmpty)
-          _buildFastestLap(results.cast<RaceResultModel>()),
+          _buildFastestLap(results.cast<RaceResultModel>(), l10n),
       ],
     );
   }
 
-  Widget _waitingResults(ScreenProvider screen) {
+  Widget _waitingResults(ScreenProvider screen, AppLocalizations l10n) {
     return Center(
       child: Card(
         elevation: 2,
@@ -104,7 +106,7 @@ class ResultsList extends ConsumerWidget {
               const SizedBox(height: 16),
 
               Text(
-                "Risultati non ancora disponibili",
+                l10n.waitForResults,
                 textAlign: TextAlign.center,
                 style: TextStyle(
                   fontSize: screen.isTablet ? 22 : 18,
@@ -115,7 +117,7 @@ class ResultsList extends ConsumerWidget {
               const SizedBox(height: 8),
 
               Text(
-                "I risultati della sessione verranno pubblicati appena disponibili.",
+                l10n.waitForResultsLabel,
                 textAlign: TextAlign.center,
                 style: TextStyle(
                   fontSize: screen.isTablet ? 16 : 14,
@@ -128,7 +130,7 @@ class ResultsList extends ConsumerWidget {
     );
   }
 
-  Widget _buildTable(List<BaseResultModel> results, ScreenProvider screen) {
+  Widget _buildTable(List<BaseResultModel> results, ScreenProvider screen, AppLocalizations l10n) {
     final headerStyle = TextStyle(
       fontWeight: FontWeight.bold,
       fontSize: screen.isTablet ? 16 : 13,
@@ -140,7 +142,7 @@ class ResultsList extends ConsumerWidget {
       horizontalMargin: screen.isTablet ? 24 : 12,
       dataRowMinHeight: screen.isTablet ? 55 : 48,
       dataRowMaxHeight: screen.isTablet ? 60 : 52,
-      columns: sessionName.headers
+      columns: sessionName.getHeaders(l10n)
           .map((h) => DataColumn(label: Text(h, style: headerStyle)))
           .toList(),
       rows: results.map((res) {
@@ -167,7 +169,7 @@ class ResultsList extends ConsumerWidget {
     );
   }
 
-  Widget _buildFastestLap(List<RaceResultModel> results) {
+  Widget _buildFastestLap(List<RaceResultModel> results, AppLocalizations l10n) {
     try {
       final fastest = results.firstWhere((res) => res.fastestLapRank == "1");
 
@@ -181,8 +183,8 @@ class ResultsList extends ConsumerWidget {
         child: Row(
           mainAxisAlignment: MainAxisAlignment.spaceAround,
           children: [
-            const Text(
-              "Giro Veloce:",
+            Text(
+              l10n.recordLap,
               style: TextStyle(fontWeight: FontWeight.bold),
             ),
             Text("${fastest.driver.surname} - ${fastest.fastestLapTime}"),
