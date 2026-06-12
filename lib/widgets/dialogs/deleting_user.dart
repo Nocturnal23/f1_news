@@ -6,6 +6,7 @@ import 'package:form_builder_validators/form_builder_validators.dart';
 
 import '../../core/providers/provider.dart';
 import '../../core/providers/screen_provider.dart';
+import '../../l10n/app_localizations.dart';
 import 'info_dialog_alert.dart';
 
 class DeletingUser extends ConsumerStatefulWidget {
@@ -19,6 +20,7 @@ class DeletingUser extends ConsumerStatefulWidget {
 class _DeletingUser extends ConsumerState<DeletingUser> {
   final _formKey = GlobalKey<FormBuilderState>();
   bool _obscuredPassword = true;
+  AppLocalizations get l10n => AppLocalizations.of(context)!;
 
   @override
   Widget build(BuildContext context) {
@@ -40,7 +42,7 @@ class _DeletingUser extends ConsumerState<DeletingUser> {
                   children: [
                     const Icon(Icons.warning_amber_rounded, color: Colors.red, size: 48),
                     Text(
-                      "PERICOLO!",
+                      l10n.deletingUserLabel,
                       textAlign: TextAlign.center,
                       style: TextStyle(
                         color: Colors.red,
@@ -49,8 +51,8 @@ class _DeletingUser extends ConsumerState<DeletingUser> {
                       ),
                     ),
                     const SizedBox(height: 12),
-                    const Text(
-                      "Attenzione: Questa azione è irreversibile. Tutti i tuoi dati di profilo, i preferiti e le impostazioni verranno cancellati definitivamente.",
+                    Text(
+                      l10n.warningLabel,
                       textAlign: TextAlign.center,
                     ),
                     if (!ref.read(authControllerProvider).isGoogleUser()) ...[
@@ -58,7 +60,7 @@ class _DeletingUser extends ConsumerState<DeletingUser> {
                         name: 'password',
                         obscureText: _obscuredPassword,
                         decoration: InputDecoration(
-                          labelText: 'Inserisci la tua password per confermare',
+                          labelText: l10n.labelPassword,
                           border: const OutlineInputBorder(),
                           suffixIcon: IconButton(
                             icon: Icon(_obscuredPassword ? Icons.visibility_off : Icons.visibility),
@@ -66,7 +68,7 @@ class _DeletingUser extends ConsumerState<DeletingUser> {
                           ),
                         ),
                         validator: FormBuilderValidators.compose([
-                          FormBuilderValidators.required(errorText: "La password è obbligatoria per confermare"),
+                          FormBuilderValidators.required(errorText: l10n.passwordRequired),
                         ]),
                       ),
                     ],
@@ -76,13 +78,13 @@ class _DeletingUser extends ConsumerState<DeletingUser> {
                       children: [
                         TextButton(
                           onPressed: () => Navigator.pop(context),
-                          child: const Text("Annulla"),
+                          child: Text(l10n.cancelButton),
                         ),
                         const SizedBox(width: 8),
                         ElevatedButton(
                           onPressed: _submit,
                           style: ElevatedButton.styleFrom(backgroundColor: Colors.red, foregroundColor: Colors.white),
-                          child: const Text("Elimina definitivamente"),
+                          child: Text(l10n.deletingUserButton),
                         ),
                       ],
                     )

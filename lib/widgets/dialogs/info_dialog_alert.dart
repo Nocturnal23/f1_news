@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 
+import '../../l10n/app_localizations.dart';
+
 class InfoDialogAlert extends StatelessWidget {
   final String? titolo;
   final String messaggio;
@@ -14,8 +16,10 @@ class InfoDialogAlert extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
+
     return AlertDialog(
-      title: Text(titolo ?? "Attenzione"),
+      title: Text(titolo ?? l10n.warningTitle),
       content: Text(messaggio),
       actions: [
         TextButton(
@@ -26,7 +30,7 @@ class InfoDialogAlert extends StatelessWidget {
               onPressed!();
             }
           },
-          child: const Text('OK'),
+          child: Text(l10n.okButton),
         ),
       ],
     );

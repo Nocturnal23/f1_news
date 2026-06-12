@@ -1,3 +1,5 @@
+import 'dart:math';
+
 import 'package:f1_news/core/providers/provider.dart';
 import 'package:f1_news/core/providers/screen_provider.dart';
 import 'package:f1_news/widgets/dialogs/info_dialog_alert.dart';
@@ -6,6 +8,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_form_builder/flutter_form_builder.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:form_builder_validators/form_builder_validators.dart';
+import '../../l10n/app_localizations.dart';
 
 class ChangePassword extends ConsumerStatefulWidget {
   const ChangePassword({super.key});
@@ -18,6 +21,7 @@ class _ChangePasswordDialogState extends ConsumerState<ChangePassword> {
   final _formKey = GlobalKey<FormBuilderState>();
   bool _obscuredPassword = true;
   bool _obscuredNewPassword = true;
+  AppLocalizations get l10n => AppLocalizations.of(context)!;
 
   @override
   Widget build(BuildContext context) {
@@ -38,7 +42,7 @@ class _ChangePasswordDialogState extends ConsumerState<ChangePassword> {
                 children: [
 
                   Text(
-                    "Modifica Password",
+                    l10n.changePassword,
                     textAlign: TextAlign.center,
                     style: TextStyle(
                       fontSize: screen.isSmallPhone ? 18 : 20,
@@ -52,7 +56,7 @@ class _ChangePasswordDialogState extends ConsumerState<ChangePassword> {
                     obscureText: _obscuredPassword,
                     decoration: InputDecoration(
                       icon: const Icon(Icons.lock_open),
-                      labelText: 'Password attuale',
+                      labelText: l10n.currentPasswordLabel,
                       suffixIcon: IconButton(
                         icon: Icon(_obscuredPassword ? Icons.visibility : Icons.visibility_off),
                         onPressed: () => setState(() => _obscuredPassword = !_obscuredPassword),
@@ -72,33 +76,31 @@ class _ChangePasswordDialogState extends ConsumerState<ChangePassword> {
                         ),
                         onPressed: () => setState(() => _obscuredNewPassword = !_obscuredNewPassword),
                       ),
-                      labelText: 'Nuova password',
+                      labelText: l10n.newPasswordLabel,
                       helperText:
-                      'Inserisci almeno 6 caratteri di cui:\n'
-                          '• 1 minuscola;\n'
-                          '• 1 maiuscola;\n'
-                          '• 1 numero;\n'
-                          '• 1 carattere speciale.',
+                        '${l10n.helperText}\n'
+                            '${l10n.detailsHelperText}',
+
                       helperMaxLines: 6,
                       errorMaxLines: 6,
                     ),
                     validator: FormBuilderValidators.aggregate([
                       FormBuilderValidators.required(),
                       FormBuilderValidators.hasLowercaseChars(
-                        errorText: 'Almeno un carattere minuscolo',
+                        errorText: l10n.validatorHasLowercaseChars,
                       ),
                       FormBuilderValidators.hasUppercaseChars(
-                        errorText: 'Almeno un carattere maiuscolo',
+                        errorText: l10n.validatorHasUppercaseChars,
                       ),
                       FormBuilderValidators.hasNumericChars(
-                        errorText: 'Almeno un numero',
+                        errorText: l10n.validatorHasNumericChars,
                       ),
                       FormBuilderValidators.hasSpecialChars(
-                        errorText: 'Almeno un carattere speciale',
+                        errorText: l10n.validatorHasSpecialChars,
                       ),
                       FormBuilderValidators.minLength(
                         6,
-                        errorText: 'Minimo 6 caratteri',
+                        errorText: l10n.validatorMinLength,
                       ),
                     ]),
                   ),
@@ -109,16 +111,16 @@ class _ChangePasswordDialogState extends ConsumerState<ChangePassword> {
                     obscureText: _obscuredNewPassword,
                     decoration: InputDecoration(
                       icon: const Icon(Icons.done_all, color: Colors.green),
-                      labelText: 'Conferma nuova password',
+                      labelText: l10n.confirmNewPasswordLabel,
                       suffixIcon: IconButton(
                         icon: Icon(_obscuredNewPassword ? Icons.visibility : Icons.visibility_off),
                         onPressed: () => setState(() => _obscuredNewPassword = !_obscuredNewPassword),
                       ),
                     ),
                     validator: (value) {
-                      if (value == null || value.isEmpty) return "Campo obbligatorio";
+                      if (value == null || value.isEmpty) return l10n.requiredField;
                       if (value != _formKey.currentState?.fields['newPassword']?.value) {
-                        return "Le password non corrispondono";
+                        return l10n.passwordNotMatch;
                       }
                       return null;
                     },
@@ -129,7 +131,7 @@ class _ChangePasswordDialogState extends ConsumerState<ChangePassword> {
                     children: [
                       TextButton(
                         onPressed: () => Navigator.pop(context),
-                        child: const Text("Annulla"),
+                        child: Text(l10n.cancelButton),
                       ),
                       const SizedBox(width: 12),
                       ElevatedButton(
@@ -138,7 +140,7 @@ class _ChangePasswordDialogState extends ConsumerState<ChangePassword> {
                           backgroundColor: Colors.redAccent,
                           foregroundColor: Colors.white,
                         ),
-                        child: const Text("Aggiorna"),
+                        child: Text(l10n.updateButton),
                       ),
                     ],
                   )
