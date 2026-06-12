@@ -45,6 +45,23 @@
   "emailFieldError": "This field requires a valid email address",
   "orText": "or",
 
+  "@titleHomepageLabel": {
+    "description": "==============================\n   SEZIONE: SCHERMATA HOMEPAGE \n=============================="
+  },
+  "titleHomepageLabel": "F1 News",
+  "userLoggedNews": "FOR YOU",
+  "userGenericNews": "Last news",
+  "loadingEvent": "Loading event...",
+  "noRaceUpcoming": "No races scheduled",
+  "checkLaterEvents": "Check back later for upcoming events",
+  "listedEvent": "EVENT IN CALENDAR",
+  "moreNews": "See all the news",
+  "days": "Days",
+  "hours": "Hours",
+  "minutes": "Min",
+  "seconds": "Sec",
+  "eventProgress": "Event in progress!",
+
   "@genericError": {
     "description": "==============================\n   ERRORE GENERICO \n=============================="
   },

@@ -46,6 +46,23 @@
   "emailFieldError": "Questo campo richiede un formato email valido",
   "orText": "oppure",
 
+  "@titleHomepageLabel": {
+    "description": "==============================\n   SEZIONE: SCHERMATA HOMEPAGE \n=============================="
+  },
+  "titleHomepageLabel": "F1 News",
+  "userLoggedNews": "PER TE",
+  "userGenericNews": "Ultime notizie",
+  "loadingEvent": "Caricamento evento...",
+  "noRaceUpcoming": "Nessuna gara in programma",
+  "checkLaterEvents": "Torna a controllare più tardi per i prossimi eventi",
+  "listedEvent": "EVENTO IN CALENDARIO",
+  "moreNews": "Vedi tutte le news",
+  "days": "Giorni",
+  "hours": "Ore",
+  "minutes": "Min",
+  "seconds": "Sec",
+  "eventProgress": "Evento in corso!",
+
   "@genericError": {
     "description": "==============================\n   ERRORE GENERICO \n=============================="
   },
