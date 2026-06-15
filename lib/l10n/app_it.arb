@@ -145,6 +145,11 @@
   "chassis": "Telaio",
   "powerUnit": "PU",
 
+  "@racesList": {
+    "description": "==============================\n   SEZIONE: LISTA GARE \n=============================="
+  },
+  "calendar": "Calendario",
+
   "@genericError": {
     "description": "==============================\n   ERRORE GENERICO \n=============================="
   },
