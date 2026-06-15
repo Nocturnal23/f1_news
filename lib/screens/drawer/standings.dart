@@ -2,6 +2,7 @@ import 'package:f1_news/widgets/navigation/app_bar_custom.dart';
 import 'package:f1_news/widgets/navigation/drawer_app.dart';
 import 'package:flutter/material.dart';
 
+import '../../l10n/app_localizations.dart';
 import '../../widgets/racing/standings_list.dart';
 
 class Standings extends StatelessWidget {
@@ -9,15 +10,17 @@ class Standings extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
+
     return DefaultTabController(
       length: 2,
       child: Scaffold(
         appBar: AppBarCustom(
-          title: "Classifica",
-          bottom: const TabBar(
+          title: "${l10n.standings} ${DateTime.now().year}",
+          bottom: TabBar(
             tabs: [
-              Tab(text: "Piloti"),
-              Tab(text: "Costruttori"),
+              Tab(text: l10n.driverType),
+              Tab(text: l10n.constructorType),
             ],
           ),
         ),

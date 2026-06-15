@@ -116,6 +116,16 @@
   "laps": "Laps",
   "raceDistance": "Race Distance",
 
+  "@standings": {
+    "description": "==============================\n   SEZIONE: CLASSIFICHE MONDIALI \n=============================="
+  },
+  "standings": "Standings",
+  "driverType": "Drivers",
+  "constructorType": "Teams",
+  "driverStanding": "Drivers' standings",
+  "constructorStandings": "Teams' standings",
+  "team": "Team",
+
   "@genericError": {
     "description": "==============================\n   ERRORE GENERICO \n=============================="
   },
