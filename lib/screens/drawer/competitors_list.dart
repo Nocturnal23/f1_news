@@ -6,6 +6,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 
 import '../../core/providers/provider.dart';
 import '../../core/providers/screen_provider.dart';
+import '../../l10n/app_localizations.dart';
 import '../../widgets/common/error_retry.dart';
 import '../../widgets/navigation/app_bar_custom.dart';
 import '../../widgets/navigation/drawer_app.dart';
@@ -20,6 +21,7 @@ class CompetitorsList extends ConsumerWidget {
     final authState = ref.watch(authStateProvider);
     final screen = ref.watch(screenProvider);
     final favoriteIds = ref.watch(favoritesProvider);
+    final l10n = AppLocalizations.of(context)!;
 
     //Caricamento dei dati in base a chi chiama la pagina.
     final dataState = ref.watch(
@@ -27,8 +29,8 @@ class CompetitorsList extends ConsumerWidget {
     );
 
     final String title = type == "drivers"
-        ? "Piloti ${DateTime.now().year}"
-        : "Costruttori ${DateTime.now().year}";
+        ? "${l10n.drivers} ${DateTime.now().year}"
+        : "${l10n.teams} ${DateTime.now().year}";
 
     return Scaffold(
       appBar: AppBarCustom(title: title),
@@ -42,7 +44,7 @@ class CompetitorsList extends ConsumerWidget {
         ),
         data: (listData) {
           if (listData.isEmpty) {
-            return const Center(child: Text("Nessun dato disponibile"));
+            return Center(child: Text(l10n.dataError));
           }
 
           //Differenziazione di vista tra smartphone e tablet.
