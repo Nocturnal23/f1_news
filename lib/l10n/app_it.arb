@@ -157,6 +157,13 @@
   "homepage": "Homepage",
   "lastNews": "Ultime Notizie",
 
+  "@appBar" : {
+    "description": "==============================\n   SEZIONE: App Bar \n=============================="
+  },
+  "profile": "Profilo",
+  "logoutButton": "Logout",
+  "upcomingFeatures": "Funzionalità in arrivo",
+
   "@genericError": {
     "description": "==============================\n   ERRORE GENERICO \n=============================="
   },
