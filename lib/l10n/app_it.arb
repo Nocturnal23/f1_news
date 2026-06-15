@@ -90,6 +90,10 @@
   "requiredField": "Campo obbligatorio",
   "passwordNotMatch": "Le password non corrispondono",
   "updateButton": "Aggiorna",
+  "fillAllFields": "Devi compilare tutti i campi!",
+  "oldAndNewNotSame": "La nuova e la vecchia password non possono combaciare",
+  "passwordUpdateSuccessfully": "Password aggiornata con successo!",
+  "updatePasswordError": "Impossibile aggiornare la password. Riprova.",
 
   "@deletingUserLabel": {
     "description": "==============================\n   SEZIONE: ELIMINA UTENTE \n=============================="
@@ -111,5 +115,6 @@
   "windowClose": "Chiudi",
   "cancelButton": "Annulla",
   "okButton": "OK",
-  "warningTitle": "Attenzione"
+  "warningTitle": "Attenzione",
+  "wrongPassword": "La password inserita non è corretta."
 }

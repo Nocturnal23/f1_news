@@ -135,7 +135,7 @@ class _ChangePasswordDialogState extends ConsumerState<ChangePassword> {
                       ),
                       const SizedBox(width: 12),
                       ElevatedButton(
-                        onPressed: _submit,
+                        onPressed: () { _submit(l10n); },
                         style: ElevatedButton.styleFrom(
                           backgroundColor: Colors.redAccent,
                           foregroundColor: Colors.white,
@@ -152,11 +152,11 @@ class _ChangePasswordDialogState extends ConsumerState<ChangePassword> {
     );
   }
 
-  Future<void> _submit() async {
+  Future<void> _submit(AppLocalizations l10n) async {
     if (!_formKey.currentState!.saveAndValidate()) {
       ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(
-          content: Text("Devi compilare tutti i campi!"),
+        SnackBar(
+          content: Text(l10n.fillAllFields),
           backgroundColor: Colors.red,
         ),
       );
@@ -168,7 +168,7 @@ class _ChangePasswordDialogState extends ConsumerState<ChangePassword> {
     if (data['currentPassword'] == data['newPassword']) {
       showDialog(
         context: context,
-        builder: (context) => InfoDialogAlert(messaggio: "La nuova e la vecchia password non possono combaciare"),
+        builder: (context) => InfoDialogAlert(messaggio: l10n.oldAndNewNotSame),
       );
       return;
     }
@@ -181,17 +181,17 @@ class _ChangePasswordDialogState extends ConsumerState<ChangePassword> {
       if (mounted) {
         Navigator.pop(context);
         ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(
-            content: Text("Password aggiornata con successo!"),
+          SnackBar(
+            content: Text(l10n.passwordUpdateSuccessfully),
             backgroundColor: Colors.green,
           ),
         );
       }
     } on FirebaseAuthException catch (e) {
-      String errorMessage = "Impossibile aggiornare la password. Riprova.";
+      String errorMessage = l10n.updatePasswordError;
 
       if(e.code == 'invalid-credential') {
-        errorMessage = "La password inserita non è corretta.";
+        errorMessage = l10n.wrongPassword;
       }
 
       if (mounted) {
