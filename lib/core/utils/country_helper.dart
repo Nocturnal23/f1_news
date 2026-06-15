@@ -25,7 +25,7 @@ class CountryHelper {
     'American': 'us',
     'Italian': 'it',
     'Swiss': 'ch',
-    'New zealander': 'nz',
+    'New Zealander': 'nz',
     'Argentine': 'ar',
     'Brazilian': 'br',
     'Danish': 'dk',
