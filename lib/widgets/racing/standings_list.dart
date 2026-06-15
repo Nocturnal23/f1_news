@@ -1,8 +1,10 @@
+import 'package:country_flags/country_flags.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../core/providers/provider.dart';
 import '../../core/providers/screen_provider.dart';
+import '../../core/utils/country_helper.dart';
 import '../../l10n/app_localizations.dart';
 import '../common/error_retry.dart';
 
@@ -71,7 +73,7 @@ class StandingsList extends ConsumerWidget {
     final style = TextStyle(
       fontWeight: FontWeight.bold,
       // color: Colors.white,
-      fontSize: isSmall ? 13 : 15,
+      fontSize: isSmall ? 12 : 15,
     );
 
     return [
@@ -99,11 +101,12 @@ class StandingsList extends ConsumerWidget {
             ),
           ),
           DataCell(
-            Text(
-              type == "drivers"
-                  ? item.driver.nationality.substring(0, 3).toUpperCase()
-                  : item.constructor.nationality.substring(0, 3).toUpperCase(),
-              style: textStyle,
+            SizedBox(
+              width: 20,
+              height: 14,
+              child: type == "drivers"
+                  ? CountryFlag.fromCountryCode( CountryHelper.getIsoCodeFromNationality(item.driver.nationality) )
+                  : CountryFlag.fromCountryCode( CountryHelper.getIsoCodeFromNationality(item.constructor.nationality) ),
             ),
           ),
           DataCell(Text("${item.points}", style: textStyle)),
