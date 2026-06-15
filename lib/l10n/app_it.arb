@@ -106,7 +106,17 @@
   "snackbarWarning": "Per continuare devi inserire la password!",
   "deletedSuccessfully": "Account eliminato con successo.",
   "deletionProblemMessage": "Problemi durante l'eliminazione dell'account. Riprova.",
-  "wrongPassword": "La password inserita non è corretta.",
+
+
+  "@cardInfo": {
+    "description": "==============================\n   SEZIONE: INFO EXTRA CIRCUITO \n=============================="
+  },
+  "firstEdition": "Prima Edizione",
+  "lastWinner": "Ultimo Vincitore",
+  "length": "Lunghezza",
+  "lapRecord": "Giro veloce",
+  "laps": "Numero di giri",
+  "raceDistance": "Distanza di gara",
 
   "@genericError": {
     "description": "==============================\n   ERRORE GENERICO \n=============================="

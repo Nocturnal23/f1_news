@@ -105,7 +105,16 @@
   "snackbarWarning": "To continue, you must enter your password!",
   "deletedSuccessfully": "Account successfully deleted.",
   "deletionProblemMessage": "There were problems deleting your account. Please try again.",
-  "wrongPassword": "The password you entered is incorrect.",
+
+  "@cardInfo": {
+    "description": "==============================\n   SEZIONE: INFO EXTRA CIRCUITO \n=============================="
+  },
+  "firstEdition": "First Edition",
+  "lastWinner": "Last Winner",
+  "length": "Length",
+  "lapRecord": "Fastest Lap Time",
+  "laps": "Laps",
+  "raceDistance": "Race Distance",
 
   "@genericError": {
     "description": "==============================\n   ERRORE GENERICO \n=============================="

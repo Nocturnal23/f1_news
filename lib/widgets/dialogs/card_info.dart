@@ -2,6 +2,7 @@ import 'package:f1_news/core/models/championship/race_details.dart';
 import 'package:f1_news/core/providers/screen_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import '../../l10n/app_localizations.dart';
 import '../common/error_retry.dart';
 
 class CardInfo extends ConsumerStatefulWidget {
@@ -24,6 +25,7 @@ class _CardInfoState extends ConsumerState<CardInfo> {
   RaceDetailsModel? _details;
   bool _isLoading = true;
   String? _errorMessage;
+  AppLocalizations get l10n => AppLocalizations.of(context)!;
 
   @override
   void initState() {
@@ -98,12 +100,12 @@ class _CardInfoState extends ConsumerState<CardInfo> {
                         childAspectRatio: sizeScreen.isSmallPhone ? 1.5 : 1.8,
                         children: [
                           _buildData(
-                            "Prima edizione",
+                            l10n.firstEdition,
                             _details!.firstEdition,
                             sizeScreen.isSmallPhone,
                           ),
                           _buildData(
-                            "Ultimo vincitore",
+                            l10n.lastWinner,
                             _details!.lastWinner,
                             sizeScreen.isSmallPhone,
                           ),
@@ -121,22 +123,22 @@ class _CardInfoState extends ConsumerState<CardInfo> {
                         crossAxisSpacing: 10,
                         children: [
                           _buildData(
-                            "Lunghezza",
+                            l10n.length,
                             "${_details!.trackLength} km",
                             sizeScreen.isSmallPhone,
                           ),
                           _buildData(
-                            "Giro veloce",
+                            l10n.lapRecord,
                             _details!.lapRecord,
                             sizeScreen.isSmallPhone,
                           ),
                           _buildData(
-                            "Numero di giri",
+                            l10n.laps,
                             "${_details!.lapsNumber}",
                             sizeScreen.isSmallPhone,
                           ),
                           _buildData(
-                            "Distanza gara",
+                            l10n.raceDistance,
                             "${(_details!.trackLength * _details!.lapsNumber).toStringAsFixed(3)} km",
                             sizeScreen.isSmallPhone,
                           ),
