@@ -4,6 +4,7 @@ import 'package:f1_news/core/providers/screen_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
+import '../../l10n/app_localizations.dart';
 import '../common/chequered_flag.dart';
 
 class DrawerApp extends ConsumerWidget {
@@ -14,6 +15,7 @@ class DrawerApp extends ConsumerWidget {
     final screen = ref.watch(screenProvider);
     final authState = ref.watch(currentUserProvider);
     final user = authState.isLoading ? null : authState.value?.displayName;
+    final l10n = AppLocalizations.of(context)!;
 
     return Drawer(
       width: screen.width * 0.75,
@@ -29,7 +31,7 @@ class DrawerApp extends ConsumerWidget {
                 Padding(
                   padding: EdgeInsets.all(10),
                   child: Text(
-                    user ?? 'Benvenuto',
+                    user ?? l10n.welcomeMessage,
                     style: TextStyle(
                       fontSize: screen.isSmallPhone ? 20 : 24,
                       fontWeight: FontWeight.bold
@@ -54,7 +56,7 @@ class DrawerApp extends ConsumerWidget {
 
           ListTile(
             leading: const Icon(Icons.home),
-            title: const Text('Homepage'),
+            title: Text(l10n.homepage),
             onTap: () {
               Navigator.pop(context); // Questo permette di chiudere il drawer.
 
@@ -77,7 +79,7 @@ class DrawerApp extends ConsumerWidget {
 
           ListTile(
             leading: const Icon(Icons.article),
-            title: const Text('Ultime Notizie'),
+            title: Text(l10n.lastNews),
             onTap: () {
               Navigator.pop(context);
 
@@ -90,7 +92,7 @@ class DrawerApp extends ConsumerWidget {
 
           ListTile(
             leading: const Icon(Icons.emoji_events),
-            title: const Text('Classifiche'),
+            title: Text(l10n.standings),
             onTap: () {
               Navigator.pop(context);
 
@@ -103,7 +105,7 @@ class DrawerApp extends ConsumerWidget {
 
           ListTile(
             leading: const Icon(Icons.person),
-            title: const Text('Piloti'),
+            title: Text(l10n.driverType),
             onTap: () {
               Navigator.pop(context);
 
@@ -116,7 +118,7 @@ class DrawerApp extends ConsumerWidget {
 
           ListTile(
             leading: const Icon(Icons.factory),
-            title: const Text('Squadre'),
+            title: Text(l10n.constructorType),
             onTap: () {
               Navigator.pop(context);
 
@@ -129,7 +131,7 @@ class DrawerApp extends ConsumerWidget {
 
           ListTile(
             leading: const Icon(Icons.calendar_month),
-            title: const Text('Calendario'),
+            title: Text(l10n.calendar),
             onTap: () {
               Navigator.pop(context);
 
