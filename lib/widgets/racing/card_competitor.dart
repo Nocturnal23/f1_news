@@ -1,3 +1,5 @@
+import 'dart:math';
+
 import 'package:country_flags/country_flags.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -6,6 +8,7 @@ import '../../core/models/championship/constructor.dart';
 import '../../core/models/championship/driver_standing.dart';
 import '../../core/providers/screen_provider.dart';
 import '../../core/utils/country_helper.dart';
+import '../../l10n/app_localizations.dart';
 import '../common/error_retry.dart';
 
 class CardCompetitor extends ConsumerStatefulWidget {
@@ -32,6 +35,7 @@ class _CardCompetitorState extends ConsumerState<CardCompetitor> {
   String? _errorMessage;
   late String _id;
   late String _isoCode;
+  AppLocalizations get l10n => AppLocalizations.of(context)!;
 
   @override
   void initState() {
@@ -200,12 +204,12 @@ class _CardCompetitorState extends ConsumerState<CardCompetitor> {
                             _buildInfoChip(
                               icon: Icons.location_on_outlined,
                               text: widget.type == "drivers"
-                                  ? "Nato il ${_extraData?.birthDate}"
+                                  ? "${l10n.born} ${_extraData?.birthDate}"
                                   : "${_extraData?.base}, ${_extraData?.country}",
                             ),
                             _buildInfoChip(
                               icon: Icons.calendar_today_outlined,
-                              text: "Debutto: ${_extraData?.debut}",
+                              text: "${l10n.debut}: ${_extraData?.debut}",
                             ),
                           ],
                         ),
@@ -221,13 +225,13 @@ class _CardCompetitorState extends ConsumerState<CardCompetitor> {
                           children: [
                             _buildInfoChip(
                               icon: Icons.flag_outlined,
-                              text: "GP Totali: ${_extraData?.gpDisputed}",
+                              text: "${l10n.grandPrixEntered}: ${_extraData?.gpDisputed}",
                             ),
                             _buildInfoChip(
                               icon: Icons.emoji_events_outlined,
                               text: (_extraData?.gpWin ?? 0) > 0
-                                  ? "GP Vinti: ${_extraData?.gpWin}"
-                                  : "Miglior risultato: ${_extraData?.bestResult}",
+                                  ? "${l10n.gpWin}: ${_extraData?.gpWin}"
+                                  : "${l10n.bestResult}: ${_extraData?.bestResult}",
                             ),
                           ],
                         ),
@@ -239,8 +243,8 @@ class _CardCompetitorState extends ConsumerState<CardCompetitor> {
                           child: _buildInfoChip(
                             icon: Icons.star_border,
                             text: widget.type == 'drivers'
-                                ? "Titoli: ${_extraData?.wdc}"
-                                : "Titoli: ${_extraData?.wdcConstructor ?? 0} (C) / ${_extraData?.wdcDriver ?? 0} (P)",
+                                ? "${l10n.title}: ${_extraData?.wdc}"
+                                : "${l10n.title}: ${_extraData?.wdcConstructor ?? 0} (${l10n.constructorType}) / ${_extraData?.wdcDriver ?? 0} (${l10n.driverType})",
                           ),
                         ),
                       ],
@@ -252,7 +256,7 @@ class _CardCompetitorState extends ConsumerState<CardCompetitor> {
                         if (widget.type == "drivers") ...[
                           _buildInfoChip(
                             icon: Icons.history,
-                            text: "Storico team: ${_extraData?.teams?.join(', ') ?? 'N/A'}",
+                            text: "${l10n.driverHistory}: ${_extraData?.teams?.join(', ') ?? 'N/A'}",
                           ),
                         ] else ...[
                           Wrap(
@@ -261,11 +265,11 @@ class _CardCompetitorState extends ConsumerState<CardCompetitor> {
                             children: [
                               _buildInfoChip(
                                 icon: Icons.person_outline,
-                                text: "TP: ${_extraData?.teamChief?.join(', ') ?? 'N/A'}",
+                                text: "${l10n.teamPrincipal}: ${_extraData?.teamChief?.join(', ') ?? 'N/A'}",
                               ),
                               _buildInfoChip(
                                 icon: Icons.engineering_outlined,
-                                text: "TD: ${_extraData?.technicalChief?.join(', ') ?? 'N/A'}",
+                                text: "${l10n.teamTechnicalDirector}: ${_extraData?.technicalChief?.join(', ') ?? 'N/A'}",
                               ),
                               Visibility(
                                 visible: _extraData?.reserveDriver?.isNotEmpty == true,
@@ -274,7 +278,7 @@ class _CardCompetitorState extends ConsumerState<CardCompetitor> {
                                 maintainState: true,
                                 child: _buildInfoChip(
                                   icon: Icons.person,
-                                  text: "Riserve: ${_extraData?.reserveDriver?.join(', ') ?? 'N/A'}",
+                                  text: "${l10n.reserveDriver}: ${_extraData?.reserveDriver?.join(', ') ?? 'N/A'}",
                                 ),
                               ),
                             ],
@@ -293,11 +297,11 @@ class _CardCompetitorState extends ConsumerState<CardCompetitor> {
                             children: [
                               _buildInfoChip(
                                 icon: Icons.directions_car_outlined,
-                                text: "Telaio: ${_extraData?.chassis ?? 'N/A'}",
+                                text: "${l10n.chassis}: ${_extraData?.chassis ?? 'N/A'}",
                               ),
                               _buildInfoChip(
                                 icon: Icons.settings_suggest_outlined,
-                                text: "PU: ${_extraData?.powerUnit ?? 'N/A'}",
+                                text: "${l10n.powerUnit}: ${_extraData?.powerUnit ?? 'N/A'}",
                               ),
                             ],
                           ),

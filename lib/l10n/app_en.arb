@@ -126,6 +126,24 @@
   "constructorStandings": "Teams' standings",
   "team": "Team",
 
+  "@competitorsList": {
+    "description": "==============================\n   SEZIONE: LISTA PARTECIPANTI \n=============================="
+  },
+  "drivers": "Drivers list",
+  "teams": "Teams list",
+  "born": "Born in",
+  "debut": "Debut",
+  "grandPrixEntered": "Grand Prix Entered",
+  "gpWin": "GP Wins",
+  "bestResult": "Best result",
+  "title": "World Championships",
+  "driverHistory": "Driver team history",
+  "teamPrincipal": "TP",
+  "teamTechnicalDirector": "TD",
+  "reserveDriver": "Reserve driver",
+  "chassis": "Chassis",
+  "powerUnit": "PU",
+
   "@genericError": {
     "description": "==============================\n   ERRORE GENERICO \n=============================="
   },
@@ -134,5 +152,6 @@
   "cancelButton": "Cancel",
   "okButton": "OK",
   "warningTitle": "Warning",
-  "wrongPassword": "The password you entered is incorrect."
+  "wrongPassword": "The password you entered is incorrect.",
+  "dataError": "No data available"
 }

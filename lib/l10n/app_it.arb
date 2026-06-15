@@ -127,6 +127,24 @@
   "constructorStandings": "Classifica costruttori",
   "team": "Team",
 
+  "@competitorsList": {
+    "description": "==============================\n   SEZIONE: LISTA PARTECIPANTI \n=============================="
+  },
+  "drivers": "Lista piloti",
+  "teams": "Lista team",
+  "born": "Nato il",
+  "debut": "Debutto",
+  "grandPrixEntered": "GP Disputati",
+  "gpWin": "GP Vinti",
+  "bestResult": "Miglior risultato",
+  "title": "Titoli Mondiali",
+  "driverHistory": "Storico team",
+  "teamPrincipal": "TP",
+  "teamTechnicalDirector": "TD",
+  "reserveDriver": "Piloti di riserva",
+  "chassis": "Telaio",
+  "powerUnit": "PU",
+
   "@genericError": {
     "description": "==============================\n   ERRORE GENERICO \n=============================="
   },
@@ -135,5 +153,6 @@
   "cancelButton": "Annulla",
   "okButton": "OK",
   "warningTitle": "Attenzione",
-  "wrongPassword": "La password inserita non è corretta."
+  "wrongPassword": "La password inserita non è corretta.",
+  "dataError": "Nessun dato disponibile"
 }
