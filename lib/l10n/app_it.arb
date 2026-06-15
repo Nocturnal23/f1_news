@@ -107,7 +107,6 @@
   "deletedSuccessfully": "Account eliminato con successo.",
   "deletionProblemMessage": "Problemi durante l'eliminazione dell'account. Riprova.",
 
-
   "@cardInfo": {
     "description": "==============================\n   SEZIONE: INFO EXTRA CIRCUITO \n=============================="
   },
@@ -117,6 +116,16 @@
   "lapRecord": "Giro veloce",
   "laps": "Numero di giri",
   "raceDistance": "Distanza di gara",
+
+  "@standings": {
+    "description": "==============================\n   SEZIONE: CLASSIFICHE MONDIALI \n=============================="
+  },
+  "standings": "Classifiche",
+  "driverType": "Piloti",
+  "constructorType": "Teams",
+  "driverStanding": "Classifica piloti",
+  "constructorStandings": "Classifica costruttori",
+  "team": "Team",
 
   "@genericError": {
     "description": "==============================\n   ERRORE GENERICO \n=============================="

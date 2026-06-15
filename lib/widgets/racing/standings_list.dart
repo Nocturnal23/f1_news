@@ -3,6 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../core/providers/provider.dart';
 import '../../core/providers/screen_provider.dart';
+import '../../l10n/app_localizations.dart';
 import '../common/error_retry.dart';
 
 class StandingsList extends ConsumerWidget {
@@ -12,6 +13,7 @@ class StandingsList extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef sRef) {
     final sizeScreen = sRef.watch(screenProvider);
+    final l10n = AppLocalizations.of(context)!;
 
     final standingsAsync = sRef.watch(
         type == "drivers" ? driversStandingsProvider : teamsStandingsProvider
@@ -35,7 +37,7 @@ class StandingsList extends ConsumerWidget {
                     Padding(
                       padding: const EdgeInsets.all(10),
                       child: Text(
-                        type == "drivers" ? 'Classifica Piloti' : 'Classifica Costruttori',
+                        type == "drivers" ? l10n.driverStanding : l10n.constructorStandings,
                         style: TextStyle(
                           fontSize: sizeScreen.isSmallPhone ? 20 : 24,
                           fontWeight: FontWeight.bold,
@@ -52,7 +54,7 @@ class StandingsList extends ConsumerWidget {
                         width: double.infinity,
                         child: DataTable(
                           horizontalMargin: sizeScreen.isSmallPhone ? 10 : 20,
-                          columns: _buildColumns(sizeScreen.isSmallPhone),
+                          columns: _buildColumns(sizeScreen.isSmallPhone, l10n),
                           rows: _buildRows(standings, sizeScreen.isSmallPhone),
                         ),
                       ),
@@ -65,7 +67,7 @@ class StandingsList extends ConsumerWidget {
     );
   }
 
-  List<DataColumn> _buildColumns(bool isSmall) {
+  List<DataColumn> _buildColumns(bool isSmall, AppLocalizations l10n) {
     final style = TextStyle(
       fontWeight: FontWeight.bold,
       // color: Colors.white,
@@ -74,8 +76,8 @@ class StandingsList extends ConsumerWidget {
 
     return [
       DataColumn(label: Text('Pos.', style: style)),
-      DataColumn(label: Text(type == "drivers" ? 'Pilota' : 'Team', style: style)),
-      DataColumn(label: Text('Naz', style: style)),
+      DataColumn(label: Text(type == "drivers" ? l10n.driver : l10n.team, style: style)),
+      DataColumn(label: Text(l10n.nationality, style: style)),
       DataColumn(label: Text('Pts', style: style)),
     ];
   }
@@ -84,7 +86,6 @@ class StandingsList extends ConsumerWidget {
     return List<DataRow>.generate(data.length, (index) {
       final item = data[index];
       final textStyle = TextStyle(
-        // color: Colors.white,
         fontSize: isSmall ? 12 : 14,
       );
 
