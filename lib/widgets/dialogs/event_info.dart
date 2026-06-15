@@ -18,6 +18,7 @@ class EventInfo extends ConsumerWidget {
     final screen = ref.watch(screenProvider);
     final todayDate = DateTime.now();
     final l10n = AppLocalizations.of(context)!;
+    final localeName = l10n.localeName;
 
     return Dialog(
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
@@ -57,9 +58,9 @@ class EventInfo extends ConsumerWidget {
                     "${session['date']}T${session['time']}",
                   );
                   final bool isPast = todayDate.isAfter(sessionDateTime);
-                  final String displayDate = DateFormat(
-                    'dd/MM HH:mm',
-                  ).format(sessionDateTime.toLocal());
+                  final String displayDate = DateFormat.Md(localeName)
+                      .add_jm()
+                      .format(sessionDateTime.toLocal());
 
                   return TableRow(
                     children: [
