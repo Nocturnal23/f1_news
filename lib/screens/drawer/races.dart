@@ -4,6 +4,7 @@ import 'package:f1_news/widgets/navigation/drawer_app.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
+import '../../l10n/app_localizations.dart';
 import '../../widgets/common/error_retry.dart';
 import '../../widgets/racing/card_custom.dart';
 import '../../widgets/navigation/app_bar_custom.dart';
@@ -14,9 +15,10 @@ class Races extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final calendar = ref.watch(calendarProvider);
+    final l10n = AppLocalizations.of(context)!;
 
     return Scaffold(
-      appBar: AppBarCustom(title: "Calendario ${DateTime.now().year}"),
+      appBar: AppBarCustom(title: "${l10n.calendar} ${DateTime.now().year}"),
 
       drawer: const DrawerApp(),
 
