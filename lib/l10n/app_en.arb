@@ -149,6 +149,13 @@
   },
   "calendar": "Schedule",
 
+  "@drawer" : {
+    "description": "==============================\n   SEZIONE: Drawer \n=============================="
+  },
+  "welcomeMessage": "Welcome",
+  "homepage": "Homepage",
+  "lastNews": "Last News",
+
   "@genericError": {
     "description": "==============================\n   ERRORE GENERICO \n=============================="
   },

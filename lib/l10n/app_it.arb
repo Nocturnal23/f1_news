@@ -150,6 +150,13 @@
   },
   "calendar": "Calendario",
 
+  "@drawer" : {
+    "description": "==============================\n   SEZIONE: Drawer \n=============================="
+  },
+  "welcomeMessage": "Benvenuto",
+  "homepage": "Homepage",
+  "lastNews": "Ultime Notizie",
+
   "@genericError": {
     "description": "==============================\n   ERRORE GENERICO \n=============================="
   },
