@@ -54,7 +54,7 @@
   "loadingEvent": "Loading event...",
   "noRaceUpcoming": "No races scheduled",
   "checkLaterEvents": "Check back later for upcoming events",
-  "listedEvent": "EVENT IN CALENDAR",
+  "listedEvent": "SCHEDULED EVENT",
   "moreNews": "See all the news",
   "days": "Days",
   "hours": "Hours",
@@ -155,6 +155,13 @@
   "welcomeMessage": "Welcome",
   "homepage": "Homepage",
   "lastNews": "Last News",
+
+  "@appBar" : {
+    "description": "==============================\n   SEZIONE: App Bar \n=============================="
+  },
+  "profile": "Profile",
+  "logoutButton": "Logout",
+  "uppcomingFeature": "Upcoming Features",
 
   "@genericError": {
     "description": "==============================\n   ERRORE GENERICO \n=============================="

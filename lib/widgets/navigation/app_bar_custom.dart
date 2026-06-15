@@ -1,5 +1,6 @@
 import 'package:country_flags/country_flags.dart';
 import 'package:f1_news/core/providers/screen_provider.dart';
+import 'package:f1_news/l10n/app_localizations.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
@@ -9,7 +10,7 @@ import '../../core/providers/provider.dart';
 import '../../core/navigation/routes.dart';
 import '../dialogs/info_dialog_alert.dart';
 
-enum MenuOptions { impostazioniAccount, impostazioniApp, logout }
+enum MenuOptions { impostazioniAccount, /*impostazioniApp,*/ logout }
 
 class AppBarCustom extends ConsumerWidget implements PreferredSizeWidget {
   final String title;
@@ -29,6 +30,7 @@ class AppBarCustom extends ConsumerWidget implements PreferredSizeWidget {
     final user = authState.value;
     final screen = ref.watch(screenProvider);
     final currentLocale = ref.watch(localeProvider);
+    final l10n = AppLocalizations.of(context)!;
 
     return AppBar(
       backgroundColor: Colors.red,
@@ -63,7 +65,7 @@ class AppBarCustom extends ConsumerWidget implements PreferredSizeWidget {
                   onPressed: () {
                     Navigator.pushNamed(context, Routes.auth);
                   },
-                  child: Text("Accedi", style: TextStyle(fontSize: screen.isSmallPhone ? 15 : 18)),
+                  child: Text(l10n.loginButton, style: TextStyle(fontSize: screen.isSmallPhone ? 15 : 18)),
                 ),
               ),
             )
@@ -82,9 +84,9 @@ class AppBarCustom extends ConsumerWidget implements PreferredSizeWidget {
                       Navigator.pushNamed(context, Routes.profile);
                     }
                     break;
-                  case MenuOptions.impostazioniApp:
-                    _showAlert(context);
-                    break;
+                  // case MenuOptions.impostazioniApp:
+                  //   _showAlert(context);
+                  //   break;
                   case MenuOptions.logout:
                     _signOut();
                     break;
@@ -92,25 +94,25 @@ class AppBarCustom extends ConsumerWidget implements PreferredSizeWidget {
               },
               itemBuilder: (BuildContext context) =>
                   <PopupMenuEntry<MenuOptions>>[
-                    const PopupMenuItem<MenuOptions>(
+                    PopupMenuItem<MenuOptions>(
                       value: MenuOptions.impostazioniAccount,
                       child: ListTile(
                         leading: Icon(Icons.person),
-                        title: Text('Profilo'),
+                        title: Text(l10n.profile),
                       ),
                     ),
-                    const PopupMenuItem<MenuOptions>(
-                      value: MenuOptions.impostazioniApp,
-                      child: ListTile(
-                        leading: Icon(Icons.settings),
-                        title: Text('Impostazioni'),
-                      ),
-                    ),
-                    const PopupMenuItem<MenuOptions>(
+                    // const PopupMenuItem<MenuOptions>(
+                    //   value: MenuOptions.impostazioniApp,
+                    //   child: ListTile(
+                    //     leading: Icon(Icons.settings),
+                    //     title: Text('Impostazioni'),
+                    //   ),
+                    // ),
+                    PopupMenuItem<MenuOptions>(
                       value: MenuOptions.logout,
                       child: ListTile(
                         leading: Icon(Icons.exit_to_app, color: Colors.red),
-                        title: Text('Esci', style: TextStyle(color: Colors.red)),
+                        title: Text(l10n.logoutButton, style: TextStyle(color: Colors.red)),
                       ),
                     ),
                   ],
@@ -130,11 +132,11 @@ class AppBarCustom extends ConsumerWidget implements PreferredSizeWidget {
     await AuthController().signOut();
   }
 
-  void _showAlert(BuildContext context){
+  void _showAlert(BuildContext context, AppLocalizations l10n){
     showDialog(
       context: context,
       builder: (context) =>
-          InfoDialogAlert(messaggio: "Funzionalità in arrivo"),
+          InfoDialogAlert(messaggio: l10n.upcomingFeatures),
     );
   }
 }
