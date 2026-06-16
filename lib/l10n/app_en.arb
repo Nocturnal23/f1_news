@@ -161,7 +161,17 @@
   },
   "profile": "Profile",
   "logoutButton": "Logout",
-  "uppcomingFeature": "Upcoming Features",
+  "upcomingFeature": "Upcoming Features",
+
+  "@newsList" : {
+    "description": "==============================\n   SEZIONE: NEWS \n=============================="
+  },
+  "search": "Search for news...",
+  "genericFilter": "All",
+  "noNewsFound": "No news found!",
+  "changeFilter": "Try changing the selected filters.",
+  "forward": "Forward",
+  "backward": "Backward",
 
   "@genericError": {
     "description": "==============================\n   ERRORE GENERICO \n=============================="

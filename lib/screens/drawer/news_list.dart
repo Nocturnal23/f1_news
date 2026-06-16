@@ -1,4 +1,3 @@
-import 'package:f1_news/core/repository/rss_repository.dart';
 import 'package:f1_news/widgets/navigation/app_bar_custom.dart';
 import 'package:f1_news/widgets/navigation/drawer_app.dart';
 import 'package:flutter/material.dart';
@@ -6,6 +5,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../controllers/news_filter_controller.dart';
 import '../../core/providers/provider.dart';
+import '../../l10n/app_localizations.dart';
 import '../../widgets/common/error_retry.dart';
 import '../../widgets/common/filter_bar.dart';
 import '../../widgets/racing/news_card.dart';
@@ -19,6 +19,7 @@ class NewsList extends ConsumerStatefulWidget {
 
 class _NewsListState extends ConsumerState<NewsList> {
   final ScrollController _scrollController = ScrollController();
+  AppLocalizations get l10n => AppLocalizations.of(context)!;
   bool _isLoading = true;
   String? _errorMessage;
 
@@ -40,7 +41,7 @@ class _NewsListState extends ConsumerState<NewsList> {
     });
 
     return Scaffold(
-      appBar: const AppBarCustom(title: "Ultime notizie"),
+      appBar: AppBarCustom(title: l10n.lastNews),
       drawer: const DrawerApp(),
       body: newsAsync.when(
         loading: () => const Center(child: CircularProgressIndicator()),
@@ -101,7 +102,7 @@ class _NewsListState extends ConsumerState<NewsList> {
                                 const SizedBox(height: 16),
 
                                 Text(
-                                  'Nessuna notizia trovata',
+                                  l10n.noNewsFound,
                                   style: Theme.of(
                                     context,
                                   ).textTheme.titleMedium,
@@ -110,7 +111,7 @@ class _NewsListState extends ConsumerState<NewsList> {
                                 const SizedBox(height: 8),
 
                                 Text(
-                                  'Prova a modificare i filtri selezionati.',
+                                  l10n.changeFilter,
                                   textAlign: TextAlign.center,
                                   style: Theme.of(context).textTheme.bodyMedium
                                       ?.copyWith(color: Colors.grey.shade600),
@@ -175,7 +176,7 @@ class _NewsListState extends ConsumerState<NewsList> {
                     _scrollToTop();
                   }
                 : null,
-            child: const Text('Indietro'),
+            child: Text(l10n.forward),
           ),
 
           Text(
@@ -191,7 +192,7 @@ class _NewsListState extends ConsumerState<NewsList> {
                     _scrollToTop();
                   }
                 : null,
-            child: const Text('Avanti'),
+            child: Text(l10n.backward),
           ),
         ],
       ),

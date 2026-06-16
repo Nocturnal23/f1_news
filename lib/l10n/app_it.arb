@@ -164,6 +164,16 @@
   "logoutButton": "Logout",
   "upcomingFeatures": "Funzionalità in arrivo",
 
+  "@newsList" : {
+    "description": "==============================\n   SEZIONE: NEWS \n=============================="
+  },
+  "search": "Cerca una notizia...",
+  "genericFilter": "Tutti",
+  "noNewsFound": "Nessuna notizia trovata!",
+  "changeFilter": "Prova a modificare i filtri selezionati.",
+  "forward": "Avanti",
+  "backward": "Indietro",
+
   "@genericError": {
     "description": "==============================\n   ERRORE GENERICO \n=============================="
   },
