@@ -26,13 +26,18 @@ class StandingsList extends ConsumerWidget {
         loading: () => const Center(child: CircularProgressIndicator(color: Colors.red)),
         error: (err, stack) => ErrorRetry(
           errorMessage: err.toString(),
-          onRetry: () => sRef.refresh(type == "drivers" ? driversStandingsProvider : teamsStandingsProvider),
+            onRetry: () async {
+              final provider = type == "drivers" ? driversStandingsProvider : teamsStandingsProvider;
+              sRef.invalidate(provider);
+              try {
+                await sRef.read(provider.future);
+              } catch (_) {
+              }
+            }
         ),
         data: (standings) {
             return SizedBox(
-              // color: Colors.black,
               width: double.infinity,
-              // height: double.infinity,
               child: SingleChildScrollView(
                 child: Column(
                   children: [

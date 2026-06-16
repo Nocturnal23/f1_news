@@ -26,7 +26,12 @@ class Races extends ConsumerWidget {
           loading: () => const Center(child: CircularProgressIndicator(color: Colors.red)),
           error: (err, stack) => ErrorRetry(
             errorMessage: err.toString(),
-            onRetry: () => ref.refresh(calendarProvider),
+            onRetry: () async {
+              ref.invalidate(calendarProvider);
+              try {
+                await ref.read(calendarProvider.future);
+              } catch (_) {}
+            },
           ),
           data: (races) {
             _precacheImages(context, races);

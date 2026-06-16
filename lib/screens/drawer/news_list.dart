@@ -55,10 +55,15 @@ class _NewsListState extends ConsumerState<NewsList> {
             physics: const AlwaysScrollableScrollPhysics(),
             children: [
               SizedBox(
-                height: MediaQuery.of(context).size.height * 0.7, // Centra verticalmente l'errore
+                height: MediaQuery.of(context).size.height * 0.7,
                 child: ErrorRetry(
                   errorMessage: err.toString(),
-                  onRetry: () => ref.invalidate(newsProvider),
+                  onRetry: () async {
+                    ref.invalidate(newsProvider);
+                    try {
+                      await ref.read(newsProvider.future);
+                    } catch (_) {}
+                  },
                 ),
               ),
             ],
