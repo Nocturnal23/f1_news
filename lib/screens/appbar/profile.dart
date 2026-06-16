@@ -7,6 +7,7 @@ import 'package:f1_news/widgets/dialogs/deleting_user.dart';
 import 'package:f1_news/widgets/navigation/app_bar_custom.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:intl/intl.dart';
 
 import '../../core/providers/screen_provider.dart';
 import '../../widgets/dialogs/manage_favorite.dart';
@@ -62,7 +63,6 @@ class Profile extends ConsumerWidget {
     WidgetRef ref,
     AppLocalizations l10n,
   ) {
-
     if (user == null) {
       WidgetsBinding.instance.addPostFrameCallback((_) {
         if (context.mounted) {
@@ -75,6 +75,8 @@ class Profile extends ConsumerWidget {
 
       return const SizedBox.shrink();
     }
+
+    final String formattedDate = DateFormat.yMd(l10n.localeName).format(user!.createdAt);
 
     return ListView(
       // padding: EdgeInsets.all(16.0),
@@ -166,7 +168,7 @@ class Profile extends ConsumerWidget {
 
                     Expanded(
                       child: Text(
-                        "${user.createdAt.day}/${user.createdAt.month}/${user.createdAt.year}",
+                        formattedDate,
                         textAlign: TextAlign.end,
                         overflow: TextOverflow.ellipsis,
                         maxLines: 1,
