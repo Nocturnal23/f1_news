@@ -192,6 +192,7 @@
   "genericError": "Unknown error. Retry",
   "errorRetry": "Error loading data! Please try again.",
   "retryButton": "Reload",
+  "loadingButton": "Loading...",
   "windowClose": "Close",
   "cancelButton": "Cancel",
   "okButton": "OK",
