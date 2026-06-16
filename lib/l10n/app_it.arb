@@ -191,6 +191,8 @@
     "description": "==============================\n   ERRORE GENERICO \n=============================="
   },
   "genericError": "Errore generico. Riprova",
+  "errorRetry": "Errore durante il caricamento dei dati! Riprova.",
+  "retryButton": "Riprova",
   "windowClose": "Chiudi",
   "cancelButton": "Annulla",
   "okButton": "OK",

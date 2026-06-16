@@ -190,6 +190,8 @@
     "description": "==============================\n   ERRORE GENERICO \n=============================="
   },
   "genericError": "Unknown error. Retry",
+  "errorRetry": "Error loading data! Please try again.",
+  "retryButton": "Reload",
   "windowClose": "Close",
   "cancelButton": "Cancel",
   "okButton": "OK",
