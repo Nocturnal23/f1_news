@@ -193,6 +193,7 @@
   "genericError": "Errore generico. Riprova",
   "errorRetry": "Errore durante il caricamento dei dati! Riprova.",
   "retryButton": "Riprova",
+  "loadingButton": "Caricamento...",
   "windowClose": "Chiudi",
   "cancelButton": "Annulla",
   "okButton": "OK",

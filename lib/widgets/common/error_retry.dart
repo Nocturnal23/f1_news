@@ -46,9 +46,6 @@ class _ErrorRetryState extends State<ErrorRetry> {
             //   ),
             // ),
             ElevatedButton.icon(
-              onPressed: onRetry,
-              icon: const Icon(Icons.refresh),
-              label: Text(l10n.retryButton),
               onPressed: _isLoading
                   ? null
                   : () async {
@@ -76,6 +73,7 @@ class _ErrorRetryState extends State<ErrorRetry> {
                 ),
               )
                   : const Icon(Icons.refresh),
+              label: Text(_isLoading ? l10n.loadingButton : l10n.retryButton),
               style: ElevatedButton.styleFrom(
                 backgroundColor: Colors.red,
                 foregroundColor: Colors.white,
