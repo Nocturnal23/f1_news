@@ -33,26 +33,20 @@ class Profile extends ConsumerWidget {
     final screen = ref.watch(screenProvider);
     final l10n = AppLocalizations.of(context)!;
 
-    return userState.when(
-      loading: () => const Scaffold(
-        body: Center(child: CircularProgressIndicator()),
-      ),
-      error: (error, stackTrace) => Scaffold(
-        appBar: AppBarCustom(title: l10n.profile),
-        body: Center(child: Text("Errore: $error")),
-      ),
-      data: (user) {
-        if (user == null) {
-          return const Scaffold(
-            body: Center(child: CircularProgressIndicator()),
-          );
-        }
+    return Scaffold(
+      appBar: AppBarCustom(title: l10n.profile),
 
-        return Scaffold(
-          appBar: AppBarCustom(title: l10n.profile),
-          body: _buildBody(user, screen, context, ref, l10n),
-        );
-      },
+      body: userState.when(
+        loading: () => const Center(child: CircularProgressIndicator()),
+        error: (error, stackTrace) => Center(child: Text("Errore: $error")),
+        data: (user) {
+          if (user == null) {
+            return const SizedBox.shrink();
+          }
+
+          return _buildBody(user, screen, context, ref, l10n);
+        },
+      ),
     );
   }
 
