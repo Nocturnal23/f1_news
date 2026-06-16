@@ -145,8 +145,18 @@ class _HomepageState extends ConsumerState<Homepage> {
     final newsAsync = ref.watch(featuredNewsProvider);
 
     return newsAsync.when(
-      loading: () => const SizedBox(height: 200, child: Center(child: CircularProgressIndicator())),
-      error: (err, stack) => const SizedBox.shrink(),
+      loading: () => const SizedBox(height: 250, child: Center(child: CircularProgressIndicator())),
+      error: (err, stack) => SizedBox(
+        height: 250,
+        child: ErrorRetry(
+          errorMessage: err.toString(),
+          onRetry: () {
+            ref.invalidate(newsProvider);
+            ref.invalidate(featuredNewsProvider);
+            ref.read(newsProvider.future);
+          },
+        ),
+      ),
       data: (articles) {
         if (articles.isEmpty) return const SizedBox.shrink();
 
