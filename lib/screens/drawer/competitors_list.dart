@@ -40,7 +40,14 @@ class CompetitorsList extends ConsumerWidget {
             const Center(child: CircularProgressIndicator(color: Colors.red)),
         error: (err, stack) => ErrorRetry(
           errorMessage: err.toString(),
-          onRetry: () => ref.refresh(type == "drivers" ? driversProvider : constructorsProvider),
+          onRetry: () async {
+            final provider = type == "drivers" ? driversProvider : constructorsProvider;
+            ref.invalidate(provider);
+            try {
+              await ref.read(provider.future);
+            } catch (_) {
+            }
+          },
         ),
         data: (listData) {
           if (listData.isEmpty) {

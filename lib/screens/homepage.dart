@@ -84,11 +84,14 @@ class _HomepageState extends ConsumerState<Homepage> {
       ),
       error: (err, stack) => ErrorRetry(
         errorMessage: err.toString(),
-        onRetry: () {
+        onRetry: () async {
           ref.invalidate(calendarProvider);
           ref.invalidate(nextRaceProvider);
-          ref.read(calendarProvider);
-          ref.read(nextRaceProvider);
+          try {
+            await ref.read(calendarProvider.future);
+          } catch (_) {}
+          // ref.read(calendarProvider);
+          // ref.read(nextRaceProvider);
         }
       ),
       data: (nextRace) {
@@ -150,10 +153,13 @@ class _HomepageState extends ConsumerState<Homepage> {
         height: 250,
         child: ErrorRetry(
           errorMessage: err.toString(),
-          onRetry: () {
+          onRetry: () async {
             ref.invalidate(newsProvider);
             ref.invalidate(featuredNewsProvider);
-            ref.read(newsProvider.future);
+            // ref.read(newsProvider.future);
+            try {
+              await ref.read(newsProvider.future);
+            } catch (_) {}
           },
         ),
       ),

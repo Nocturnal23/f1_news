@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../core/models/sessions/base_result.dart';
+import '../../core/providers/provider.dart';
 import '../../core/providers/screen_provider.dart';
 import '../../l10n/app_localizations.dart';
 import '../common/error_retry.dart';
@@ -29,7 +30,12 @@ class ResultsList extends ConsumerWidget {
       loading: () => const Center(child: CircularProgressIndicator(color: Colors.red)),
       error: (err, stack) => ErrorRetry(
         errorMessage: err.toString(),
-        onRetry: () => ref.invalidate(provider),
+        onRetry: () async {
+          try {
+            await sessionName.refreshAndAwait(ref, round);
+          } catch (_) {
+          }
+        },
       ),
       data: (results) => Padding(
         padding: const EdgeInsets.all(16.0),
