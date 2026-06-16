@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../controllers/news_filter_controller.dart';
-import '../../core/models/championship/driver_standing.dart';
+import '../../l10n/app_localizations.dart';
 
 class FilterBar extends ConsumerStatefulWidget {
   final NewsFilterController filterController;
@@ -18,6 +18,7 @@ class _FilterBarState extends ConsumerState<FilterBar> {
   final TextEditingController _searchController = TextEditingController();
   String? _selectedDriver;
   String? _selectedTeam;
+  AppLocalizations get l10n => AppLocalizations.of(context)!;
 
   @override
   void dispose() {
@@ -43,7 +44,7 @@ class _FilterBarState extends ConsumerState<FilterBar> {
           TextField(
             controller: _searchController,
             decoration: InputDecoration(
-              hintText: 'Cerca una notizia...',
+              hintText: l10n.search,
               prefixIcon: const Icon(Icons.search),
               suffixIcon: IconButton(
                 icon: const Icon(Icons.clear),
@@ -74,9 +75,9 @@ class _FilterBarState extends ConsumerState<FilterBar> {
                   initialValue: _selectedDriver,
                   isExpanded: true,
                   items: [
-                    const DropdownMenuItem<String?>(
+                    DropdownMenuItem<String?>(
                       value: null,
-                      child: Text('Tutti'),
+                      child: Text(l10n.genericFilter),
                     ),
                     for (final d in drivers)
                       DropdownMenuItem<String?>(
@@ -90,8 +91,8 @@ class _FilterBarState extends ConsumerState<FilterBar> {
                     });
                     widget.filterController.updateDriver(value);
                   },
-                  decoration: const InputDecoration(
-                    labelText: 'Pilota',
+                  decoration: InputDecoration(
+                    labelText: l10n.driver,
                     border: OutlineInputBorder(),
                     filled: true,
                     fillColor: Colors.white,
@@ -109,9 +110,9 @@ class _FilterBarState extends ConsumerState<FilterBar> {
                   initialValue: _selectedTeam,
                   isExpanded: true,
                   items: [
-                    const DropdownMenuItem<String?>(
+                    DropdownMenuItem<String?>(
                       value: null,
-                      child: Text('Tutti'),
+                      child: Text(l10n.genericFilter),
                     ),
                     for (final t in teams)
                       DropdownMenuItem<String?>(
@@ -125,8 +126,8 @@ class _FilterBarState extends ConsumerState<FilterBar> {
                     });
                     widget.filterController.updateConstructor(value);
                   },
-                  decoration: const InputDecoration(
-                    labelText: 'Team',
+                  decoration: InputDecoration(
+                    labelText: l10n.team,
                     border: OutlineInputBorder(),
                     filled: true,
                     fillColor: Colors.white,
