@@ -1,6 +1,7 @@
 import 'package:f1_news/core/models/user.dart';
 import 'package:f1_news/core/navigation/routes.dart';
 import 'package:f1_news/core/providers/provider.dart';
+import 'package:f1_news/l10n/app_localizations.dart';
 import 'package:f1_news/widgets/dialogs/change_password.dart';
 import 'package:f1_news/widgets/dialogs/deleting_user.dart';
 import 'package:f1_news/widgets/navigation/app_bar_custom.dart';
@@ -29,13 +30,14 @@ class Profile extends ConsumerWidget {
 
     final userState = ref.watch(currentUserProvider);
     final screen = ref.watch(screenProvider);
+    final l10n = AppLocalizations.of(context)!;
 
     return userState.when(
       loading: () => const Scaffold(
         body: Center(child: CircularProgressIndicator()),
       ),
       error: (error, stackTrace) => Scaffold(
-        appBar: AppBarCustom(title: "Profilo"),
+        appBar: AppBarCustom(title: l10n.profile),
         body: Center(child: Text("Errore: $error")),
       ),
       data: (user) {
@@ -46,8 +48,8 @@ class Profile extends ConsumerWidget {
         }
 
         return Scaffold(
-          appBar: AppBarCustom(title: "Profilo"),
-          body: _buildBody(user, screen, context, ref),
+          appBar: AppBarCustom(title: l10n.profile),
+          body: _buildBody(user, screen, context, ref, l10n),
         );
       },
     );
@@ -58,6 +60,7 @@ class Profile extends ConsumerWidget {
     ScreenProvider screen,
     BuildContext context,
     WidgetRef ref,
+    AppLocalizations l10n,
   ) {
 
     if (user == null) {
@@ -84,7 +87,7 @@ class Profile extends ConsumerWidget {
         Padding(
           padding: const EdgeInsets.only(left: 12, bottom: 8),
           child: Text(
-            "INFORMAZIONI ACCOUNT",
+            l10n.accountInfo,
             style: TextStyle(
               fontSize: screen.isSmallPhone ? 13 : 14,
               fontWeight: FontWeight.bold,
@@ -101,7 +104,7 @@ class Profile extends ConsumerWidget {
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
                     Text(
-                      "Nome utente",
+                      l10n.username,
                       style: TextStyle(fontSize: screen.isSmallPhone ? 13 : 16),
                     ),
 
@@ -128,7 +131,7 @@ class Profile extends ConsumerWidget {
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
                     Text(
-                      "Email",
+                      l10n.email,
                       style: TextStyle(fontSize: screen.isSmallPhone ? 13 : 16),
                     ),
 
@@ -155,7 +158,7 @@ class Profile extends ConsumerWidget {
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
                     Text(
-                      "Iscritto dal",
+                      l10n.subscribe,
                       style: TextStyle(fontSize: screen.isSmallPhone ? 13 : 16),
                     ),
 
@@ -184,7 +187,7 @@ class Profile extends ConsumerWidget {
         Padding(
           padding: const EdgeInsets.only(left: 12, bottom: 8),
           child: Text(
-            "I TUOI PREFERITI",
+            l10n.favorite,
             style: TextStyle(
               fontSize: screen.isSmallPhone ? 13 : 14,
               fontWeight: FontWeight.bold,
@@ -196,7 +199,7 @@ class Profile extends ConsumerWidget {
           elevation: 2,
           child: ListTile(
             leading: const Icon(Icons.favorite, color: Colors.red),
-            title: const Text("Gestisci i preferiti"),
+            title: Text(l10n.manageFavorite),
             trailing: const Icon(
               Icons.arrow_forward_ios,
               size: 16,
@@ -214,7 +217,7 @@ class Profile extends ConsumerWidget {
         Padding(
           padding: const EdgeInsets.only(left: 12, bottom: 8),
           child: Text(
-            "SICUREZZA",
+            l10n.security,
             style: TextStyle(
               fontSize: screen.isSmallPhone ? 13 : 14,
               fontWeight: FontWeight.bold,
@@ -229,7 +232,7 @@ class Profile extends ConsumerWidget {
               if (!ref.read(authControllerProvider).isGoogleUser()) ...[
                 ListTile(
                   leading: const Icon(Icons.lock_outline, color: Colors.blue),
-                  title: const Text("Modifica Password"),
+                  title: Text(l10n.managePassword),
                   trailing: const Icon(
                     Icons.arrow_forward_ios,
                     size: 16,
@@ -247,8 +250,8 @@ class Profile extends ConsumerWidget {
 
               ListTile(
                 leading: const Icon(Icons.delete_forever, color: Colors.red),
-                title: const Text(
-                  "Elimina Account",
+                title: Text(
+                  l10n.manageAccount,
                   style: TextStyle(
                     color: Colors.red,
                     fontWeight: FontWeight.bold,

@@ -174,6 +174,19 @@
   "forward": "Avanti",
   "backward": "Indietro",
 
+  "@profilePage" : {
+    "description": "==============================\n   SEZIONE: PAGINA PROFILO \n=============================="
+  },
+  "accountInfo": "INFORMAZIONI ACCOUNT",
+  "username": "Nome utente",
+  "email": "Email",
+  "subscribe": "Iscritto dal",
+  "favorite": "I TUOI PREFERITI",
+  "manageFavorite": "Gestisci i tuoi preferiti",
+  "security": "SICUREZZA",
+  "managePassword": "Modifica password",
+  "manageAccount": "Elimina account",
+
   "@genericError": {
     "description": "==============================\n   ERRORE GENERICO \n=============================="
   },
