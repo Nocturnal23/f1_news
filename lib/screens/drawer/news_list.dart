@@ -20,8 +20,6 @@ class NewsList extends ConsumerStatefulWidget {
 class _NewsListState extends ConsumerState<NewsList> {
   final ScrollController _scrollController = ScrollController();
   AppLocalizations get l10n => AppLocalizations.of(context)!;
-  bool _isLoading = true;
-  String? _errorMessage;
 
   @override
   void dispose() {
@@ -45,9 +43,26 @@ class _NewsListState extends ConsumerState<NewsList> {
       drawer: const DrawerApp(),
       body: newsAsync.when(
         loading: () => const Center(child: CircularProgressIndicator()),
-        error: (err, stack) => ErrorRetry(
-          errorMessage: err.toString(),
-          onRetry: () => ref.invalidate(newsProvider),
+        error: (err, stack) => RefreshIndicator(
+          onRefresh: () async {
+            ref.invalidate(newsProvider);
+            try {
+              await ref.read(newsProvider.future);
+            } catch (_) {
+            }
+          },
+          child: ListView(
+            physics: const AlwaysScrollableScrollPhysics(),
+            children: [
+              SizedBox(
+                height: MediaQuery.of(context).size.height * 0.7, // Centra verticalmente l'errore
+                child: ErrorRetry(
+                  errorMessage: err.toString(),
+                  onRetry: () => ref.invalidate(newsProvider),
+                ),
+              ),
+            ],
+          ),
         ),
         data: (articles) {
           if (!filterController.hasArticles && articles.isNotEmpty) {
