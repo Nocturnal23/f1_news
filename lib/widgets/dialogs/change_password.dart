@@ -1,5 +1,3 @@
-import 'dart:math';
-
 import 'package:f1_news/core/providers/provider.dart';
 import 'package:f1_news/core/providers/screen_provider.dart';
 import 'package:f1_news/widgets/dialogs/info_dialog_alert.dart';
@@ -154,12 +152,23 @@ class _ChangePasswordDialogState extends ConsumerState<ChangePassword> {
 
   Future<void> _submit(AppLocalizations l10n) async {
     if (!_formKey.currentState!.saveAndValidate()) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(
-          content: Text(l10n.fillAllFields),
-          backgroundColor: Colors.red,
-        ),
-      );
+
+      final fields = _formKey.currentState!.fields;
+
+      final bool isAnyFieldEmpty = fields.values.any((field) {
+        final value = field.value;
+        return value == null || value.toString().trim().isEmpty;
+      });
+
+      if (isAnyFieldEmpty) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text(l10n.fillAllFields),
+            backgroundColor: Colors.red,
+          ),
+        );
+      }
+
       return;
     }
 
