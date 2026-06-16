@@ -60,4 +60,27 @@ extension SessionTypeExtension on SessionType {
       default: return Provider((_) => const AsyncValue.data([]));
     }
   }
+
+  Future<void> refreshAndAwait(WidgetRef ref, String round) async {
+    switch (this) {
+      case SessionType.sprintQualifying:
+        ref.invalidate(sprintGridProvider(round));
+        await ref.read(sprintGridProvider(round).future);
+        break;
+      case SessionType.qualifying:
+        ref.invalidate(qualiResultsProvider(round));
+        await ref.read(qualiResultsProvider(round).future);
+        break;
+      case SessionType.sprintRace:
+        ref.invalidate(sprintResultsProvider(round));
+        await ref.read(sprintResultsProvider(round).future);
+        break;
+      case SessionType.race:
+        ref.invalidate(raceResultsProvider(round));
+        await ref.read(raceResultsProvider(round).future);
+        break;
+      default:
+        break;
+    }
+  }
 }
