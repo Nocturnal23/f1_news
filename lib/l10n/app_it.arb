@@ -206,5 +206,7 @@
   "okButton": "OK",
   "warningTitle": "Attenzione",
   "wrongPassword": "La password inserita non è corretta.",
-  "dataError": "Nessun dato disponibile"
+  "dataError": "Nessun dato disponibile",
+  "noConnection": "Nessuna connessione a internet!",
+  "okConnection": "Connessione a internet ripristinata!"
 }
