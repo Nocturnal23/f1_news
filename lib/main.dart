@@ -12,8 +12,11 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'core/navigation/routes.dart';
 import 'core/providers/language_provider.dart';
 import 'core/providers/screen_provider.dart';
+import 'core/providers/network_monitor.dart';
 import 'firebase_options.dart';
 import 'package:f1_news/l10n/app_localizations.dart';
+
+final GlobalKey<ScaffoldMessengerState> scaffoldMessengerKey = GlobalKey<ScaffoldMessengerState>();
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -37,6 +40,7 @@ class MyApp extends ConsumerWidget {
     final Size size = MediaQuery.of(context).size;
     final isTablet = size.width >= 600 || size.height >= 600;
     final currentLocale = sRef.watch(localeProvider);
+    sRef.watch(startNetworkMonitoring);
 
     if (!isTablet) {
       // Se è uno smartphone bloccato rigidamente in verticale
@@ -71,6 +75,7 @@ class MyApp extends ConsumerWidget {
         locale: currentLocale,
         localizationsDelegates: AppLocalizations.localizationsDelegates,
         supportedLocales: AppLocalizations.supportedLocales,
+        scaffoldMessengerKey: scaffoldMessengerKey,
 
         home: Homepage(),
 

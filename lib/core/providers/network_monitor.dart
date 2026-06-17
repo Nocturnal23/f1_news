@@ -1,5 +1,3 @@
-import 'dart:async';
-
 import 'package:f1_news/l10n/app_localizations.dart';
 import 'package:flutter/material.dart';
 import 'package:internet_connection_checker_plus/internet_connection_checker_plus.dart';
@@ -8,11 +6,15 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import 'language_provider.dart';
 
-bool isAppConnected = true;
-Timer? _offlineTimer;
-
 void showOfflineSnackBar(AppLocalizations l10n, bool isAppConnected) {
-  scaffoldMessengerKey.currentState?.showSnackBar(
+  final messenger = scaffoldMessengerKey.currentState;
+  if (messenger == null) return;
+
+  messenger
+    ..clearSnackBars()
+    ..removeCurrentSnackBar();
+
+  messenger.showSnackBar(
     SnackBar(
       content: Text(
         isAppConnected ?l10n.okConnection : l10n.noConnection,
@@ -25,41 +27,25 @@ void showOfflineSnackBar(AppLocalizations l10n, bool isAppConnected) {
 }
 
 final startNetworkMonitoring = Provider<void>((ref) {
-  InternetConnection().onStatusChange.listen((InternetStatus status) {
-    final currentLocale = ref.read(localeProvider);
-    final l10n = lookupAppLocalizations(currentLocale);
+    InternetConnection().onStatusChange.listen((status) {
+      final connected = status == InternetStatus.connected;
 
-    switch (status) {
-      case InternetStatus.connected:
-        if (!isAppConnected) {
-          isAppConnected = true;
-          _offlineTimer?.cancel();
-          _offlineTimer = null;
+      final currentLocale = ref.read(localeProvider);
+      final l10n = lookupAppLocalizations(currentLocale);
 
-          scaffoldMessengerKey.currentState?.hideCurrentSnackBar();
+      final messenger = scaffoldMessengerKey.currentState;
+      if (messenger == null) return;
 
-          showOfflineSnackBar(l10n, isAppConnected);
-        }
-        break;
+      messenger.clearSnackBars();
 
-      case InternetStatus.disconnected:
-        if (isAppConnected) {
-          isAppConnected = false;
-
-          showOfflineSnackBar(l10n, isAppConnected);
-
-          _offlineTimer = Timer.periodic(
-            const Duration(seconds: 10), (_) {
-              if (!isAppConnected) {
-                final locale = ref.read(localeProvider);
-                final l10n = lookupAppLocalizations(locale);
-
-                showOfflineSnackBar(l10n, isAppConnected);
-              }
-            },
-          );
-        }
-        break;
-    }
-  });
+      messenger.showSnackBar(
+        SnackBar(
+          content: Text(
+            connected ? l10n.okConnection : l10n.noConnection,
+          ),
+          backgroundColor: connected ? Colors.green : Colors.red,
+          duration: const Duration(seconds: 5),
+        ),
+      );
+    });
 });

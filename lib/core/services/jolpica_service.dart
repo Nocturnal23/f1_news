@@ -1,15 +1,21 @@
 import 'dart:convert';
 import 'dart:io';
 import 'package:http/http.dart' as http;
+import 'package:internet_connection_checker_plus/internet_connection_checker_plus.dart';
 import 'dart:async';
-import '../providers/network_monitor.dart';
 
 class ApiService {
   static const String baseUrl = 'https://api.jolpi.ca/ergast/f1';
 
+  Future<bool> _hasConnection() async {
+    return InternetConnection().hasInternetAccess;
+  }
+
   //Endpoint per i piloti presenti in classifica.
   Future<Map<String, dynamic>> getDriversStandings() async {
-    if (!isAppConnected) {
+    final connected = await _hasConnection();
+
+    if (!connected) {
       throw const SocketException('Nessuna connessione a Internet');
     }
 
@@ -31,7 +37,9 @@ class ApiService {
 
   //Endpoint per tutti i piloti che hanno preso parte ad almeno una sessione ufficiale.
   Future<Map<String, dynamic>> getDrivers() async {
-    if (!isAppConnected) {
+    final connected = await _hasConnection();
+
+    if (!connected) {
       throw const SocketException('Nessuna connessione a Internet');
     }
 
@@ -53,7 +61,9 @@ class ApiService {
 
   //Endpoint per i teams.
   Future<Map<String, dynamic>> getTeams() async {
-    if (!isAppConnected) {
+    final connected = await _hasConnection();
+
+    if (!connected) {
       throw const SocketException('Nessuna connessione a Internet');
     }
 
@@ -75,7 +85,9 @@ class ApiService {
 
   //Endpoint per la classifica teams.
   Future<Map<String, dynamic>> getTeamsStandings() async {
-    if (!isAppConnected) {
+    final connected = await _hasConnection();
+
+    if (!connected) {
       throw const SocketException('Nessuna connessione a Internet');
     }
 
@@ -97,7 +109,9 @@ class ApiService {
 
   //Endpoit per le gare in calendario
   Future<Map<String, dynamic>> getRaces() async {
-    if (!isAppConnected) {
+    final connected = await _hasConnection();
+
+    if (!connected) {
       throw const SocketException('Nessuna connessione a Internet');
     }
 
@@ -119,7 +133,9 @@ class ApiService {
 
   //E' parte del recupero del ultimo vincitore.
   Future<Map<String, dynamic>> getWinnersMetadata(String circuit_id) async {
-    if (!isAppConnected) {
+    final connected = await _hasConnection();
+
+    if (!connected) {
       throw const SocketException('Nessuna connessione a Internet');
     }
 
@@ -139,7 +155,9 @@ class ApiService {
 
   //Endpoint per recuperare il vincitore dell'ultima edizione disputata di un GP.
   Future<Map<String, dynamic>> getLastWinner(String circuit_id, int offset) async {
-    if (!isAppConnected) {
+    final connected = await _hasConnection();
+
+    if (!connected) {
       throw const SocketException('Nessuna connessione a Internet');
     }
 
@@ -160,7 +178,9 @@ class ApiService {
 
   //Extra info sui circuiti.
   Future<Map<String, dynamic>> getExtraInfo() async {
-    if (!isAppConnected) {
+    final connected = await _hasConnection();
+
+    if (!connected) {
       throw const SocketException('Nessuna connessione a Internet');
     }
 
@@ -182,7 +202,9 @@ class ApiService {
 
   //Endpoint per i risultati della Sprint
   Future<Map<String, dynamic>> getSprintResult(String round) async {
-    if (!isAppConnected) {
+    final connected = await _hasConnection();
+
+    if (!connected) {
       throw const SocketException('Nessuna connessione a Internet');
     }
 
@@ -204,7 +226,9 @@ class ApiService {
 
   //Endpoint per i risultati della qualifica
   Future<Map<String, dynamic>> getQualiResult(String round) async {
-    if (!isAppConnected) {
+    final connected = await _hasConnection();
+
+    if (!connected) {
       throw const SocketException('Nessuna connessione a Internet');
     }
 
@@ -226,7 +250,9 @@ class ApiService {
 
   //Endpoint per i risultati di gara.
   Future<Map<String, dynamic>> getRaceResult(String round) async {
-    if (!isAppConnected) {
+    final connected = await _hasConnection();
+
+    if (!connected) {
       throw const SocketException('Nessuna connessione a Internet');
     }
 
@@ -248,7 +274,9 @@ class ApiService {
 
   //Extra info su piloti o team.
   Future<Map<String, dynamic>> getExtraCompetitorInfo(type) async {
-    if (!isAppConnected) {
+    final connected = await _hasConnection();
+
+    if (!connected) {
       throw const SocketException('Nessuna connessione a Internet');
     }
 
