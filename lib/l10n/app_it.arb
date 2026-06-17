@@ -187,6 +187,13 @@
   "managePassword": "Modifica password",
   "manageAccount": "Elimina account",
 
+  "@favoriteManage" : {
+    "description": "==============================\n   SEZIONE: GESTISCI PREFERITI \n=============================="
+  },
+  "loadingFav": "Caricamento preferiti...",
+  "noSelected": "Nessuno selezionato.",
+  "addFav": "Aggiungili qui.",
+
   "@genericError": {
     "description": "==============================\n   ERRORE GENERICO \n=============================="
   },

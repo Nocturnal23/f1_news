@@ -1,5 +1,6 @@
 import 'package:f1_news/core/providers/provider.dart';
 import 'package:f1_news/core/providers/screen_provider.dart';
+import 'package:f1_news/l10n/app_localizations.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
@@ -12,19 +13,20 @@ class ManageFavorite extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final favorite = ref.watch(favoritesProvider);
     final screen = ref.watch(screenProvider);
+    final l10n = AppLocalizations.of(context)!;
 
     final driversAsync = ref.watch(driversProvider);
     if (driversAsync.isLoading) {
       return Dialog(
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
-        child: const Padding(
+        child: Padding(
           padding: EdgeInsets.all(32.0),
           child: Column(
             mainAxisSize: MainAxisSize.min,
             children: [
               CircularProgressIndicator(color: Colors.red),
               SizedBox(height: 16),
-              Text("Caricamento preferiti...", style: TextStyle(color: Colors.grey)),
+              Text(l10n.loadingFav, style: TextStyle(color: Colors.grey)),
             ],
           ),
         ),
@@ -54,7 +56,7 @@ class ManageFavorite extends ConsumerWidget {
           mainAxisSize: MainAxisSize.min,
           children: [
             Text(
-              "I TUOI PREFERITI",
+              l10n.favorite,
               style: TextStyle(fontSize: screen.isSmallPhone ? 18 : 20, fontWeight: FontWeight.bold),
             ),
             const Divider(height: 24),
@@ -71,10 +73,11 @@ class ManageFavorite extends ConsumerWidget {
                                 child: _buildFavorite(
                                   context,
                                   ref,
-                                  title: "Piloti",
+                                  title: l10n.driver,
                                   item: favoriteDrivers,
                                   route: Routes.drivers,
-                                  screen: screen
+                                  screen: screen,
+                                  l10n: l10n
                                 )
                             ),
 
@@ -84,10 +87,11 @@ class ManageFavorite extends ConsumerWidget {
                                 child: _buildFavorite(
                                     context,
                                     ref,
-                                    title: "Costruttori",
+                                    title: l10n.team,
                                     item: favoriteTeams,
                                     route: Routes.teams,
-                                    screen: screen
+                                    screen: screen,
+                                    l10n: l10n
                                 )
                             ),
                           ],
@@ -99,7 +103,7 @@ class ManageFavorite extends ConsumerWidget {
             const Divider(height: 5),
             TextButton(
               onPressed: () => Navigator.pop(context),
-              child: const Text("Chiudi", style: TextStyle(color: Colors.red, fontSize: 16)),
+              child: Text(l10n.windowClose, style: TextStyle(color: Colors.red, fontSize: 16)),
             ),
           ],
         ),
@@ -107,7 +111,7 @@ class ManageFavorite extends ConsumerWidget {
     );
   }
 
-  Widget _buildFavorite(BuildContext context, WidgetRef ref, {required String title, required List<String> item, required String route, required ScreenProvider screen,}) {
+  Widget _buildFavorite(BuildContext context, WidgetRef ref, {required String title, required List<String> item, required String route, required ScreenProvider screen, required AppLocalizations l10n,}) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -126,7 +130,7 @@ class ManageFavorite extends ConsumerWidget {
               },
 
               child: Text(
-                "Nessuno selezionato.\nAggiungili qui.",
+                "${l10n.noSelected}\n${l10n.addFav}",
                 textAlign: TextAlign.center,
                 style: TextStyle(fontSize: screen.isSmallPhone ? 12 : 14, color: Colors.blue, decoration: TextDecoration.underline),
               ),
