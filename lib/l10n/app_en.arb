@@ -205,5 +205,7 @@
   "okButton": "OK",
   "warningTitle": "Warning",
   "wrongPassword": "The password you entered is incorrect.",
-  "dataError": "No data available"
+  "dataError": "No data available",
+  "noConnection": "No internet connection!",
+  "okConnection": "Internet connection restored!"
 }
