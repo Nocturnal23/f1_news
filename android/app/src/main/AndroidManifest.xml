@@ -1,8 +1,8 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android">
     <application
-        android:label="f1_news"
+        android:label="Apex F1"
         android:name="${applicationName}"
-        android:icon="@mipmap/ic_launcher">
+        android:icon="@mipmap/apex">
         <activity
             android:name=".MainActivity"
             android:exported="true"
