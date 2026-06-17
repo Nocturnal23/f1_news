@@ -1,12 +1,18 @@
 import 'dart:convert';
+import 'dart:io';
 import 'package:http/http.dart' as http;
 import 'dart:async';
+import '../providers/network_monitor.dart';
 
 class ApiService {
   static const String baseUrl = 'https://api.jolpi.ca/ergast/f1';
 
   //Endpoint per i piloti presenti in classifica.
   Future<Map<String, dynamic>> getDriversStandings() async {
+    if (!isAppConnected) {
+      throw const SocketException('Nessuna connessione a Internet');
+    }
+
     final response = await http.get(Uri.parse('$baseUrl/${DateTime
         .now()
         .year}/driverStandings.json')).timeout(
@@ -25,6 +31,10 @@ class ApiService {
 
   //Endpoint per tutti i piloti che hanno preso parte ad almeno una sessione ufficiale.
   Future<Map<String, dynamic>> getDrivers() async {
+    if (!isAppConnected) {
+      throw const SocketException('Nessuna connessione a Internet');
+    }
+
     final response = await http.get(Uri.parse('$baseUrl/${DateTime
         .now()
         .year}/drivers.json?limit=100')).timeout(
@@ -43,6 +53,10 @@ class ApiService {
 
   //Endpoint per i teams.
   Future<Map<String, dynamic>> getTeams() async {
+    if (!isAppConnected) {
+      throw const SocketException('Nessuna connessione a Internet');
+    }
+
     final response = await http.get(Uri.parse('$baseUrl/${DateTime
         .now()
         .year}/constructors.json')).timeout(
@@ -61,6 +75,10 @@ class ApiService {
 
   //Endpoint per la classifica teams.
   Future<Map<String, dynamic>> getTeamsStandings() async {
+    if (!isAppConnected) {
+      throw const SocketException('Nessuna connessione a Internet');
+    }
+
     final response = await http.get(Uri.parse('$baseUrl/${DateTime
         .now()
         .year}/constructorStandings.json')).timeout(
@@ -79,6 +97,10 @@ class ApiService {
 
   //Endpoit per le gare in calendario
   Future<Map<String, dynamic>> getRaces() async {
+    if (!isAppConnected) {
+      throw const SocketException('Nessuna connessione a Internet');
+    }
+
     final response = await http.get(Uri.parse('$baseUrl/${DateTime
         .now()
         .year}/races.json')).timeout(
@@ -97,6 +119,10 @@ class ApiService {
 
   //E' parte del recupero del ultimo vincitore.
   Future<Map<String, dynamic>> getWinnersMetadata(String circuit_id) async {
+    if (!isAppConnected) {
+      throw const SocketException('Nessuna connessione a Internet');
+    }
+
     final response = await http.get(
         Uri.parse('$baseUrl/circuits/$circuit_id/results/1.json?limit=1')).timeout(
         const Duration(seconds: 10),
@@ -113,6 +139,10 @@ class ApiService {
 
   //Endpoint per recuperare il vincitore dell'ultima edizione disputata di un GP.
   Future<Map<String, dynamic>> getLastWinner(String circuit_id, int offset) async {
+    if (!isAppConnected) {
+      throw const SocketException('Nessuna connessione a Internet');
+    }
+
     final response = await http.get(Uri.parse(
         '$baseUrl/circuits/$circuit_id/results/1.json?limit=1&offset=$offset')).timeout(
         const Duration(seconds: 10),
@@ -130,6 +160,10 @@ class ApiService {
 
   //Extra info sui circuiti.
   Future<Map<String, dynamic>> getExtraInfo() async {
+    if (!isAppConnected) {
+      throw const SocketException('Nessuna connessione a Internet');
+    }
+
     final response = await http.get(Uri.parse(
         'https://gist.githubusercontent.com/Nocturnal23/421160de818f6c42d40a57b0edfbb4a5/raw/f1_news_circuits_extra_data.json')).timeout(
         const Duration(seconds: 10),
@@ -148,6 +182,10 @@ class ApiService {
 
   //Endpoint per i risultati della Sprint
   Future<Map<String, dynamic>> getSprintResult(String round) async {
+    if (!isAppConnected) {
+      throw const SocketException('Nessuna connessione a Internet');
+    }
+
     final response = await http.get(Uri.parse('$baseUrl/${DateTime
         .now()
         .year}/${round}/sprint.json')).timeout(
@@ -166,6 +204,10 @@ class ApiService {
 
   //Endpoint per i risultati della qualifica
   Future<Map<String, dynamic>> getQualiResult(String round) async {
+    if (!isAppConnected) {
+      throw const SocketException('Nessuna connessione a Internet');
+    }
+
     final response = await http.get(Uri.parse('$baseUrl/${DateTime
         .now()
         .year}/${round}/qualifying.json')).timeout(
@@ -184,6 +226,10 @@ class ApiService {
 
   //Endpoint per i risultati di gara.
   Future<Map<String, dynamic>> getRaceResult(String round) async {
+    if (!isAppConnected) {
+      throw const SocketException('Nessuna connessione a Internet');
+    }
+
     final response = await http.get(Uri.parse('$baseUrl/${DateTime
         .now()
         .year}/${round}/results.json')).timeout(
@@ -202,6 +248,10 @@ class ApiService {
 
   //Extra info su piloti o team.
   Future<Map<String, dynamic>> getExtraCompetitorInfo(type) async {
+    if (!isAppConnected) {
+      throw const SocketException('Nessuna connessione a Internet');
+    }
+
     late http.Response response;
     if (type == "drivers") {
       response = await http.get(Uri.parse('https://gist.githubusercontent.com/Nocturnal23/3b01177e7915a872ef45c04c3abcdf0e/raw/f1_news_drivers_extra_data.json')).timeout(
