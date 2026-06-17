@@ -77,6 +77,7 @@ class MyApp extends ConsumerWidget {
         supportedLocales: AppLocalizations.supportedLocales,
         scaffoldMessengerKey: scaffoldMessengerKey,
 
+        title: "Apex F1",
         home: Homepage(),
 
         routes: {
