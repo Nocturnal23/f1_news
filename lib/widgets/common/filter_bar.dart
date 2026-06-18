@@ -16,9 +16,13 @@ class FilterBar extends ConsumerStatefulWidget {
 
 class _FilterBarState extends ConsumerState<FilterBar> {
   final TextEditingController _searchController = TextEditingController();
-  String? _selectedDriver;
-  String? _selectedTeam;
   AppLocalizations get l10n => AppLocalizations.of(context)!;
+
+  @override
+  void initState() { //Bug barra di ricerca.
+    super.initState();
+    _searchController.text = widget.filterController.searchQuery;
+  }
 
   @override
   void dispose() {
@@ -72,7 +76,7 @@ class _FilterBarState extends ConsumerState<FilterBar> {
               //Piloti.
               Expanded(
                 child: DropdownButtonFormField<String?>(
-                  initialValue: _selectedDriver,
+                  initialValue: widget.filterController.selectedDriver,
                   isExpanded: true,
                   items: [
                     DropdownMenuItem<String?>(
@@ -86,9 +90,6 @@ class _FilterBarState extends ConsumerState<FilterBar> {
                       ),
                   ],
                   onChanged: (value) {
-                    setState(() {
-                      _selectedDriver = value;
-                    });
                     widget.filterController.updateDriver(value);
                   },
                   decoration: InputDecoration(
@@ -107,7 +108,7 @@ class _FilterBarState extends ConsumerState<FilterBar> {
               //Costruttori.
               Expanded(
                 child: DropdownButtonFormField<String?>(
-                  initialValue: _selectedTeam,
+                  initialValue: widget.filterController.selectedConstructor,
                   isExpanded: true,
                   items: [
                     DropdownMenuItem<String?>(
@@ -121,9 +122,6 @@ class _FilterBarState extends ConsumerState<FilterBar> {
                       ),
                   ],
                   onChanged: (value) {
-                    setState(() {
-                      _selectedTeam = value;
-                    });
                     widget.filterController.updateConstructor(value);
                   },
                   decoration: InputDecoration(
