@@ -114,6 +114,10 @@ class NewsFilterController extends ChangeNotifier {
 
   bool get hasArticles => _filteredArticles.isNotEmpty;
 
+  String get searchQuery => _searchQuery;
+  String? get selectedDriver => _selectedDriver;
+  String? get selectedConstructor => _selectedConstructor;
+
   void nextPage() {
     if (_currentPage < totalPages) {
       _currentPage++;
