@@ -77,6 +77,7 @@ class _FilterBarState extends ConsumerState<FilterBar> {
               Expanded(
                 child: DropdownButtonFormField<String?>(
                   initialValue: widget.filterController.selectedDriver,
+                  menuMaxHeight: 300,
                   isExpanded: true,
                   items: [
                     DropdownMenuItem<String?>(
@@ -109,6 +110,7 @@ class _FilterBarState extends ConsumerState<FilterBar> {
               Expanded(
                 child: DropdownButtonFormField<String?>(
                   initialValue: widget.filterController.selectedConstructor,
+                  menuMaxHeight: 300,
                   isExpanded: true,
                   items: [
                     DropdownMenuItem<String?>(

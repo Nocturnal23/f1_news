@@ -32,6 +32,9 @@ class _NewsListState extends ConsumerState<NewsList> {
     final newsAsync = ref.watch(newsProvider);
     final filterController = ref.watch(newsFilterProvider);
 
+    ref.watch(driversProvider);
+    ref.watch(constructorsProvider);
+
     ref.listen(newsProvider, (previous, next) {
       next.whenData((articles) {
         filterController.setArticles(articles);
