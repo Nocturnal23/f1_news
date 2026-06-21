@@ -20,88 +20,95 @@ class EventInfo extends ConsumerWidget {
     final l10n = AppLocalizations.of(context)!;
     final localeName = l10n.localeName;
 
-    return Dialog(
-      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
-      child: SingleChildScrollView(
-        child: Padding(
-          padding: const EdgeInsets.all(16.0),
-          child: Column(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              Text(
-                raceModel.raceName,
-                style: TextStyle(
-                    fontSize: screen.isSmallPhone ? 18 : 20,
-                    fontWeight: FontWeight.bold
-                ),
-              ),
-              const SizedBox(height: 8),
-              Text(
-                "${raceModel.locality}, ${raceModel.country}",
-                style: const TextStyle(color: Colors.grey),
-              ),
-              const Divider(height: 24),
+    return Center(
+      child: ConstrainedBox(
+        constraints: BoxConstraints(
+          maxWidth: screen.isTablet ? 700 : double.infinity,
+        ),
+        child: Dialog(
+          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
+          child: SingleChildScrollView(
+            child: Padding(
+              padding: const EdgeInsets.all(16.0),
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  Text(
+                    raceModel.raceName,
+                    style: TextStyle(
+                        fontSize: screen.isSmallPhone ? 18 : 20,
+                        fontWeight: FontWeight.bold
+                    ),
+                  ),
+                  const SizedBox(height: 8),
+                  Text(
+                    "${raceModel.locality}, ${raceModel.country}",
+                    style: const TextStyle(color: Colors.grey),
+                  ),
+                  const Divider(height: 24),
 
-              Table(
-                defaultVerticalAlignment: TableCellVerticalAlignment.middle,
-                columnWidths: const {
-                  0: FlexColumnWidth(2),
-                  1: FlexColumnWidth(2),
-                },
-                children: raceModel.weekendSessions.map((session) {
-                  final SessionType type = session['type'];
-                  final String sessionName = type == SessionType.unknown
-                      ? session['defaultName']
-                      : type.getDisplayName(l10n);
+                  Table(
+                    defaultVerticalAlignment: TableCellVerticalAlignment.middle,
+                    columnWidths: const {
+                      0: FlexColumnWidth(2),
+                      1: FlexColumnWidth(2),
+                    },
+                    children: raceModel.weekendSessions.map((session) {
+                      final SessionType type = session['type'];
+                      final String sessionName = type == SessionType.unknown
+                          ? session['defaultName']
+                          : type.getDisplayName(l10n);
 
-                  final sessionDateTime = DateTime.parse(
-                    "${session['date']}T${session['time']}",
-                  );
-                  final bool isPast = todayDate.isAfter(sessionDateTime);
-                  final String displayDate = DateFormat.Md(localeName)
-                      .add_jm()
-                      .format(sessionDateTime.toLocal());
+                      final sessionDateTime = DateTime.parse(
+                        "${session['date']}T${session['time']}",
+                      );
+                      final bool isPast = todayDate.isAfter(sessionDateTime);
+                      final String displayDate = DateFormat.Md(localeName)
+                          .add_jm()
+                          .format(sessionDateTime.toLocal());
 
-                  return TableRow(
-                    children: [
-                      Padding(
-                        padding: EdgeInsets.symmetric(vertical: screen.isSmallPhone ? 8.0 : 13.0),
-                        child: Text(
-                          sessionName,
-                          style: TextStyle(fontSize: screen.isSmallPhone ? 13 : 15, fontWeight: FontWeight.w600),
-                        ),
-                      ),
-                      Padding(
-                        padding: EdgeInsets.symmetric(vertical: screen.isSmallPhone ? 8.0 : 13.0),
-                        child: isPast && type.hasResults
-                            ? Row(
-                                mainAxisSize: MainAxisSize.min,
-                                children: [
-                                  InkWell(
-                                    onTap: () => _openResultsDialog(
-                                      context,
-                                      raceModel.round,
-                                      type,
-                                    ),
-                                    child: Text(
-                                      l10n.eventInfoResult,
-                                      style: TextStyle(color: Colors.blue),
-                                    ),
-                                  ),
-                                ],
-                              )
-                            : Text(isPast ? l10n.eventInfoEnded : displayDate),
-                      ),
-                    ],
-                  );
-                }).toList(),
+                      return TableRow(
+                        children: [
+                          Padding(
+                            padding: EdgeInsets.symmetric(vertical: screen.isSmallPhone ? 8.0 : 13.0),
+                            child: Text(
+                              sessionName,
+                              style: TextStyle(fontSize: screen.isSmallPhone ? 13 : 15, fontWeight: FontWeight.w600),
+                            ),
+                          ),
+                          Padding(
+                            padding: EdgeInsets.symmetric(vertical: screen.isSmallPhone ? 8.0 : 13.0),
+                            child: isPast && type.hasResults
+                                ? Row(
+                                    mainAxisSize: MainAxisSize.min,
+                                    children: [
+                                      InkWell(
+                                        onTap: () => _openResultsDialog(
+                                          context,
+                                          raceModel.round,
+                                          type,
+                                        ),
+                                        child: Text(
+                                          l10n.eventInfoResult,
+                                          style: TextStyle(color: Colors.blue),
+                                        ),
+                                      ),
+                                    ],
+                                  )
+                                : Text(isPast ? l10n.eventInfoEnded : displayDate),
+                          ),
+                        ],
+                      );
+                    }).toList(),
+                  ),
+                  const SizedBox(height: 16),
+                  TextButton(
+                    onPressed: () => Navigator.pop(context),
+                    child: Text(l10n.windowClose),
+                  ),
+                ],
               ),
-              const SizedBox(height: 16),
-              TextButton(
-                onPressed: () => Navigator.pop(context),
-                child: Text(l10n.windowClose),
-              ),
-            ],
+            ),
           ),
         ),
       ),

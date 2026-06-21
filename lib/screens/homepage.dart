@@ -53,9 +53,21 @@ class _HomepageState extends ConsumerState<Homepage> {
                   ),
                 ),
                 const SizedBox(height: 10),
-                _buildNewsCarousel(),
+                Center(
+                  child: ConstrainedBox(
+                    constraints: const BoxConstraints(maxWidth: 800),
+                    child: _buildNewsCarousel(),
+                  ),
+                ),
+                // _buildNewsCarousel(),
                 const SizedBox(height: 50),
-                _buildNextRace(),
+                Center(
+                  child: ConstrainedBox(
+                    constraints: const BoxConstraints(maxWidth: 650),
+                    child: _buildNextRace(),
+                  ),
+                ),
+                // _buildNextRace(),
               ],
             ),
           ),
