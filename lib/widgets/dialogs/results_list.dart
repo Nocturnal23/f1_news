@@ -74,17 +74,24 @@ class ResultsList extends ConsumerWidget {
       return _waitingResults(screen, l10n);
     }
 
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.stretch,
-      children: [
-        SingleChildScrollView(
-            scrollDirection: Axis.horizontal,
-            child: tableWidget,
-          ),
+    return Center(
+      child: ConstrainedBox(
+        constraints: BoxConstraints(
+          maxWidth: screen.isTablet ? 700 : double.infinity,
+        ),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.stretch,
+          children: [
+            SingleChildScrollView(
+                scrollDirection: Axis.horizontal,
+                child: tableWidget,
+              ),
 
-        if (sessionName.hasFastestLap && results.isNotEmpty)
-          _buildFastestLap(results.cast<RaceResultModel>(), l10n),
-      ],
+            if (sessionName.hasFastestLap && results.isNotEmpty)
+              _buildFastestLap(results.cast<RaceResultModel>(), l10n),
+          ],
+        ),
+      ),
     );
   }
 

@@ -41,11 +41,9 @@ class RssRepository {
 
     final targetFeeds = languageCode == 'en' ? RssList.feedUrlsEN : RssList.feedUrls;
 
-    print("FETCH NEWS START");
     for (var entry in targetFeeds.entries) {
       final key = entry.key;
       final url = entry.value;
-      print("START FEED ${entry.key}");
 
       try {
         final rawXml = await _apiClient.fetchRawXml(url);
@@ -54,14 +52,10 @@ class RssRepository {
         for (var item in feed.items) {
           allArticles.add(Article.fromRssItem(item, key));
         }
-        print("END FEED ${entry.key}");
       } catch (e) {
-        print("ERROR FEED ${entry.key}: $e");
         hasError = true;
-        print('Errore durante il fetch o parsing di $url: $e');
       }
     }
-    print("FETCH NEWS END");
 
     if (allArticles.isEmpty && hasError) {
       throw Exception('Nessuna connessione o impossibile recuperare le notizie.');
