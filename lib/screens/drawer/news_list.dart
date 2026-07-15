@@ -48,32 +48,28 @@ class _NewsListState extends ConsumerState<NewsList> {
       drawer: const DrawerApp(),
       body: newsAsync.when(
         loading: () => const Center(child: CircularProgressIndicator()),
-        error: (err, stack) => RefreshIndicator(
-          onRefresh: () async {
+        error: (err, stack) {
+          Future<void> handleRetry() async {
             ref.invalidate(newsProvider);
-            try {
-              await ref.read(newsProvider.future);
-            } catch (_) {
-            }
-          },
-          child: ListView(
-            physics: const AlwaysScrollableScrollPhysics(),
-            children: [
-              SizedBox(
-                height: MediaQuery.of(context).size.height * 0.7,
-                child: ErrorRetry(
-                  errorMessage: err.toString(),
-                  onRetry: () async {
-                    ref.invalidate(newsProvider);
-                    try {
-                      await ref.read(newsProvider.future);
-                    } catch (_) {}
-                  },
+            return ref.read(newsProvider.future).then((_) => null, onError: (_) => null);
+          }
+
+          return RefreshIndicator(
+            onRefresh: handleRetry,
+            child: ListView(
+              physics: const AlwaysScrollableScrollPhysics(),
+              children: [
+                SizedBox(
+                  height: screen.height * 0.7,
+                  child: ErrorRetry(
+                    errorMessage: err.toString(),
+                    onRetry: handleRetry,
+                  ),
                 ),
-              ),
-            ],
-          ),
-        ),
+              ],
+            ),
+          );
+        },
         data: (articles) {
           if (!filterController.hasArticles && articles.isNotEmpty) {
             WidgetsBinding.instance.addPostFrameCallback((_) {
