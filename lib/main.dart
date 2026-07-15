@@ -37,18 +37,18 @@ class MyApp extends ConsumerWidget {
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context, WidgetRef sRef) {
-    final Size size = MediaQuery.of(context).size;
-    final isTablet = size.width >= 600 || size.height >= 600;
     final currentLocale = sRef.watch(localeProvider);
     sRef.watch(startNetworkMonitoring);
 
+    final view = WidgetsBinding.instance.platformDispatcher.views.first;
+    final size = MediaQueryData.fromView(view).size;
+    final shortestSide = size.shortestSide;
+    final isTablet = shortestSide >= 600;
     if (!isTablet) {
-      // Se è uno smartphone bloccato rigidamente in verticale
       SystemChrome.setPreferredOrientations([
         DeviceOrientation.portraitUp,
       ]);
     } else {
-      // Se è un tablet, sblocca tutti gli orientamenti.
       SystemChrome.setPreferredOrientations([
         DeviceOrientation.portraitUp,
         DeviceOrientation.portraitDown,
@@ -56,7 +56,6 @@ class MyApp extends ConsumerWidget {
         DeviceOrientation.landscapeRight,
       ]);
     }
-
 
     return ProviderScope(
       overrides: [

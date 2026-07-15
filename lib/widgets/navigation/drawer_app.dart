@@ -18,7 +18,7 @@ class DrawerApp extends ConsumerWidget {
     final l10n = AppLocalizations.of(context)!;
 
     return Drawer(
-      width: screen.width * 0.75,
+      width: screen.isTablet ? screen.width * 0.50 : screen.width * 0.75,
       child: ListView(
         padding: EdgeInsets.zero,
         children: [
