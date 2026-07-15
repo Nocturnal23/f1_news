@@ -86,7 +86,7 @@ class _FilterBarState extends ConsumerState<FilterBar> {
                     ),
                     for (final d in drivers)
                       DropdownMenuItem<String?>(
-                        value: d.driver.id,
+                        value: d.driver.surname,
                         child: Text(d.driver.surname),
                       ),
                   ],
@@ -119,7 +119,7 @@ class _FilterBarState extends ConsumerState<FilterBar> {
                     ),
                     for (final t in teams)
                       DropdownMenuItem<String?>(
-                        value: t.id,
+                        value: t.name,
                         child: Text(t.name),
                       ),
                   ],
