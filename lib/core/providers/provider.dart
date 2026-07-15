@@ -91,7 +91,6 @@ final nextRaceProvider = Provider<AsyncValue<RaceModel?>>((ref) {
     final now = DateTime.now();
     try {
       return races.firstWhere((race) {
-        // Usa il nuovo getter! Ora è preciso al secondo.
         final raceExpiration = race.raceStartDateTime.add(const Duration(hours: 24));
         return raceExpiration.isAfter(now);
       });

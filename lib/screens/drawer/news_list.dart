@@ -1,3 +1,4 @@
+import 'package:f1_news/core/providers/screen_provider.dart';
 import 'package:f1_news/widgets/navigation/app_bar_custom.dart';
 import 'package:f1_news/widgets/navigation/drawer_app.dart';
 import 'package:flutter/material.dart';
@@ -31,6 +32,7 @@ class _NewsListState extends ConsumerState<NewsList> {
   Widget build(BuildContext context) {
     final newsAsync = ref.watch(newsProvider);
     final filterController = ref.watch(newsFilterProvider);
+    final screen = ref.watch(screenProvider);
 
     ref.watch(driversProvider);
     ref.watch(constructorsProvider);
