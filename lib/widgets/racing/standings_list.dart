@@ -77,7 +77,6 @@ class StandingsList extends ConsumerWidget {
   List<DataColumn> _buildColumns(bool isSmall, AppLocalizations l10n) {
     final style = TextStyle(
       fontWeight: FontWeight.bold,
-      // color: Colors.white,
       fontSize: isSmall ? 12 : 15,
     );
 

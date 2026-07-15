@@ -99,10 +99,6 @@ class _RegisterFormState extends ConsumerState<RegisterForm> {
                   helperText:
                       '${l10n.helperText}\n'
                       '${l10n.detailsHelperText}',
-                      // '• 1 minuscola;\n'
-                      // '• 1 maiuscola;\n'
-                      // '• 1 numero;\n'
-                      // '• 1 carattere speciale.',
                   helperMaxLines: 6,
                   errorMaxLines: 6,
                 ),
@@ -165,7 +161,7 @@ class _RegisterFormState extends ConsumerState<RegisterForm> {
         await FirebaseAuth.instance.signOut();
 
         if (mounted) {
-          _showAlert(
+          _showAlert( //Il popup che appare a registrazione avvenuta e che chiede la conferma della mail.
             titolo: l10n.titleRegistrationComplete,
             messaggio: l10n.messageRegistrationComplete,
             onConfirm: () {
@@ -180,7 +176,7 @@ class _RegisterFormState extends ConsumerState<RegisterForm> {
         }
         String error = l10n.genericError;
 
-        if (e.code == 'email-already-in-use') {
+        if (e.code == 'email-already-in-use') { //Il controllo qualora la registrazione non è andata a buon fine e la causa è la mail già presente.
           error = l10n.messageAlreadyInUse;
         }
 
