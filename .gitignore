@@ -49,3 +49,7 @@ app.*.map.json
 
 # Ignora i file generati per le traduzioni
 /lib/l10n/app_localizations*.dart
+
+# Ignora i seguenti files
+/android/app/google-services.json
+/lib/firebase_options.dart
